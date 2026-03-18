@@ -299,13 +299,10 @@
         .flyer-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 55% at 12% 20%,rgba(244,96,12,.22) 0%,transparent 100%),radial-gradient(ellipse 32% 32% at 88% 82%,rgba(245,168,0,.06) 0%,transparent 100%)}
         .fc-bar{position:absolute;left:0;top:0;bottom:0;width:4px;background:#f4600c;z-index:3}
 
-        /* Wide: two column */
-        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:0 0 54%;padding:clamp(14px,4.5%,32px);display:flex;flex-direction:column;gap:clamp(5px,1.2%,11px);border-right:1px solid rgba(255,255,255,.04)}
-        .flyer-card.wide .fc-right{position:relative;z-index:2;flex:1;padding:clamp(12px,3%,22px);display:flex;flex-direction:column;overflow:hidden}
-
-        /* Square: single column */
-        .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:clamp(20px,6%,48px);display:flex;flex-direction:column;gap:clamp(8px,1.8%,18px)}
-        .flyer-card.sq .fc-right{display:none}
+        /* Both formats: full-width single column */
+        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:1;padding:clamp(20px,5%,48px);display:flex;flex-direction:column;gap:clamp(7px,1.4%,14px)}
+        .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:clamp(24px,6%,56px);display:flex;flex-direction:column;gap:clamp(8px,1.8%,18px)}
+        .fc-right{display:none}
 
         /* Flyer content elements */
         .fc-brand{display:flex;align-items:center;gap:7px}
@@ -327,12 +324,6 @@
         .fc-ameta{font-size:clamp(7px,1.1%,10px);color:#333;font-family:'Geist Mono',monospace;display:block}
         .fc-url{font-size:clamp(7px,1.1%,10px);font-family:'Geist Mono',monospace;color:#2a2a2a;margin-top:auto}
 
-        /* Right code pane */
-        .fc-code-lbl{font-size:clamp(6px,.9%,9px);font-family:'Geist Mono',monospace;font-weight:700;letter-spacing:.18em;color:#333;text-transform:uppercase;margin-bottom:clamp(5px,.9%,10px)}
-        .fc-code{font-family:'Geist Mono',monospace;font-size:clamp(6px,1%,10.5px);line-height:1.65;overflow:hidden;flex:1}
-        .fc-code .ck{color:#f4600c}.fc-code .ca{color:#f5a800}.fc-code .cs{color:#50e3c2}
-        .fc-code .cc{color:#2d2d2d;font-style:italic}.fc-code .cn{color:#b8c4e0}.fc-code .cb{color:#3291ff}.fc-code .cm{color:#555}
-        .fc-gen{margin-top:auto;background:rgba(244,96,12,.07);border:1px solid rgba(244,96,12,.15);border-radius:4px;padding:clamp(3px,.5%,6px) clamp(6px,1%,10px);font-family:'Geist Mono',monospace;font-size:clamp(6px,.9%,9px);color:#f4600c}
 
         /* Format toggle */
         .sm-fmt{display:flex;align-items:center;gap:8px;margin-bottom:14px}
@@ -430,9 +421,17 @@
                 March 18, 2026
                 <span class="pub-dot">·</span>
                 12 min read
-                <span class="pub-dot">·</span>
-                <a href="https://medium.com/@sathnidukottage/the-core-science-behind-fractalx-dfbdc6cffd7e" target="_blank" rel="noopener" style="color:var(--orange);text-decoration:none;font-family:var(--mono);font-size:12px">Read on Medium ↗</a>
             </span>
+        </div>
+        <div style="display:flex;gap:8px;margin-left:auto;flex-shrink:0;flex-wrap:wrap">
+            <button class="sib" onclick="openShareModal()" style="padding:6px 12px;font-size:12px">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                Share
+            </button>
+            <a class="sib" href="https://medium.com/@sathnidukottage/the-core-science-behind-fractalx-dfbdc6cffd7e" target="_blank" rel="noopener" style="padding:6px 12px;font-size:12px">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+                Read on Medium
+            </a>
         </div>
     </div>
 
@@ -841,30 +840,6 @@ docker-compose up --build</code></pre>
                     <div class="fc-url">project-fractalx.github.io/FractalX-Web/blog</div>
                 </div>
 
-                <!-- Right code pane (wide only) -->
-                <div class="fc-right">
-                    <div class="fc-code-lbl">OrderModule.java</div>
-                    <div class="fc-code">
-<span class="ca">@DecomposableModule</span>(
-  serviceName = <span class="cs">"order-service"</span>,
-  port = <span class="cn">8081</span>
-)
-<span class="ck">public class</span> <span class="cb">OrderModule</span> {
-
-  <span class="cc">// auto-detected dep</span>
-  <span class="ck">private final</span> <span class="cb">PaymentService</span> ps;
-
-  <span class="ca">@DistributedSaga</span>(
-    sagaId = <span class="cs">"place-order-saga"</span>
-  )
-  <span class="ck">public</span> <span class="cb">Order</span> placeOrder(...) {
-    <span class="cc">// generates full saga</span>
-    <span class="cc">// orchestrator service</span>
-  }
-}</div>
-                    <div class="fc-gen">&#8627; generates order-service + saga-orchestrator</div>
-                </div>
-
             </div>
         </div>
 
@@ -1125,57 +1100,6 @@ docker-compose up --build</code></pre>
         ctx.font = `400 ${10*s}px 'Geist Mono', monospace`;
         const urlY = isWide ? 598*s : 1040*s;
         ctx.fillText('project-fractalx.github.io/FractalX-Web/blog/the-core-science-behind-fractalx', 64*s, urlY);
-
-        /* right code pane (wide only) */
-        if (isWide){
-            const rx = 660*s, ry = 40*s, rw = 496*s, rh = 560*s;
-            rr(ctx, rx, ry, rw, rh, 8*s, '#0d0d0d', '#1a1a1a');
-            /* code label */
-            ctx.fillStyle = '#2a2a2a';
-            ctx.font = `700 ${9*s}px 'Geist Mono', monospace`;
-            ctx.letterSpacing = '0.18em';
-            ctx.fillText('ORDERMODULE.JAVA', rx+20*s, ry+24*s);
-            ctx.letterSpacing = '0';
-            /* code lines */
-            const cl = 11*s, lh = 18*s;
-            let cy = ry+52*s;
-            const lines = [
-                [{c:'#f5a800',t:'@DecomposableModule'},{c:'#555',t:'('}],
-                [{c:'#555',t:'  serviceName = '},{c:'#50e3c2',t:'"order-service"'},{c:'#555',t:','}],
-                [{c:'#555',t:'  port = '},{c:'#b8c4e0',t:'8081'}],
-                [{c:'#555',t:')'}],
-                [{c:'#f4600c',t:'public class '},{c:'#3291ff',t:'OrderModule'},{c:'#555',t:' {'}],
-                [],
-                [{c:'#2d2d2d',t:'  // auto-detected dependency'}],
-                [{c:'#f4600c',t:'  private final '},{c:'#3291ff',t:'PaymentService'},{c:'#555',t:' ps;'}],
-                [],
-                [{c:'#f5a800',t:'  @DistributedSaga'},{c:'#555',t:'('}],
-                [{c:'#555',t:'    sagaId = '},{c:'#50e3c2',t:'"place-order-saga"'}],
-                [{c:'#555',t:'  )'}],
-                [{c:'#f4600c',t:'  public '},{c:'#3291ff',t:'Order'},{c:'#555',t:' placeOrder(...) {'}],
-                [{c:'#2d2d2d',t:'    // generates full saga orch.'}],
-                [{c:'#555',t:'  }'}],
-                [{c:'#555',t:'}'}],
-            ];
-            ctx.font = `400 ${cl}px 'Geist Mono', monospace`;
-            for (const segs of lines){
-                let lx = rx+20*s;
-                for (const seg of segs){
-                    ctx.fillStyle = seg.c;
-                    ctx.fillText(seg.t, lx, cy);
-                    lx += ctx.measureText(seg.t).width;
-                }
-                cy += lh;
-            }
-            /* generated badge */
-            const gy = ry+rh-34*s;
-            rr(ctx, rx+16*s, gy, rw-32*s, 22*s, 4*s, 'rgba(244,96,12,.07)', 'rgba(244,96,12,.18)');
-            ctx.fillStyle = '#f4600c';
-            ctx.font = `400 ${9*s}px 'Geist Mono', monospace`;
-            ctx.textAlign = 'center';
-            ctx.fillText('↳ generates order-service + fractalx-saga-orchestrator', rx+rw/2, gy+14.5*s);
-            ctx.textAlign = 'left';
-        }
 
         /* download */
         const link = document.createElement('a');
