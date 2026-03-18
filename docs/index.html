@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>FractalX Docs — Static Decomposition Framework for Spring Boot</title>
-    <meta name="description" content="Complete documentation for FractalX — installation, annotations reference, NetScope gRPC, distributed sagas, Resilience4j, Docker deployment, and the Maven plugin."/>
+    <title>FractalX Docs - Static Decomposition Framework for Spring Boot</title>
+    <meta name="description" content="Complete documentation for FractalX - installation, annotations reference, NetScope gRPC, distributed sagas, Resilience4j, Docker deployment, and the Maven plugin."/>
     <meta name="keywords" content="FractalX docs, Spring Boot microservices, @DecomposableModule, NetScope, distributed saga, Maven plugin, Java decomposition"/>
     <meta name="robots" content="index, follow"/>
     <link rel="canonical" href="https://fractalx.org/docs/"/>
@@ -20,8 +20,8 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website"/>
     <meta property="og:site_name" content="FractalX"/>
-    <meta property="og:title" content="FractalX Docs — Static Decomposition Framework for Spring Boot"/>
-    <meta property="og:description" content="Complete documentation for FractalX — annotations reference, NetScope gRPC, distributed sagas, Resilience4j, Docker deployment, and Maven plugin."/>
+    <meta property="og:title" content="FractalX Docs - Static Decomposition Framework for Spring Boot"/>
+    <meta property="og:description" content="Complete documentation for FractalX - annotations reference, NetScope gRPC, distributed sagas, Resilience4j, Docker deployment, and Maven plugin."/>
     <meta property="og:url" content="https://fractalx.org/docs/"/>
     <meta property="og:image" content="https://fractalx.org/assets/og/home.svg"/>
     <meta property="og:image:width" content="1200"/>
@@ -29,8 +29,8 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:title" content="FractalX Docs — Static Decomposition Framework for Spring Boot"/>
-    <meta name="twitter:description" content="Complete documentation for FractalX — annotations reference, NetScope gRPC, distributed sagas, Resilience4j, Docker deployment, and Maven plugin."/>
+    <meta name="twitter:title" content="FractalX Docs - Static Decomposition Framework for Spring Boot"/>
+    <meta name="twitter:description" content="Complete documentation for FractalX - annotations reference, NetScope gRPC, distributed sagas, Resilience4j, Docker deployment, and Maven plugin."/>
     <meta name="twitter:image" content="https://fractalx.org/assets/og/home.svg"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,7 +57,7 @@
             --text:#ededed;--text2:#a1a1aa;--text3:#71717a;--text4:#3f3f46;
             --prose:#c4c4cc;
             --white:#fff;
-            /* brand accents — used sparingly */
+            /* brand accents - used sparingly */
             --accent:#f26419;--accent2:#f5a800;--accent3:#b8c4e0;
             --accent-dim:rgba(242,100,25,.12);--accent2-dim:rgba(245,168,0,.1);
             --blue:#3291ff;--blue-dim:rgba(50,145,255,.1);
@@ -187,9 +187,9 @@
         .cpb:hover{color:var(--text);border-color:var(--border3)}
         pre{padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--text3)}
 
-        /* syntax — dark (Dracula) */
+        /* syntax - dark (Dracula) */
         .kw{color:#ff79c6}.st{color:#50fa7b}.cm{color:#555f6e;font-style:italic}.an{color:#8be9fd}.nm{color:#ffb86c}.fn{color:#bd93f9}.tp{color:#ffb86c}.yk{color:#8be9fd}.yv{color:#f1fa8c}.xt{color:#50fa7b}.xa{color:#ffb86c}
-        /* syntax — light (GitHub) */
+        /* syntax - light (GitHub) */
         html.light .kw{color:#cf222e}html.light .st{color:#0a3069}html.light .cm{color:#8c949e;font-style:italic}html.light .an{color:#0550ae}html.light .nm{color:#953800}html.light .fn{color:#6639ba}html.light .tp{color:#953800}html.light .yk{color:#0550ae}html.light .yv{color:#0a3069}html.light .xt{color:#116329}html.light .xa{color:#953800}
 
         /* CALLOUT */
@@ -437,7 +437,7 @@
             <!-- OVERVIEW -->
             <div class="pg on" id="pg-getting-started">
                 <div class="hero">
-                    <div class="htag"><span class="dot"></span>v0.2.4 — stable</div>
+                    <div class="htag"><span class="dot"></span>v0.2.4 - stable</div>
                     <h1 class="pt">FractalX Framework</h1>
                     <p class="pl">Decompose a Spring Boot modular monolith into a production-ready microservice platform with a single Maven command.</p>
                 </div>
@@ -455,7 +455,7 @@
                 <h2>What FractalX generates</h2>
                 <p>For every annotated domain module a fully independent Spring Boot service is produced, plus four shared infrastructure services per project.</p>
                 <div class="fl">
-                    <div class="fi2"><span class="fic">📦</span><div><div class="ft">Standalone Spring Boot service</div><div class="fd">Own pom.xml with filtered deps — no fat-JAR waste</div></div></div>
+                    <div class="fi2"><span class="fic">📦</span><div><div class="ft">Standalone Spring Boot service</div><div class="fd">Own pom.xml with filtered deps - no fat-JAR waste</div></div></div>
                     <div class="fi2"><span class="fic">🔗</span><div><div class="ft">NetScope inter-service communication</div><div class="fd">gRPC-based, auto-generated client interfaces, zero config</div></div></div>
                     <div class="fi2"><span class="fic">🛡</span><div><div class="ft">Resilience4j circuit-breakers</div><div class="fd">Retries and time limiters per dependency, out of the box</div></div></div>
                     <div class="fi2"><span class="fic">🔭</span><div><div class="ft">OpenTelemetry + Micrometer</div><div class="fd">Tracing, health metrics, structured log shipping</div></div></div>
@@ -465,7 +465,7 @@
                 <div class="tw"><table>
                     <thead><tr><th>Principle</th><th>What it means</th></tr></thead>
                     <tbody>
-                    <tr><td><strong>Annotation-minimal</strong></td><td>One <code>@DecomposableModule</code> per module — the entire developer contract</td></tr>
+                    <tr><td><strong>Annotation-minimal</strong></td><td>One <code>@DecomposableModule</code> per module - the entire developer contract</td></tr>
                     <tr><td><strong>Zero-intrusion</strong></td><td>No changes to business logic, entities, or service classes</td></tr>
                     <tr><td><strong>Safe-default</strong></td><td>Unknown dependencies always kept; unknown code always copied</td></tr>
                     <tr><td><strong>Incremental</strong></td><td>Re-running <code>decompose</code> replaces only changed output</td></tr>
@@ -486,7 +486,7 @@
                     <tr><td>Maven</td><td>3.8</td><td>Maven wrapper <code>mvnw</code> recommended</td></tr>
                     <tr><td>Spring Boot</td><td>3.2.x</td><td>Spring Boot 2.x not supported</td></tr>
                     <tr><td>PostgreSQL</td><td>14+</td><td>Or MySQL 8+, MongoDB 6+</td></tr>
-                    <tr><td>Docker</td><td>24+</td><td>Optional — container deployment only</td></tr>
+                    <tr><td>Docker</td><td>24+</td><td>Optional - container deployment only</td></tr>
                     </tbody>
                 </table></div>
                 <h2>Add to pom.xml</h2>
@@ -511,7 +511,7 @@
   <span class="xt">&lt;artifactId&gt;</span>fractalx-maven-plugin<span class="xt">&lt;/artifactId&gt;</span>
   <span class="xt">&lt;version&gt;</span>${fractalx.version}<span class="xt">&lt;/version&gt;</span>
 <span class="xt">&lt;/plugin&gt;&lt;/plugins&gt;&lt;/build&gt;</span></code></pre></div>
-                <div class="cl info"><span class="cl-i">ⓘ</span><div><strong>scope=provided</strong> — annotations are compile-time only and will not appear in your production JAR.</div></div>
+                <div class="cl info"><span class="cl-i">ⓘ</span><div><strong>scope=provided</strong> - annotations are compile-time only and will not appear in your production JAR.</div></div>
                 <h2>Verify</h2>
                 <div class="cb"><div class="ch"><span class="cf"><span class="ld lb"></span>Terminal</span><button class="cpb" onclick="cp(this)">Copy</button></div>
                     <pre><code>$ mvn fractalx:help
@@ -537,7 +537,7 @@ Available goals:
                         <div class="cb"><div class="ch"><span class="cf"><span class="ld lj"></span>PaymentModule.java</span></div>
                             <pre><code><span class="an">@DecomposableModule</span>(serviceName = <span class="st">"payment-service"</span>, port = <span class="nm">8082</span>)
 <span class="kw">public class</span> <span class="tp">PaymentModule</span> {
-  <span class="cm">// Declare cross-module deps — FractalX wires via NetScope</span>
+  <span class="cm">// Declare cross-module deps - FractalX wires via NetScope</span>
   <span class="kw">private</span> <span class="tp">OrderService</span> orderService;
 }</code></pre></div>
                     </div></div>
@@ -546,7 +546,7 @@ Available goals:
                         <div class="cb"><div class="ch"><span class="cf"><span class="ld lb"></span>Terminal</span><button class="cpb" onclick="cp(this)">Copy</button></div>
                             <pre><code>$ mvn fractalx:decompose
 
-[INFO] FractalX 0.2.4 — starting decomposition
+[INFO] FractalX 0.2.4 - starting decomposition
 [INFO] Phase 1: Parsing 22 source files ...
 [INFO] Phase 2: Detected 2 modules, 1 cross-module dependency
 [INFO] Generating order-service   (port 8081) ...
@@ -557,12 +557,12 @@ Available goals:
                     <div class="step"><div class="sn">3</div><div class="sb2">
                         <div class="st2">Start everything</div>
                         <div class="cb"><div class="ch"><span class="cf"><span class="ld lb"></span>Terminal</span><button class="cpb" onclick="cp(this)">Copy</button></div>
-                            <pre><code><span class="cm"># Option A — Docker Compose (recommended)</span>
+                            <pre><code><span class="cm"># Option A - Docker Compose (recommended)</span>
 $ docker-compose -f fractalx-output/docker-compose.yml up -d
 
-<span class="cm"># Option B — start script</span>
+<span class="cm"># Option B - start script</span>
 $ ./fractalx-output/start-all.sh</code></pre></div>
-                        <div class="cl tip"><span class="cl-i">✓</span><div>Admin Dashboard at <strong>http://localhost:9090</strong> — topology, health, traces and alerts auto-configured.</div></div>
+                        <div class="cl tip"><span class="cl-i">✓</span><div>Admin Dashboard at <strong>http://localhost:9090</strong> - topology, health, traces and alerts auto-configured.</div></div>
                     </div></div>
                 </div>
                 <div class="pn"><a class="pnb" onclick="nav('installation')"><div class="pd">← Previous</div><div class="pl2">Installation</div></a><a class="pnb nx" onclick="nav('project-structure')"><div class="pd">Next →</div><div class="pl2">Project Structure</div></a></div>
@@ -601,7 +601,7 @@ $ ./fractalx-output/start-all.sh</code></pre></div>
 └── start-all.sh</code></pre></div>
                 <h2>Infrastructure services</h2>
                 <div class="sg">
-                    <div class="st3"><div class="sn2">fractalx-registry</div><div class="sp">:8761</div><div class="sd">Service registry — starts first</div></div>
+                    <div class="st3"><div class="sn2">fractalx-registry</div><div class="sp">:8761</div><div class="sd">Service registry - starts first</div></div>
                     <div class="st3"><div class="sn2">fractalx-gateway</div><div class="sp">:9999</div><div class="sd">API gateway with auth + rate limiting</div></div>
                     <div class="st3"><div class="sn2">admin-service</div><div class="sp">:9090</div><div class="sd">Full-stack management dashboard</div></div>
                     <div class="st3"><div class="sn2">logger-service</div><div class="sp">:9099</div><div class="sd">Centralised structured log sink</div></div>
@@ -619,7 +619,7 @@ $ ./fractalx-output/start-all.sh</code></pre></div>
                     <tr><td><code>ResilienceConfig.java</code></td><td>Circuit breaker + retry + time limiter per dependency</td></tr>
                     <tr><td><code>*ServiceClient.java</code></td><td>NetScope <code>@NetScopeClient</code> interface</td></tr>
                     <tr><td><code>V1__init.sql</code></td><td>Flyway initial schema scaffold from <code>@Entity</code> classes</td></tr>
-                    <tr><td><code>docker-compose.yml</code></td><td>Full platform — all services + Jaeger</td></tr>
+                    <tr><td><code>docker-compose.yml</code></td><td>Full platform - all services + Jaeger</td></tr>
                     </tbody>
                 </table></div>
                 <div class="pn"><a class="pnb" onclick="nav('quickstart')"><div class="pd">← Previous</div><div class="pl2">Quick Start</div></a><a class="pnb nx" onclick="nav('annotations')"><div class="pd">Next →</div><div class="pl2">Annotations</div></a></div>
@@ -627,7 +627,7 @@ $ ./fractalx-output/start-all.sh</code></pre></div>
 
             <!-- ANNOTATIONS -->
             <div class="pg" id="pg-annotations">
-                <div class="hero"><div class="htag"><span class="dot"></span>Core Concepts</div><h1 class="pt">Annotations</h1><p class="pl">FractalX's developer API is four annotations. Two are generated internally — do not use them manually.</p></div>
+                <div class="hero"><div class="htag"><span class="dot"></span>Core Concepts</div><h1 class="pt">Annotations</h1><p class="pl">FractalX's developer API is four annotations. Two are generated internally - do not use them manually.</p></div>
                 <div class="ac"><div class="ah"><span class="an2">@DecomposableModule</span><span class="bx br">Required</span></div><div class="ab">
                     <p>Primary annotation. Marks a class as the boundary definition for a microservice. Place one per package subtree.</p>
                     <div class="cb"><div class="ch"><span class="cf"><span class="ld lj"></span>OrderModule.java</span></div>
@@ -643,8 +643,8 @@ $ ./fractalx-output/start-all.sh</code></pre></div>
                     <div class="tw"><table>
                         <thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
                         <tbody>
-                        <tr><td><code>serviceName</code></td><td>String</td><td>—</td><td>Service directory name + <code>spring.application.name</code>. Required.</td></tr>
-                        <tr><td><code>port</code></td><td>int</td><td>—</td><td>HTTP port. gRPC auto-set to <code>port + 10000</code>. Required.</td></tr>
+                        <tr><td><code>serviceName</code></td><td>String</td><td>-</td><td>Service directory name + <code>spring.application.name</code>. Required.</td></tr>
+                        <tr><td><code>port</code></td><td>int</td><td>-</td><td>HTTP port. gRPC auto-set to <code>port + 10000</code>. Required.</td></tr>
                         <tr><td><code>independentDeployment</code></td><td>boolean</td><td>false</td><td>No runtime dependency on other generated services.</td></tr>
                         <tr><td><code>ownedSchemas</code></td><td>String[]</td><td>{}</td><td>Scopes Flyway migrations and JPA boundaries.</td></tr>
                         </tbody>
@@ -657,7 +657,7 @@ $ ./fractalx-output/start-all.sh</code></pre></div>
 <span class="kw">public boolean</span> <span class="fn">isConfirmed</span>(<span class="tp">Long</span> orderId) {
   <span class="kw">return</span> repository.existsByIdAndStatus(orderId, CONFIRMED);
 }
-<span class="cm">// stays internal — not exposed to other services</span>
+<span class="cm">// stays internal - not exposed to other services</span>
 <span class="kw">public void</span> <span class="fn">recalculateTotal</span>(<span class="tp">Order</span> order) { ... }</code></pre></div>
                 </div></div>
                 <div class="ac"><div class="ah"><span class="an2">@AdminEnabled</span><span class="bx bo">Optional</span></div><div class="ab">
@@ -680,16 +680,16 @@ $ ./fractalx-output/start-all.sh</code></pre></div>
   paymentService.refund(userId);
   orderService.cancel(orderId);
 }</code></pre></div>
-                    <div class="cl warn"><span class="cl-i">⚠</span><div><strong>Stub completion required.</strong> Generated method bodies in the saga orchestrator are stubs — fill in signatures for non-trivial overloaded methods after decomposition.</div></div>
+                    <div class="cl warn"><span class="cl-i">⚠</span><div><strong>Stub completion required.</strong> Generated method bodies in the saga orchestrator are stubs - fill in signatures for non-trivial overloaded methods after decomposition.</div></div>
                 </div></div>
                 <div class="pn"><a class="pnb" onclick="nav('project-structure')"><div class="pd">← Previous</div><div class="pl2">Project Structure</div></a><a class="pnb nx" onclick="nav('dependencies')"><div class="pd">Next →</div><div class="pl2">Cross-Module Deps</div></a></div>
             </div>
 
             <!-- DEPENDENCIES -->
             <div class="pg" id="pg-dependencies">
-                <div class="hero"><div class="htag"><span class="dot"></span>Core Concepts</div><h1 class="pt">Cross-Module Dependencies</h1><p class="pl">FractalX detects inter-module dependencies automatically via two-phase AST analysis — no explicit declarations needed.</p></div>
+                <div class="hero"><div class="htag"><span class="dot"></span>Core Concepts</div><h1 class="pt">Cross-Module Dependencies</h1><p class="pl">FractalX detects inter-module dependencies automatically via two-phase AST analysis - no explicit declarations needed.</p></div>
                 <h2>How detection works</h2>
-                <p><strong>Phase 1</strong> parses every <code>.java</code> file into an in-memory AST map. <strong>Phase 2</strong> maps each <code>@DecomposableModule</code> to its package prefix, then finds every import referencing a type from a different module's package — these are the cross-module dependencies.</p>
+                <p><strong>Phase 1</strong> parses every <code>.java</code> file into an in-memory AST map. <strong>Phase 2</strong> maps each <code>@DecomposableModule</code> to its package prefix, then finds every import referencing a type from a different module's package - these are the cross-module dependencies.</p>
                 <h2>Declaring dependencies</h2>
                 <div class="cb"><div class="ch"><span class="cf"><span class="ld lj"></span>Explicit (recommended)</span></div>
                     <pre><code><span class="an">@DecomposableModule</span>(serviceName = <span class="st">"leave-service"</span>, port = <span class="nm">8084</span>)
@@ -711,7 +711,7 @@ $ ./fractalx-output/start-all.sh</code></pre></div>
                 <div class="tw"><table>
                     <thead><tr><th>Location</th><th>Artefact</th><th>Description</th></tr></thead>
                     <tbody>
-                    <tr><td><code>service-A</code></td><td><code>BServiceClient.java</code></td><td><code>@NetScopeClient</code> interface — drop-in for <code>BService</code></td></tr>
+                    <tr><td><code>service-A</code></td><td><code>BServiceClient.java</code></td><td><code>@NetScopeClient</code> interface - drop-in for <code>BService</code></td></tr>
                     <tr><td><code>service-A</code></td><td>Resilience4j config</td><td>CircuitBreaker, Retry, TimeLimiter for the B dep</td></tr>
                     <tr><td><code>service-B</code></td><td><code>@NetworkPublic</code></td><td>Added to each called public method, exposes over gRPC</td></tr>
                     <tr><td><code>service-B</code></td><td>gRPC port</td><td>Auto-set to <code>B.port + 10000</code></td></tr>
@@ -732,7 +732,7 @@ $ ./fractalx-output/start-all.sh</code></pre></div>
   <span class="kw">boolean</span> <span class="fn">charge</span>(<span class="tp">Long</span> userId, <span class="tp">BigDecimal</span> amount);
   <span class="kw">void</span>    <span class="fn">refund</span>(<span class="tp">Long</span> userId);
 }</code></pre></div>
-                <h2>application.yml — NetScope section</h2>
+                <h2>application.yml - NetScope section</h2>
                 <div class="cb"><div class="ch"><span class="cf"><span class="ld ly"></span>application.yml</span></div>
                     <pre><code><span class="yk">netscope</span>:
   <span class="yk">server</span>:
@@ -812,18 +812,18 @@ $ mvn fractalx:decompose -Dfractalx.verbose=true</code></pre></div>
 
             <!-- OBSERVABILITY -->
             <div class="pg" id="pg-observability">
-                <div class="hero"><div class="htag"><span class="dot"></span>Features</div><h1 class="pt">Observability</h1><p class="pl">Distributed tracing, health metrics, and correlation IDs — zero developer action required.</p></div>
-                <h2>Distributed tracing — OpenTelemetry</h2>
+                <div class="hero"><div class="htag"><span class="dot"></span>Features</div><h1 class="pt">Observability</h1><p class="pl">Distributed tracing, health metrics, and correlation IDs - zero developer action required.</p></div>
+                <h2>Distributed tracing - OpenTelemetry</h2>
                 <p>Each service gets an <code>OtelConfig.java</code> configuring the OTLP/gRPC exporter pointing at Jaeger. W3C <code>traceparent</code> headers propagate through all HTTP and gRPC calls automatically.</p>
                 <div class="cl tip"><span class="cl-i">✓</span><div>Jaeger UI at <strong>http://localhost:16686</strong> when using the generated <code>docker-compose.yml</code>.</div></div>
-                <h2>Health metrics — Micrometer</h2>
+                <h2>Health metrics - Micrometer</h2>
                 <p><code>ServiceHealthConfig.java</code> registers a TCP health check per dependency and exposes a Micrometer gauge <code>fractalx.service.dependency.up</code> for each one. Scraped by Prometheus and visualised on the Admin Dashboard.</p>
                 <h2>Correlation IDs</h2>
                 <div class="tw"><table>
                     <thead><tr><th>Header</th><th>Description</th></tr></thead>
                     <tbody>
                     <tr><td><code>X-Request-Id</code></td><td>Unique per HTTP request (UUID)</td></tr>
-                    <tr><td><code>X-Correlation-Id</code></td><td>Spans a logical operation across multiple service calls — set once at gateway, propagated</td></tr>
+                    <tr><td><code>X-Correlation-Id</code></td><td>Spans a logical operation across multiple service calls - set once at gateway, propagated</td></tr>
                     </tbody>
                 </table></div>
                 <div class="pn"><a class="pnb" onclick="nav('maven-plugin')"><div class="pd">← Previous</div><div class="pl2">Maven Plugin</div></a><a class="pnb nx" onclick="nav('resilience')"><div class="pd">Next →</div><div class="pl2">Resilience</div></a></div>
@@ -854,7 +854,7 @@ $ mvn fractalx:decompose -Dfractalx.verbose=true</code></pre></div>
                 <div class="tw"><table>
                     <thead><tr><th>Endpoint</th><th>Description</th></tr></thead>
                     <tbody>
-                    <tr><td><code>POST /saga/{sagaId}/start</code></td><td>Start a saga instance — returns <code>correlationId</code></td></tr>
+                    <tr><td><code>POST /saga/{sagaId}/start</code></td><td>Start a saga instance - returns <code>correlationId</code></td></tr>
                     <tr><td><code>GET /saga/status/{correlationId}</code></td><td>Poll: <code>STARTED</code> → <code>IN_PROGRESS</code> → <code>DONE</code> / <code>FAILED</code></td></tr>
                     <tr><td><code>GET /saga</code></td><td>List all definitions and recent executions</td></tr>
                     </tbody>
@@ -864,7 +864,7 @@ $ mvn fractalx:decompose -Dfractalx.verbose=true</code></pre></div>
 
             <!-- GATEWAY -->
             <div class="pg" id="pg-gateway">
-                <div class="hero"><div class="htag"><span class="dot"></span>Features</div><h1 class="pt">API Gateway</h1><p class="pl">Spring Cloud Gateway at <code>:9999</code> — dynamic routing, auth, rate limiting and observability, generated automatically.</p></div>
+                <div class="hero"><div class="htag"><span class="dot"></span>Features</div><h1 class="pt">API Gateway</h1><p class="pl">Spring Cloud Gateway at <code>:9999</code> - dynamic routing, auth, rate limiting and observability, generated automatically.</p></div>
                 <div class="tw"><table>
                     <thead><tr><th>Capability</th><th>Description</th><th>Default</th></tr></thead>
                     <tbody>
@@ -938,10 +938,10 @@ $ ./fractalx-output/start-all.sh</code></pre></div>
                 <div class="tw"><table>
                     <thead><tr><th>Service</th><th>HTTP</th><th>gRPC</th><th>Description</th></tr></thead>
                     <tbody>
-                    <tr><td><code>fractalx-registry</code></td><td>8761</td><td>—</td><td>Service registry</td></tr>
-                    <tr><td><code>fractalx-gateway</code></td><td>9999</td><td>—</td><td>API gateway</td></tr>
-                    <tr><td><code>admin-service</code></td><td>9090</td><td>—</td><td>Admin dashboard</td></tr>
-                    <tr><td><code>logger-service</code></td><td>9099</td><td>—</td><td>Log sink</td></tr>
+                    <tr><td><code>fractalx-registry</code></td><td>8761</td><td>-</td><td>Service registry</td></tr>
+                    <tr><td><code>fractalx-gateway</code></td><td>9999</td><td>-</td><td>API gateway</td></tr>
+                    <tr><td><code>admin-service</code></td><td>9090</td><td>-</td><td>Admin dashboard</td></tr>
+                    <tr><td><code>logger-service</code></td><td>9099</td><td>-</td><td>Log sink</td></tr>
                     <tr><td>Domain service 1</td><td>8081</td><td>18081</td><td>First domain service</td></tr>
                     <tr><td>Domain service 2</td><td>8082</td><td>18082</td><td>Second domain service</td></tr>
                     <tr><td>Domain service n</td><td>808n</td><td>1808n</td><td>n-th domain service</td></tr>
@@ -957,9 +957,9 @@ $ ./fractalx-output/start-all.sh</code></pre></div>
                 <div class="hero"><div class="htag"><span class="dot"></span>Reference</div><h1 class="pt">Troubleshooting</h1><p class="pl">Fixes for the most common issues.</p></div>
                 <div class="acc" onclick="tog(this)"><div class="ah2">No modules detected<span class="chv">▾</span></div><div class="ab2">
                     <div class="em">[WARN] No @DecomposableModule classes found. BUILD SUCCESS (no output)</div>
-                    <p>1. Class not in scanned source root — verify <code>&lt;sourceDirectory&gt;</code> in plugin config.</p>
-                    <p>2. Annotation on inner class — move to a top-level class.</p>
-                    <p>3. Missing/wrong-scope dependency — run <code>mvn dependency:list | grep fractalx</code>.</p>
+                    <p>1. Class not in scanned source root - verify <code>&lt;sourceDirectory&gt;</code> in plugin config.</p>
+                    <p>2. Annotation on inner class - move to a top-level class.</p>
+                    <p>3. Missing/wrong-scope dependency - run <code>mvn dependency:list | grep fractalx</code>.</p>
                 </div></div>
                 <div class="acc" onclick="tog(this)"><div class="ah2">Cross-module dependency not detected<span class="chv">▾</span></div><div class="ab2">
                     <p>1. Field uses interface type, not concrete class. Use <code>BService</code>, not <code>IBService</code>.</p>
@@ -970,13 +970,13 @@ $ ./fractalx-output/start-all.sh</code></pre></div>
                     <div class="em">java.lang.IllegalArgumentException: Unsupported class file major version 68</div>
                     <div class="cb"><div class="ch"><span class="cf"><span class="ld lb"></span>Terminal</span></div><pre><code>$ mvn fractalx:decompose -Djacoco.skip=true</code></pre></div>
                 </div></div>
-                <div class="acc" onclick="tog(this)"><div class="ah2">Generated service fails to start — datasource not found<span class="chv">▾</span></div><div class="ab2">
+                <div class="acc" onclick="tog(this)"><div class="ah2">Generated service fails to start - datasource not found<span class="chv">▾</span></div><div class="ab2">
                     <div class="em">Failed to configure a DataSource: 'url' attribute is not specified</div>
                     <p>1. Create <code>fractalx-config.yml</code> with datasource URL <em>before</em> running decompose.</p>
                     <p>2. Set env var: <code>export ORDER_DB_URL=jdbc:postgresql://localhost:5432/order_db</code></p>
-                    <p>3. Use Docker Compose — it starts database containers automatically.</p>
+                    <p>3. Use Docker Compose - it starts database containers automatically.</p>
                 </div></div>
-                <div class="acc" onclick="tog(this)"><div class="ah2">Flyway migration fails — relation already exists<span class="chv">▾</span></div><div class="ab2">
+                <div class="acc" onclick="tog(this)"><div class="ah2">Flyway migration fails - relation already exists<span class="chv">▾</span></div><div class="ab2">
                     <div class="em">ERROR: relation "orders" already exists</div>
                     <div class="cb"><div class="ch"><span class="cf"><span class="ld ly"></span>application-dev.yml</span></div><pre><code><span class="yk">spring.flyway</span>:
   <span class="yk">baseline-on-migrate</span>: <span class="yv">true</span>
@@ -995,7 +995,7 @@ $ curl http://localhost:9090/api/topology | jq .</code></pre></div>
             <!-- FAQ -->
             <div class="pg" id="pg-faq">
                 <div class="hero"><div class="htag"><span class="dot"></span>Reference</div><h1 class="pt">FAQ</h1><p class="pl">Answers to the most frequently asked questions.</p></div>
-                <div class="acc op" onclick="tog(this)"><div class="ah2">Can I decompose a monolith I didn't write?<span class="chv">▾</span></div><div class="ab2"><p>Yes. FractalX only parses source files — it doesn't compile or run them. Add <code>@DecomposableModule</code> to one class per bounded context and run <code>decompose</code>. No modification to existing code is required.</p></div></div>
+                <div class="acc op" onclick="tog(this)"><div class="ah2">Can I decompose a monolith I didn't write?<span class="chv">▾</span></div><div class="ab2"><p>Yes. FractalX only parses source files - it doesn't compile or run them. Add <code>@DecomposableModule</code> to one class per bounded context and run <code>decompose</code>. No modification to existing code is required.</p></div></div>
                 <div class="acc" onclick="tog(this)"><div class="ah2">Does FractalX modify my original source files?<span class="chv">▾</span></div><div class="ab2"><p>No. FractalX is read-only on the monolith source tree. All generated code is written to <code>fractalx-output/</code> by default.</p></div></div>
                 <div class="acc" onclick="tog(this)"><div class="ah2">Can I run decompose multiple times?<span class="chv">▾</span></div><div class="ab2"><p>Yes. Each run replaces the output directory. Safe to run iteratively as you refine module boundaries.</p></div></div>
                 <div class="acc" onclick="tog(this)"><div class="ah2">What databases are supported?<span class="chv">▾</span></div><div class="ab2"><p>PostgreSQL, MySQL, and MongoDB datasource configuration is generated from <code>fractalx-config.yml</code>. H2 is supported for testing.</p></div></div>

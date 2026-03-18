@@ -1,6 +1,6 @@
 # FractalX Web
 
-Marketing and documentation site for [FractalX](https://github.com/Project-FractalX/FractalX) — the open-source static decomposition framework for Spring Boot.
+Marketing and documentation site for [FractalX](https://github.com/Project-FractalX/FractalX) - the open-source static decomposition framework for Spring Boot.
 
 ## Structure
 
@@ -34,4 +34,4 @@ python3 -m http.server 8080
 
 ## License
 
-Apache 2.0 — same as the FractalX framework itself.
+Apache 2.0 - same as the FractalX framework itself.

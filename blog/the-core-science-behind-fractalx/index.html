@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>The Core Science Behind FractalX — FractalX Blog</title>
-    <meta name="description" content="A deep dive into how FractalX uses static AST analysis and build-time code generation to automate monolith decomposition — covering NetScope gRPC, distributed sagas, resilience wiring, and 30+ code generators."/>
+    <title>The Core Science Behind FractalX - FractalX Blog</title>
+    <meta name="description" content="A deep dive into how FractalX uses static AST analysis and build-time code generation to automate monolith decomposition - covering NetScope gRPC, distributed sagas, resilience wiring, and 30+ code generators."/>
     <meta name="keywords" content="FractalX, AST analysis, code generation, Spring Boot microservices, gRPC, distributed saga, Resilience4j, Java monolith decomposition"/>
     <meta name="author" content="FractalX Team"/>
     <meta name="robots" content="index, follow"/>
@@ -22,13 +22,13 @@
     <meta property="og:type" content="article"/>
     <meta property="og:site_name" content="FractalX"/>
     <meta property="og:title" content="The Core Science Behind FractalX"/>
-    <meta property="og:description" content="A deep dive into static AST analysis and build-time code generation — how FractalX automates the full decomposition of Spring Boot monoliths into production-ready microservices."/>
+    <meta property="og:description" content="A deep dive into static AST analysis and build-time code generation - how FractalX automates the full decomposition of Spring Boot monoliths into production-ready microservices."/>
     <meta property="og:url" content="https://fractalx.org/blog/the-core-science-behind-fractalx/"/>
     <meta property="og:image" content="https://fractalx.org/assets/og/blog-core-science.jpg"/>
     <meta property="og:image:type" content="image/jpeg"/>
     <meta property="og:image:width" content="1200"/>
     <meta property="og:image:height" content="630"/>
-    <meta property="og:image:alt" content="The Core Science Behind FractalX — AST analysis, code generation, gRPC, sagas"/>
+    <meta property="og:image:alt" content="The Core Science Behind FractalX - AST analysis, code generation, gRPC, sagas"/>
     <meta property="article:published_time" content="2026-03-18T00:00:00Z"/>
     <meta property="article:author" content="FractalX Team"/>
     <meta property="article:tag" content="Java"/>
@@ -39,7 +39,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:title" content="The Core Science Behind FractalX"/>
-    <meta name="twitter:description" content="A deep dive into static AST analysis and build-time code generation — how FractalX automates the full decomposition of Spring Boot monoliths into production-ready microservices."/>
+    <meta name="twitter:description" content="A deep dive into static AST analysis and build-time code generation - how FractalX automates the full decomposition of Spring Boot monoliths into production-ready microservices."/>
     <meta name="twitter:image" content="https://fractalx.org/assets/og/blog-core-science.jpg"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -295,6 +295,7 @@
         html.light .share-modal{background:var(--bg);border-color:var(--border2)}
         html.light .share-modal::-webkit-scrollbar-thumb{background:var(--border3)}
         @keyframes smin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes spin{to{transform:rotate(360deg)}}
         .sm-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
         .sm-hd-l{display:flex;align-items:center;gap:9px}
         .sm-hd-l svg{width:17px;height:17px;color:var(--orange)}
@@ -304,7 +305,7 @@
         html.light .sm-close{border-color:var(--border2);color:var(--text3)}
         html.light .sm-close:hover{border-color:var(--border3);color:var(--text);background:var(--bg2)}
 
-        /* Flyer preview — fixed 1200px native, scaled to fit modal */
+        /* Flyer preview - fixed 1200px native, scaled to fit modal */
         .flyer-wrap{border-radius:10px;overflow:hidden;border:1px solid #1f1f1f;margin-bottom:14px;position:relative}
         html.light .flyer-wrap{border-color:var(--border2)}
         .flyer-card{width:1200px;background:#0a0a0a;position:relative;overflow:hidden;display:flex;transform-origin:top left}
@@ -317,7 +318,7 @@
         html.light .flyer-card::after{background:radial-gradient(ellipse 55% 55% at 12% 20%,rgba(244,96,12,.10) 0%,transparent 100%),radial-gradient(ellipse 32% 32% at 88% 82%,rgba(245,168,0,.05) 0%,transparent 100%)}
         .fc-bar{position:absolute;left:0;top:0;bottom:0;width:5px;background:#f4600c;z-index:3}
 
-        /* Full-width single column — top group + bottom footer pinned via space-between */
+        /* Full-width single column - top group + bottom footer pinned via space-between */
         .flyer-card.wide .fc-left{position:relative;z-index:2;flex:1;padding:56px 76px 56px 80px;display:flex;flex-direction:column;justify-content:space-between;gap:28px}
         .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:76px 88px;display:flex;flex-direction:column;justify-content:space-between;gap:36px}
         .fc-right{display:none}
@@ -327,7 +328,7 @@
         /* Footer group */
         .fc-footer{display:flex;flex-direction:column;gap:12px}
 
-        /* Flyer content elements — absolute px at 1200px native size */
+        /* Flyer content elements - absolute px at 1200px native size */
         .fc-brand{display:flex;align-items:center;gap:12px}
         .fc-bname{font-size:26px;font-weight:700;color:#ededed;letter-spacing:-.3px}
         html.light .fc-bname{color:#09090b}
@@ -641,7 +642,7 @@ jaeger          :16686 &larr; distributed trace store</pre>
 
         <p>One of the most interesting parts of FractalX is its inter-service communication layer, called <strong>NetScope</strong>. When FractalX detects that <code>order-service</code> depends on <code>PaymentService</code>, it does something clever: it reads the <code>PaymentService</code> class from the monolith source, extracts all of its public methods, and generates a <code>@NetScopeClient</code> interface in the calling service with matching signatures.</p>
 
-<pre><code><span class="cmt">// Generated in order-service — you never write this</span>
+<pre><code><span class="cmt">// Generated in order-service - you never write this</span>
 <span class="ann">@NetScopeClient</span>(<span class="str">"payment-service"</span>)
 <span class="kw">public interface</span> <span class="cls">PaymentServiceClient</span> {
     <span class="cls">PaymentResult</span> processPayment(<span class="cls">Long</span> customerId, <span class="cls">BigDecimal</span> amount, <span class="cls">Long</span> orderId);
@@ -997,7 +998,7 @@ docker-compose up --build</code></pre>
     /* ── SHARE CONSTANTS ── */
     const POST_URL = 'https://fractalx.org/blog/the-core-science-behind-fractalx/';
     const POST_TITLE = 'The Core Science Behind FractalX';
-    const POST_DESC = 'A deep dive into static AST analysis and build-time code generation — how FractalX automates the decomposition of Spring Boot monoliths into production-ready microservices.';
+    const POST_DESC = 'A deep dive into static AST analysis and build-time code generation - how FractalX automates the decomposition of Spring Boot monoliths into production-ready microservices.';
 
     /* ── BUILD FLYER CANVAS (shared between download + share) ── */
     async function buildFlyerCanvas(){
@@ -1094,20 +1095,36 @@ docker-compose up --build</code></pre>
         ));
     }
 
-    /* Download flyer as PNG */
+    /* Spinner HTML reused across buttons */
+    const SPINNER = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin .7s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
+
+    /* Download flyer - on mobile uses Web Share API so iOS "Save Image" → Photos */
     async function downloadFlyer(){
-        const canvas = await buildFlyerCanvas();
-        const link = document.createElement('a');
-        link.download = `fractalx-blog-${curFmt==='wide'?'1200x630':'1080x1080'}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+        const dlBtn = document.querySelector('.sm-dl');
+        const origHTML = dlBtn ? dlBtn.innerHTML : null;
+        if(dlBtn){ dlBtn.innerHTML = SPINNER + ' Generating…'; dlBtn.disabled = true; }
+        try {
+            const canvas = await buildFlyerCanvas();
+            const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+            const file = new File([blob], `fractalx-flyer-${curFmt}.png`, {type:'image/png'});
+            /* On mobile: share sheet → user taps "Save Image" to save to Photos */
+            if(navigator.canShare && navigator.canShare({files:[file]})){
+                await navigator.share({files:[file], title:'FractalX - ' + POST_TITLE});
+            } else {
+                /* Desktop: direct <a download> */
+                const link = document.createElement('a');
+                link.download = `fractalx-blog-${curFmt==='wide'?'1200x630':'1080x1080'}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }
+        } catch(e){ /* AbortError = user cancelled - no-op */ }
+        if(dlBtn){ dlBtn.innerHTML = origHTML; dlBtn.disabled = false; }
     }
 
-    /* Share with flyer image attached; platformFallback runs if Web Share API unavailable */
+    /* Share with flyer attached; platformFallback used only if Web Share API unavailable */
     async function shareWithFlyer(btn, platformFallback){
         const origHTML = btn.innerHTML;
-        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
-        btn.disabled = true;
+        btn.innerHTML = SPINNER; btn.disabled = true;
         try {
             const file = await getFlyerFile();
             if(navigator.canShare && navigator.canShare({files:[file]})){
@@ -1122,7 +1139,7 @@ docker-compose up --build</code></pre>
         platformFallback();
     }
 
-    /* Platform URL fallbacks */
+    /* Platform URL fallbacks (desktop / unsupported browsers) */
     function _shareX(){ window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(POST_TITLE+'\n\n'+POST_DESC+'\n')}&url=${encodeURIComponent(POST_URL)}`,'_blank','width=580,height=400'); }
     function _shareLinkedIn(){ window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(POST_URL)}`,'_blank','width=600,height=500'); }
     function _shareWhatsApp(){ window.open(`https://wa.me/?text=${encodeURIComponent(POST_TITLE+'\n'+POST_DESC+'\n'+POST_URL)}`,'_blank'); }
