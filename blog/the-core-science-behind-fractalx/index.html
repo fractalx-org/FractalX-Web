@@ -161,6 +161,7 @@
 
         /* ── HERO BANNER ── */
         .art-hero{background:linear-gradient(135deg,#0d0d0d 0%,#161616 50%,#0d0d0d 100%);border:1px solid var(--border2);border-radius:12px;padding:40px 36px;margin-bottom:48px;position:relative;overflow:hidden}
+        html.light .art-hero{background:linear-gradient(135deg,#fafafa 0%,#f0f0f2 50%,#fafafa 100%)}
         .art-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,var(--orange-glow) 0%,transparent 55%),radial-gradient(ellipse at 80% 20%,rgba(244,96,12,.06) 0%,transparent 50%)}
         .art-hero-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.2em;color:var(--text4);text-transform:uppercase;margin-bottom:10px;position:relative;z-index:1}
         .art-hero-title{font-family:var(--mono);font-size:clamp(20px,4vw,30px);font-weight:500;color:var(--orange);line-height:1.3;margin-bottom:8px;position:relative;z-index:1}
@@ -201,7 +202,7 @@
         /* code blocks */
         .prose pre{background:#0d0d0d;border:1px solid var(--border2);border-radius:10px;padding:22px 24px;overflow-x:auto;margin:24px 0;font-family:var(--mono);font-size:13px;line-height:1.65;color:#d4d4d4}
         .prose pre code{background:none;border:none;padding:0;border-radius:0;color:inherit;font-size:inherit;white-space:pre}
-        html.light .prose pre{background:#0d0d0d;border-color:#2a2a2a}
+        html.light .prose pre{background:#f6f8fa;border-color:var(--border2);color:#24292e}
         .prose pre .kw{color:var(--orange)}
         .prose pre .ann{color:var(--gold)}
         .prose pre .str{color:var(--green)}
@@ -209,6 +210,13 @@
         .prose pre .num{color:var(--peri)}
         .prose pre .cls{color:var(--blue)}
         .prose pre .pn{color:#a0a0a0}
+        html.light .prose pre .kw{color:#c04608}
+        html.light .prose pre .ann{color:#c47a00}
+        html.light .prose pre .str{color:#067a6f}
+        html.light .prose pre .cmt{color:#8a929e}
+        html.light .prose pre .num{color:#4a5fa8}
+        html.light .prose pre .cls{color:#0070f3}
+        html.light .prose pre .pn{color:#666}
 
         /* steps list */
         .steps{list-style:none;margin:20px 0;display:flex;flex-direction:column;gap:0}
@@ -227,9 +235,10 @@
 
         /* architecture box */
         .arch-box{background:#0d0d0d;border:1px solid var(--border2);border-radius:10px;padding:24px;margin:24px 0;overflow-x:auto}
-        html.light .arch-box{background:#0d0d0d;border-color:#2a2a2a}
+        html.light .arch-box{background:#f6f8fa;border-color:var(--border2)}
         .arch-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--text4);text-transform:uppercase;margin-bottom:10px}
         .arch-box pre{background:transparent;border:none;padding:0;margin:0;font-family:var(--mono);font-size:12.5px;color:#6ee7b7;line-height:1.6;white-space:pre}
+        html.light .arch-box pre{color:#067a6f}
 
         /* comparison table */
         .compare-wrap{overflow-x:auto;margin:24px 0}
@@ -277,10 +286,13 @@
 
         /* ── SHARE MODAL ── */
         .share-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);backdrop-filter:blur(14px) saturate(120%);align-items:center;justify-content:center;padding:20px}
+        html.light .share-overlay{background:rgba(255,255,255,.80)}
         .share-overlay.open{display:flex}
         .share-modal{background:#0a0a0a;border:1px solid #272727;border-radius:16px;width:100%;max-width:660px;max-height:92vh;overflow-y:auto;padding:28px;animation:smin .2s ease}
         .share-modal::-webkit-scrollbar{width:3px}
         .share-modal::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:3px}
+        html.light .share-modal{background:var(--bg);border-color:var(--border2)}
+        html.light .share-modal::-webkit-scrollbar-thumb{background:var(--border3)}
         @keyframes smin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
         .sm-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
         .sm-hd-l{display:flex;align-items:center;gap:9px}
@@ -288,48 +300,74 @@
         .sm-hd h3{font-size:15px;font-weight:600;color:var(--text)}
         .sm-close{width:30px;height:30px;border-radius:6px;border:1px solid #272727;background:transparent;color:#52525b;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0;font-size:18px;line-height:1;font-family:sans-serif}
         .sm-close:hover{border-color:#444;color:var(--text);background:#111}
+        html.light .sm-close{border-color:var(--border2);color:var(--text3)}
+        html.light .sm-close:hover{border-color:var(--border3);color:var(--text);background:var(--bg2)}
 
         /* Flyer preview — fixed 1200px native, scaled to fit modal */
         .flyer-wrap{border-radius:10px;overflow:hidden;border:1px solid #1f1f1f;margin-bottom:14px;position:relative}
+        html.light .flyer-wrap{border-color:var(--border2)}
         .flyer-card{width:1200px;background:#0a0a0a;position:relative;overflow:hidden;display:flex;transform-origin:top left}
+        html.light .flyer-card{background:#ffffff}
         .flyer-card.wide{height:630px}
         .flyer-card.sq{height:1080px;flex-direction:column}
         .flyer-card::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(#1e1e1e 1px,transparent 1px),linear-gradient(90deg,#1e1e1e 1px,transparent 1px);background-size:48px 48px;opacity:.6}
+        html.light .flyer-card::before{background-image:linear-gradient(#e4e4e7 1px,transparent 1px),linear-gradient(90deg,#e4e4e7 1px,transparent 1px);opacity:.7}
         .flyer-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 55% at 12% 20%,rgba(244,96,12,.22) 0%,transparent 100%),radial-gradient(ellipse 32% 32% at 88% 82%,rgba(245,168,0,.06) 0%,transparent 100%)}
+        html.light .flyer-card::after{background:radial-gradient(ellipse 55% 55% at 12% 20%,rgba(244,96,12,.10) 0%,transparent 100%),radial-gradient(ellipse 32% 32% at 88% 82%,rgba(245,168,0,.05) 0%,transparent 100%)}
         .fc-bar{position:absolute;left:0;top:0;bottom:0;width:5px;background:#f4600c;z-index:3}
 
-        /* Full-width single column for both formats */
-        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:1;padding:52px 64px;display:flex;flex-direction:column;gap:16px}
-        .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:72px 80px;display:flex;flex-direction:column;gap:20px}
+        /* Full-width single column — top group + bottom footer pinned via space-between */
+        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:1;padding:56px 76px 56px 80px;display:flex;flex-direction:column;justify-content:space-between;gap:28px}
+        .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:76px 88px;display:flex;flex-direction:column;justify-content:space-between;gap:36px}
         .fc-right{display:none}
 
+        /* Top content group */
+        .fc-top{display:flex;flex-direction:column;gap:14px}
+        /* Footer group */
+        .fc-footer{display:flex;flex-direction:column;gap:12px}
+
         /* Flyer content elements — absolute px at 1200px native size */
-        .fc-brand{display:flex;align-items:center;gap:9px}
-        .fc-bname{font-size:18px;font-weight:700;color:#ededed;letter-spacing:-.2px}
-        .fc-bsep{font-size:16px;color:#2a2a2a}
-        .fc-bsec{font-size:16px;color:#555}
-        .fc-tags{display:flex;gap:7px;flex-wrap:wrap}
-        .fc-tag{font-size:12px;font-family:'Geist Mono',monospace;font-weight:500;padding:4px 11px;border-radius:20px;letter-spacing:.03em;white-space:nowrap}
+        .fc-brand{display:flex;align-items:center;gap:12px}
+        .fc-bname{font-size:26px;font-weight:700;color:#ededed;letter-spacing:-.3px}
+        html.light .fc-bname{color:#09090b}
+        .fc-bsep{font-size:22px;color:#2a2a2a}
+        html.light .fc-bsep{color:#d4d4d8}
+        .fc-bsec{font-size:22px;color:#555}
+        html.light .fc-bsec{color:#71717a}
+        .fc-tags{display:flex;gap:8px;flex-wrap:wrap}
+        .fc-tag{font-size:17px;font-family:'Geist Mono',monospace;font-weight:500;padding:5px 13px;border-radius:40px;letter-spacing:.03em;white-space:nowrap}
         .fc-tag.or{background:rgba(244,96,12,.12);border:1px solid rgba(244,96,12,.3);color:#f4600c}
         .fc-tag.gd{background:rgba(245,168,0,.10);border:1px solid rgba(245,168,0,.25);color:#f5a800}
+        html.light .fc-tag.gd{color:#c47a00;border-color:rgba(196,122,0,.3)}
         .fc-tag.df{background:#0d0d0d;border:1px solid #272727;color:#666}
-        .fc-title{font-size:54px;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.1}
+        html.light .fc-tag.df{background:#f4f4f5;border-color:#e4e4e7;color:#71717a}
+        .fc-title{font-size:66px;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.08}
+        html.light .fc-title{color:#09090b}
         .fc-title .hl{color:#f4600c}
-        .fc-desc{font-size:17px;color:#555;line-height:1.55;flex:1}
-        .fc-hr{border:none;border-top:1px solid #1a1a1a;margin:0}
-        .fc-author{display:flex;align-items:center;gap:10px}
-        .fc-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#f4600c,#e0540a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:12px}
-        .fc-aname{font-size:14px;font-weight:600;color:#aaa;display:block}
-        .fc-ameta{font-size:12px;color:#444;font-family:'Geist Mono',monospace;display:block}
-        .fc-url{font-size:13px;font-family:'Geist Mono',monospace;color:#333;margin-top:auto}
+        html.light .fc-title .hl{color:#d4510a}
+        .fc-desc{font-size:20px;color:#555;line-height:1.55}
+        html.light .fc-desc{color:#71717a}
+        .fc-hr{border:none;border-top:1px solid #222;margin:0}
+        html.light .fc-hr{border-top-color:#e4e4e7}
+        .fc-author{display:flex;align-items:center;gap:12px}
+        .fc-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#f4600c,#e0540a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:16px}
+        .fc-aname{font-size:20px;font-weight:600;color:#aaa;display:block}
+        html.light .fc-aname{color:#52525b}
+        .fc-ameta{font-size:17px;color:#444;font-family:'Geist Mono',monospace;display:block}
+        html.light .fc-ameta{color:#a1a1aa}
+        .fc-url{font-size:17px;font-family:'Geist Mono',monospace;color:#333}
+        html.light .fc-url{color:#a1a1aa}
 
 
         /* Format toggle */
         .sm-fmt{display:flex;align-items:center;gap:8px;margin-bottom:14px}
         .sm-fmt span{font-size:11.5px;font-family:'Geist Mono',monospace;color:#444}
+        html.light .sm-fmt span{color:var(--text3)}
         .fmtb{padding:4px 12px;border-radius:6px;border:1px solid #1f1f1f;background:transparent;font-size:11px;font-family:'Geist Mono',monospace;color:#555;cursor:pointer;transition:all .15s}
         .fmtb.on{border-color:#f4600c;color:#f4600c;background:rgba(244,96,12,.10)}
         .fmtb:hover:not(.on){border-color:#333;color:#999}
+        html.light .fmtb{border-color:var(--border2);color:var(--text3)}
+        html.light .fmtb:hover:not(.on){border-color:var(--border3);color:var(--text2)}
 
         /* Download */
         .sm-dl{width:100%;padding:11px;border-radius:8px;border:none;background:#f4600c;color:#fff;font-size:13.5px;font-weight:500;font-family:'Geist',system-ui,sans-serif;cursor:pointer;transition:background .15s;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -338,11 +376,15 @@
 
         /* Share buttons */
         .sm-sh-lbl{font-size:10.5px;font-family:'Geist Mono',monospace;color:#333;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+        html.light .sm-sh-lbl{color:var(--text4)}
         .sm-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
         .shb{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 14px;border-radius:8px;border:1px solid #1a1a1a;background:#0d0d0d;color:#555;font-size:13px;font-weight:500;font-family:'Geist',system-ui,sans-serif;cursor:pointer;transition:all .15s;text-decoration:none}
         .shb:hover{border-color:#2a2a2a;color:#ededed;background:#111;text-decoration:none}
         .shb svg{width:15px;height:15px;flex-shrink:0}
         .shb.ok{border-color:#f4600c;color:#f4600c;background:rgba(244,96,12,.10)}
+        html.light .shb{border-color:var(--border);background:var(--bg1);color:var(--text3)}
+        html.light .shb:hover{border-color:var(--border3);color:var(--text);background:var(--bg2);text-decoration:none}
+        html.light .shb.ok{border-color:var(--orange);color:var(--orange);background:var(--orange-dim)}
 
         @media(max-width:640px){
             .article-wrap{padding:80px 20px 80px}
@@ -813,29 +855,33 @@ docker-compose up --build</code></pre>
 
                 <!-- Left content -->
                 <div class="fc-left">
-                    <div class="fc-brand">
-                        <svg width="36" height="40" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="#f4600c"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="#f4600c"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="#f4600c"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="#f4600c"/></svg>
-                        <span class="fc-bname">FractalX</span>
-                        <span class="fc-bsep">/</span>
-                        <span class="fc-bsec">Blog</span>
-                    </div>
-                    <div class="fc-tags">
-                        <span class="fc-tag or">Architecture</span>
-                        <span class="fc-tag df">Java</span>
-                        <span class="fc-tag df">Spring Boot</span>
-                        <span class="fc-tag gd">Code Generation</span>
-                    </div>
-                    <div class="fc-title">The Core Science<br>Behind <span class="hl">FractalX</span></div>
-                    <div class="fc-desc">Static AST analysis &middot; Build-time code generation &middot; NetScope gRPC &middot; Distributed sagas &middot; 30+ generators</div>
-                    <hr class="fc-hr">
-                    <div class="fc-author">
-                        <div class="fc-av">F</div>
-                        <div>
-                            <span class="fc-aname">FractalX Team</span>
-                            <span class="fc-ameta">March 18, 2026 &nbsp;&middot;&nbsp; 12 min read</span>
+                    <div class="fc-top">
+                        <div class="fc-brand">
+                            <svg width="34" height="38" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="#f4600c"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="#f4600c"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="#f4600c"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="#f4600c"/></svg>
+                            <span class="fc-bname">FractalX</span>
+                            <span class="fc-bsep">/</span>
+                            <span class="fc-bsec">Blog</span>
                         </div>
+                        <div class="fc-tags">
+                            <span class="fc-tag or">Architecture</span>
+                            <span class="fc-tag df">Java</span>
+                            <span class="fc-tag df">Spring Boot</span>
+                            <span class="fc-tag gd">Code Generation</span>
+                        </div>
+                        <div class="fc-title">The Core Science<br>Behind <span class="hl">FractalX</span></div>
+                        <div class="fc-desc">Static AST analysis &middot; Build-time code generation &middot; NetScope gRPC &middot; Distributed sagas &middot; 30+ generators</div>
                     </div>
-                    <div class="fc-url">project-fractalx.github.io/FractalX-Web/blog</div>
+                    <div class="fc-footer">
+                        <hr class="fc-hr">
+                        <div class="fc-author">
+                            <div class="fc-av">F</div>
+                            <div>
+                                <span class="fc-aname">FractalX Team</span>
+                                <span class="fc-ameta">March 18, 2026 &nbsp;&middot;&nbsp; 12 min read</span>
+                            </div>
+                        </div>
+                        <div class="fc-url">project-fractalx.github.io/FractalX-Web/blog</div>
+                    </div>
                 </div>
 
             </div>
@@ -981,42 +1027,66 @@ docker-compose up --build</code></pre>
     /* ── CANVAS FLYER DOWNLOAD ── */
     async function downloadFlyer(){
         const isWide = curFmt === 'wide';
+        const isLight = document.documentElement.classList.contains('light');
         const W = isWide ? 1200 : 1080;
         const H = isWide ? 630 : 1080;
         const canvas = document.createElement('canvas');
         canvas.width = W; canvas.height = H;
         const ctx = canvas.getContext('2d');
-        const s = W / 1200; // scale from 1200-base
+        const s = W / 1200;
+
+        /* theme palette */
+        const T = isLight ? {
+            bg:'#ffffff', grid:'#e4e4e7', gridOpacity:.7,
+            glowOrange:'rgba(244,96,12,.10)', glowGold:'rgba(245,168,0,.05)',
+            brandName:'#09090b', brandSep:'#d4d4d8', brandSec:'#71717a',
+            tagDfBg:'#f4f4f5', tagDfBd:'#e4e4e7', tagDfFg:'#71717a',
+            tagGdFg:'#c47a00', tagGdBg:'rgba(196,122,0,.08)', tagGdBd:'rgba(196,122,0,.3)',
+            titleColor:'#09090b', accentColor:'#d4510a',
+            descColor:'#71717a', divider:'#e4e4e7',
+            authorName:'#52525b', authorMeta:'#a1a1aa', url:'#a1a1aa',
+        } : {
+            bg:'#0a0a0a', grid:'#1e1e1e', gridOpacity:.6,
+            glowOrange:'rgba(244,96,12,.22)', glowGold:'rgba(245,168,0,.06)',
+            brandName:'#ededed', brandSep:'#2a2a2a', brandSec:'#555',
+            tagDfBg:'#0d0d0d', tagDfBd:'#272727', tagDfFg:'#666',
+            tagGdFg:'#f5a800', tagGdBg:'rgba(245,168,0,.10)', tagGdBd:'rgba(245,168,0,.25)',
+            titleColor:'#ffffff', accentColor:'#f4600c',
+            descColor:'#555', divider:'#1f1f1f',
+            authorName:'#999', authorMeta:'#444', url:'#2a2a2a',
+        };
 
         await document.fonts.ready;
 
         /* background */
-        ctx.fillStyle = '#0a0a0a';
+        ctx.fillStyle = T.bg;
         ctx.fillRect(0, 0, W, H);
 
         /* grid */
-        ctx.strokeStyle = '#1e1e1e';
+        ctx.globalAlpha = T.gridOpacity;
+        ctx.strokeStyle = T.grid;
         ctx.lineWidth = 0.8;
         const gs = 48 * s;
         for (let x = 0; x <= W; x += gs){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
         for (let y = 0; y <= H; y += gs){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+        ctx.globalAlpha = 1;
 
-        /* orange glow */
+        /* glow */
         const g1 = ctx.createRadialGradient(W*.12, H*.18, 0, W*.12, H*.18, W*.55);
-        g1.addColorStop(0,'rgba(244,96,12,.22)'); g1.addColorStop(1,'rgba(0,0,0,0)');
+        g1.addColorStop(0, T.glowOrange); g1.addColorStop(1,'rgba(0,0,0,0)');
         ctx.fillStyle = g1; ctx.fillRect(0,0,W,H);
         const g2 = ctx.createRadialGradient(W*.88, H*.84, 0, W*.88, H*.84, W*.35);
-        g2.addColorStop(0,'rgba(245,168,0,.06)'); g2.addColorStop(1,'rgba(0,0,0,0)');
+        g2.addColorStop(0, T.glowGold); g2.addColorStop(1,'rgba(0,0,0,0)');
         ctx.fillStyle = g2; ctx.fillRect(0,0,W,H);
 
         /* left bar */
         ctx.fillStyle = '#f4600c';
-        ctx.fillRect(0, 0, 4*s, H);
+        ctx.fillRect(0, 0, 5*s, H);
 
-        /* logo mark using Path2D */
+        /* logo mark */
         ctx.save();
         const ls = 0.24 * s;
-        ctx.translate(64*s, 50*s);
+        ctx.translate(80*s, 50*s);
         ctx.scale(ls, ls);
         ctx.fillStyle = '#f4600c';
         ['M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z',
@@ -1027,22 +1097,24 @@ docker-compose up --build</code></pre>
         ctx.restore();
 
         /* brand name */
-        ctx.fillStyle = '#ededed';
+        ctx.fillStyle = T.brandName;
         ctx.font = `700 ${20*s}px 'Geist', system-ui, sans-serif`;
-        ctx.fillText('FractalX', 104*s, 76*s);
-        ctx.fillStyle = '#333';
-        ctx.font = `400 ${14*s}px 'Geist', system-ui, sans-serif`;
-        ctx.fillText('/ Blog', 164*s, 76*s);
+        ctx.fillText('FractalX', 122*s, 76*s);
+        ctx.fillStyle = T.brandSep;
+        ctx.font = `400 ${16*s}px 'Geist', system-ui, sans-serif`;
+        ctx.fillText('/', 198*s, 74*s);
+        ctx.fillStyle = T.brandSec;
+        ctx.fillText('Blog', 214*s, 74*s);
 
         /* tags */
         const tags = [
-            {t:'Architecture', fg:'#f4600c', bg:'rgba(244,96,12,.12)', bd:'rgba(244,96,12,.3)'},
-            {t:'Java',          fg:'#555',    bg:'#0d0d0d',             bd:'#222'},
-            {t:'Spring Boot',   fg:'#555',    bg:'#0d0d0d',             bd:'#222'},
-            {t:'Code Generation',fg:'#f5a800',bg:'rgba(245,168,0,.10)',bd:'rgba(245,168,0,.25)'},
+            {t:'Architecture', fg:'#f4600c',    bg:'rgba(244,96,12,.12)', bd:'rgba(244,96,12,.3)'},
+            {t:'Java',          fg:T.tagDfFg,   bg:T.tagDfBg,             bd:T.tagDfBd},
+            {t:'Spring Boot',   fg:T.tagDfFg,   bg:T.tagDfBg,             bd:T.tagDfBd},
+            {t:'Code Generation',fg:T.tagGdFg,  bg:T.tagGdBg,             bd:T.tagGdBd},
         ];
         ctx.font = `500 ${11*s}px 'Geist Mono', monospace`;
-        let tx = 64*s, ty = 104*s, th = 22*s, tp = 10*s, tr = 11*s;
+        let tx = 80*s, ty = 104*s, th = 22*s, tp = 10*s, tr = 11*s;
         for (const tag of tags){
             const tw2 = ctx.measureText(tag.t).width + tp*2;
             rr(ctx, tx, ty, tw2, th, tr, tag.bg, tag.bd);
@@ -1052,44 +1124,43 @@ docker-compose up --build</code></pre>
         }
 
         /* title */
-        const titleX = 64*s;
+        const titleX = 80*s;
+        ctx.fillStyle = T.titleColor;
         if (isWide){
-            ctx.fillStyle = '#ffffff';
             ctx.font = `800 ${52*s}px 'Geist', system-ui, sans-serif`;
             ctx.fillText('The Core Science', titleX, 204*s);
             ctx.fillText('Behind ', titleX, 268*s);
-            ctx.fillStyle = '#f4600c';
+            ctx.fillStyle = T.accentColor;
             const bw = ctx.measureText('Behind ').width;
             ctx.fillText('FractalX', titleX + bw, 268*s);
         } else {
-            ctx.fillStyle = '#ffffff';
             ctx.font = `800 ${70*s}px 'Geist', system-ui, sans-serif`;
-            ctx.fillText('The Core', 64*s, 340*s);
-            ctx.fillText('Science', 64*s, 428*s);
-            ctx.fillStyle = '#f4600c';
-            ctx.fillText('Behind FractalX', 64*s, 516*s);
+            ctx.fillText('The Core', titleX, 340*s);
+            ctx.fillText('Science', titleX, 428*s);
+            ctx.fillStyle = T.accentColor;
+            ctx.fillText('Behind FractalX', titleX, 516*s);
         }
 
         /* description */
-        ctx.fillStyle = '#3a3a3a';
+        ctx.fillStyle = T.descColor;
         ctx.font = `400 ${13*s}px 'Geist', system-ui, sans-serif`;
         if (isWide){
             ctx.fillText('Static AST analysis · Build-time code generation · NetScope gRPC · 30+ generators', titleX, 316*s);
         } else {
-            ctx.fillText('Static AST analysis · Build-time code generation', 64*s, 570*s);
-            ctx.fillText('NetScope gRPC · Distributed sagas · 30+ generators', 64*s, 592*s);
+            ctx.fillText('Static AST analysis · Build-time code generation', titleX, 570*s);
+            ctx.fillText('NetScope gRPC · Distributed sagas · 30+ generators', titleX, 592*s);
         }
 
         /* divider */
-        ctx.strokeStyle = '#1f1f1f';
+        ctx.strokeStyle = T.divider;
         ctx.lineWidth = 1;
         const divY = isWide ? 350*s : 630*s;
-        ctx.beginPath(); ctx.moveTo(titleX, divY); ctx.lineTo((isWide?620:1016)*s, divY); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(titleX, divY); ctx.lineTo((isWide?1120:1016)*s, divY); ctx.stroke();
 
         /* author avatar */
         const avY = isWide ? 385*s : 660*s;
         const avR = 14*s;
-        const avX = (64+avR)*s;
+        const avX = (80+avR)*s;
         ctx.beginPath();
         ctx.arc(avX, avY, avR, 0, Math.PI*2);
         const ag = ctx.createRadialGradient(avX-2*s, avY-2*s, 0, avX, avY, avR);
@@ -1102,18 +1173,18 @@ docker-compose up --build</code></pre>
         ctx.textAlign = 'left';
 
         /* author text */
-        ctx.fillStyle = '#999';
+        ctx.fillStyle = T.authorName;
         ctx.font = `600 ${13*s}px 'Geist', system-ui, sans-serif`;
-        ctx.fillText('FractalX Team', (64+avR*2+8)*s, avY-2*s);
-        ctx.fillStyle = '#333';
+        ctx.fillText('FractalX Team', (80+avR*2+8)*s, avY-2*s);
+        ctx.fillStyle = T.authorMeta;
         ctx.font = `400 ${11*s}px 'Geist Mono', monospace`;
-        ctx.fillText('March 18, 2026  ·  12 min read', (64+avR*2+8)*s, avY+12*s);
+        ctx.fillText('March 18, 2026  ·  12 min read', (80+avR*2+8)*s, avY+12*s);
 
         /* URL */
-        ctx.fillStyle = '#2a2a2a';
+        ctx.fillStyle = T.url;
         ctx.font = `400 ${10*s}px 'Geist Mono', monospace`;
         const urlY = isWide ? 598*s : 1040*s;
-        ctx.fillText('project-fractalx.github.io/FractalX-Web/blog/the-core-science-behind-fractalx', 64*s, urlY);
+        ctx.fillText('project-fractalx.github.io/FractalX-Web/blog/the-core-science-behind-fractalx', titleX, urlY);
 
         /* download */
         const link = document.createElement('a');
