@@ -264,6 +264,96 @@
         .foot-link:hover{color:var(--text);text-decoration:none}
         .foot-copy{font-size:12px;color:var(--text4)}
 
+        /* ── SHARE SECTION ── */
+        .share-section{padding:32px 0 0;border-top:1px solid var(--border);margin-top:48px;display:flex;flex-direction:column;gap:16px}
+        .share-section-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+        .share-label{font-size:12.5px;font-family:var(--mono);color:var(--text3);letter-spacing:.04em}
+        .share-inline-btns{display:flex;gap:8px;flex-wrap:wrap}
+        .sib{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;font-family:var(--font);border:1px solid var(--border2);background:var(--bg1);color:var(--text2);cursor:pointer;transition:all .15s;text-decoration:none}
+        .sib:hover{border-color:var(--border3);color:var(--text);background:var(--bg2);text-decoration:none}
+        .sib.primary{background:var(--orange);color:#fff;border-color:transparent}
+        .sib.primary:hover{background:var(--orange2)}
+        .sib svg{width:14px;height:14px;flex-shrink:0}
+
+        /* ── SHARE MODAL ── */
+        .share-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);backdrop-filter:blur(14px) saturate(120%);align-items:center;justify-content:center;padding:20px}
+        .share-overlay.open{display:flex}
+        .share-modal{background:#0a0a0a;border:1px solid #272727;border-radius:16px;width:100%;max-width:660px;max-height:92vh;overflow-y:auto;padding:28px;animation:smin .2s ease}
+        .share-modal::-webkit-scrollbar{width:3px}
+        .share-modal::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:3px}
+        @keyframes smin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+        .sm-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+        .sm-hd-l{display:flex;align-items:center;gap:9px}
+        .sm-hd-l svg{width:17px;height:17px;color:var(--orange)}
+        .sm-hd h3{font-size:15px;font-weight:600;color:var(--text)}
+        .sm-close{width:30px;height:30px;border-radius:6px;border:1px solid #272727;background:transparent;color:#52525b;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0;font-size:18px;line-height:1;font-family:sans-serif}
+        .sm-close:hover{border-color:#444;color:var(--text);background:#111}
+
+        /* Flyer preview */
+        .flyer-wrap{border-radius:10px;overflow:hidden;border:1px solid #1f1f1f;margin-bottom:14px}
+        .flyer-card{width:100%;background:#0a0a0a;position:relative;overflow:hidden;display:flex}
+        .flyer-card.wide{aspect-ratio:1200/630}
+        .flyer-card.sq{aspect-ratio:1/1;flex-direction:column}
+        .flyer-card::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(#1e1e1e 1px,transparent 1px),linear-gradient(90deg,#1e1e1e 1px,transparent 1px);background-size:calc(100%/25) calc(100%/13.125);opacity:.6}
+        .flyer-card.sq::before{background-size:calc(100%/22) calc(100%/22)}
+        .flyer-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 55% at 12% 20%,rgba(244,96,12,.22) 0%,transparent 100%),radial-gradient(ellipse 32% 32% at 88% 82%,rgba(245,168,0,.06) 0%,transparent 100%)}
+        .fc-bar{position:absolute;left:0;top:0;bottom:0;width:4px;background:#f4600c;z-index:3}
+
+        /* Wide: two column */
+        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:0 0 54%;padding:clamp(14px,4.5%,32px);display:flex;flex-direction:column;gap:clamp(5px,1.2%,11px);border-right:1px solid rgba(255,255,255,.04)}
+        .flyer-card.wide .fc-right{position:relative;z-index:2;flex:1;padding:clamp(12px,3%,22px);display:flex;flex-direction:column;overflow:hidden}
+
+        /* Square: single column */
+        .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:clamp(20px,6%,48px);display:flex;flex-direction:column;gap:clamp(8px,1.8%,18px)}
+        .flyer-card.sq .fc-right{display:none}
+
+        /* Flyer content elements */
+        .fc-brand{display:flex;align-items:center;gap:7px}
+        .fc-bname{font-size:clamp(11px,2%,17px);font-weight:700;color:#ededed;letter-spacing:-.2px}
+        .fc-bsep{font-size:clamp(10px,1.8%,15px);color:#2a2a2a}
+        .fc-bsec{font-size:clamp(10px,1.8%,15px);color:#444}
+        .fc-tags{display:flex;gap:clamp(3px,.7%,6px);flex-wrap:wrap}
+        .fc-tag{font-size:clamp(7px,1.1%,10px);font-family:'Geist Mono',monospace;font-weight:500;padding:clamp(2px,.4%,3px) clamp(5px,.9%,8px);border-radius:20px;letter-spacing:.03em;white-space:nowrap}
+        .fc-tag.or{background:rgba(244,96,12,.12);border:1px solid rgba(244,96,12,.3);color:#f4600c}
+        .fc-tag.gd{background:rgba(245,168,0,.10);border:1px solid rgba(245,168,0,.25);color:#f5a800}
+        .fc-tag.df{background:#0d0d0d;border:1px solid #272727;color:#555}
+        .fc-title{font-size:clamp(15px,3.2%,34px);font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.15}
+        .fc-title .hl{color:#f4600c}
+        .fc-desc{font-size:clamp(8px,1.4%,13px);color:#444;line-height:1.5;flex:1}
+        .fc-hr{border:none;border-top:1px solid #1a1a1a;margin:0}
+        .fc-author{display:flex;align-items:center;gap:clamp(5px,.9%,9px)}
+        .fc-av{width:clamp(16px,2.8%,24px);height:clamp(16px,2.8%,24px);border-radius:50%;background:linear-gradient(135deg,#f4600c,#e0540a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:clamp(7px,1.1%,10px)}
+        .fc-aname{font-size:clamp(8px,1.3%,12px);font-weight:600;color:#aaa;display:block}
+        .fc-ameta{font-size:clamp(7px,1.1%,10px);color:#333;font-family:'Geist Mono',monospace;display:block}
+        .fc-url{font-size:clamp(7px,1.1%,10px);font-family:'Geist Mono',monospace;color:#2a2a2a;margin-top:auto}
+
+        /* Right code pane */
+        .fc-code-lbl{font-size:clamp(6px,.9%,9px);font-family:'Geist Mono',monospace;font-weight:700;letter-spacing:.18em;color:#333;text-transform:uppercase;margin-bottom:clamp(5px,.9%,10px)}
+        .fc-code{font-family:'Geist Mono',monospace;font-size:clamp(6px,1%,10.5px);line-height:1.65;overflow:hidden;flex:1}
+        .fc-code .ck{color:#f4600c}.fc-code .ca{color:#f5a800}.fc-code .cs{color:#50e3c2}
+        .fc-code .cc{color:#2d2d2d;font-style:italic}.fc-code .cn{color:#b8c4e0}.fc-code .cb{color:#3291ff}.fc-code .cm{color:#555}
+        .fc-gen{margin-top:auto;background:rgba(244,96,12,.07);border:1px solid rgba(244,96,12,.15);border-radius:4px;padding:clamp(3px,.5%,6px) clamp(6px,1%,10px);font-family:'Geist Mono',monospace;font-size:clamp(6px,.9%,9px);color:#f4600c}
+
+        /* Format toggle */
+        .sm-fmt{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+        .sm-fmt span{font-size:11.5px;font-family:'Geist Mono',monospace;color:#444}
+        .fmtb{padding:4px 12px;border-radius:6px;border:1px solid #1f1f1f;background:transparent;font-size:11px;font-family:'Geist Mono',monospace;color:#555;cursor:pointer;transition:all .15s}
+        .fmtb.on{border-color:#f4600c;color:#f4600c;background:rgba(244,96,12,.10)}
+        .fmtb:hover:not(.on){border-color:#333;color:#999}
+
+        /* Download */
+        .sm-dl{width:100%;padding:11px;border-radius:8px;border:none;background:#f4600c;color:#fff;font-size:13.5px;font-weight:500;font-family:'Geist',system-ui,sans-serif;cursor:pointer;transition:background .15s;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+        .sm-dl:hover{background:#e0540a}
+        .sm-dl svg{width:15px;height:15px}
+
+        /* Share buttons */
+        .sm-sh-lbl{font-size:10.5px;font-family:'Geist Mono',monospace;color:#333;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+        .sm-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .shb{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 14px;border-radius:8px;border:1px solid #1a1a1a;background:#0d0d0d;color:#555;font-size:13px;font-weight:500;font-family:'Geist',system-ui,sans-serif;cursor:pointer;transition:all .15s;text-decoration:none}
+        .shb:hover{border-color:#2a2a2a;color:#ededed;background:#111;text-decoration:none}
+        .shb svg{width:15px;height:15px;flex-shrink:0}
+        .shb.ok{border-color:#f4600c;color:#f4600c;background:rgba(244,96,12,.10)}
+
         @media(max-width:640px){
             .article-wrap{padding:80px 20px 80px}
             .art-hero{padding:28px 22px}
@@ -272,6 +362,8 @@
             .compare-table td,.compare-table th{padding:9px 11px}
             .art-nav{flex-direction:column;align-items:flex-start}
             .foot-inner{flex-direction:column;align-items:flex-start}
+            .sm-btns{grid-template-columns:1fr}
+            .share-modal{padding:20px}
         }
     </style>
 </head>
@@ -654,6 +746,23 @@ docker-compose up --build</code></pre>
 
     </div><!-- /prose -->
 
+    <!-- ── SHARE SECTION ── -->
+    <div class="share-section">
+        <div class="share-section-top">
+            <span class="share-label">Found this useful? Share it.</span>
+            <div class="share-inline-btns">
+                <button class="sib primary" onclick="openShareModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                    Share &amp; download
+                </button>
+                <a class="sib" href="https://medium.com/@sathnidukottage/the-core-science-behind-fractalx-dfbdc6cffd7e" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+                    Read on Medium
+                </a>
+            </div>
+        </div>
+    </div>
+
     <div class="art-nav">
         <a href="/blog" class="art-nav-back">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
@@ -688,24 +797,408 @@ docker-compose up --build</code></pre>
     </div>
 </footer>
 
+<!-- ── SHARE MODAL ── -->
+<div class="share-overlay" id="shareOverlay" onclick="closeShareModal(event)">
+    <div class="share-modal" onclick="event.stopPropagation()">
+
+        <div class="sm-hd">
+            <div class="sm-hd-l">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <h3>Share this post</h3>
+            </div>
+            <button class="sm-close" onclick="closeShareModal()">&times;</button>
+        </div>
+
+        <!-- Flyer preview -->
+        <div class="flyer-wrap">
+            <div class="flyer-card wide" id="flyerCard">
+                <div class="fc-bar"></div>
+
+                <!-- Left content -->
+                <div class="fc-left">
+                    <div class="fc-brand">
+                        <svg width="16" height="18" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="#f4600c"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="#f4600c"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="#f4600c"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="#f4600c"/></svg>
+                        <span class="fc-bname">FractalX</span>
+                        <span class="fc-bsep">/</span>
+                        <span class="fc-bsec">Blog</span>
+                    </div>
+                    <div class="fc-tags">
+                        <span class="fc-tag or">Architecture</span>
+                        <span class="fc-tag df">Java</span>
+                        <span class="fc-tag df">Spring Boot</span>
+                        <span class="fc-tag gd">Code Generation</span>
+                    </div>
+                    <div class="fc-title">The Core Science<br>Behind <span class="hl">FractalX</span></div>
+                    <div class="fc-desc">Static AST analysis &middot; Build-time code generation &middot; NetScope gRPC &middot; Distributed sagas &middot; 30+ generators</div>
+                    <hr class="fc-hr">
+                    <div class="fc-author">
+                        <div class="fc-av">F</div>
+                        <div>
+                            <span class="fc-aname">FractalX Team</span>
+                            <span class="fc-ameta">March 18, 2026 &nbsp;&middot;&nbsp; 12 min read</span>
+                        </div>
+                    </div>
+                    <div class="fc-url">project-fractalx.github.io/FractalX-Web/blog</div>
+                </div>
+
+                <!-- Right code pane (wide only) -->
+                <div class="fc-right">
+                    <div class="fc-code-lbl">OrderModule.java</div>
+                    <div class="fc-code">
+<span class="ca">@DecomposableModule</span>(
+  serviceName = <span class="cs">"order-service"</span>,
+  port = <span class="cn">8081</span>
+)
+<span class="ck">public class</span> <span class="cb">OrderModule</span> {
+
+  <span class="cc">// auto-detected dep</span>
+  <span class="ck">private final</span> <span class="cb">PaymentService</span> ps;
+
+  <span class="ca">@DistributedSaga</span>(
+    sagaId = <span class="cs">"place-order-saga"</span>
+  )
+  <span class="ck">public</span> <span class="cb">Order</span> placeOrder(...) {
+    <span class="cc">// generates full saga</span>
+    <span class="cc">// orchestrator service</span>
+  }
+}</div>
+                    <div class="fc-gen">&#8627; generates order-service + saga-orchestrator</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Format toggle -->
+        <div class="sm-fmt">
+            <span>Format:</span>
+            <button class="fmtb on" id="fmtWide" onclick="setFmt('wide')">16:9</button>
+            <button class="fmtb" id="fmtSq" onclick="setFmt('sq')">1:1</button>
+        </div>
+
+        <!-- Download -->
+        <button class="sm-dl" onclick="downloadFlyer()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download as PNG
+        </button>
+
+        <!-- Share buttons -->
+        <div class="sm-sh-lbl">Share to</div>
+        <div class="sm-btns">
+            <button class="shb" onclick="shareX()">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.259 5.631L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                Post on X
+            </button>
+            <button class="shb" onclick="shareLinkedIn()">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                LinkedIn
+            </button>
+            <button class="shb" onclick="shareWhatsApp()">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                WhatsApp
+            </button>
+            <button class="shb" id="copyBtn" onclick="copyLink()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                <span id="copyLabel">Copy link</span>
+            </button>
+            <a class="shb" href="https://medium.com/@sathnidukottage/the-core-science-behind-fractalx-dfbdc6cffd7e" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+                Read on Medium
+            </a>
+            <button class="shb" onclick="nativeShare()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                More options
+            </button>
+        </div>
+
+    </div>
+</div>
+
 <script>
+    /* ── THEME ── */
     function toggleTheme(){
         const isLight = document.documentElement.classList.toggle('light');
         localStorage.setItem('frx-theme', isLight ? 'light' : 'dark');
     }
 
+    /* ── MOBILE MENU ── */
     let mobOpen = false;
     function toggleMob(){
         mobOpen = !mobOpen;
         document.getElementById('mob-menu').classList.toggle('open', mobOpen);
         document.body.style.overflow = mobOpen ? 'hidden' : '';
     }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape' && mobOpen) toggleMob(); });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { if (mobOpen) toggleMob(); closeShareModal(); }
+    });
 
     const nav = document.querySelector('.nav');
     window.addEventListener('scroll', () => {
         nav.style.boxShadow = window.scrollY > 10 ? '0 1px 0 var(--border)' : '';
     }, {passive:true});
+
+    /* ── SHARE MODAL ── */
+    function openShareModal(){
+        document.getElementById('shareOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeShareModal(e){
+        if (e && e.target !== document.getElementById('shareOverlay')) return;
+        document.getElementById('shareOverlay').classList.remove('open');
+        if (!mobOpen) document.body.style.overflow = '';
+    }
+
+    /* ── FORMAT TOGGLE ── */
+    let curFmt = 'wide';
+    function setFmt(f){
+        curFmt = f;
+        const card = document.getElementById('flyerCard');
+        card.classList.toggle('wide', f === 'wide');
+        card.classList.toggle('sq', f === 'sq');
+        document.getElementById('fmtWide').classList.toggle('on', f === 'wide');
+        document.getElementById('fmtSq').classList.toggle('on', f === 'sq');
+    }
+
+    /* ── SHARE URLS ── */
+    const POST_URL = 'https://project-fractalx.github.io/FractalX-Web/blog/the-core-science-behind-fractalx/';
+    const POST_TITLE = 'The Core Science Behind FractalX';
+    const POST_DESC = 'A deep dive into static AST analysis and build-time code generation — how FractalX automates the decomposition of Spring Boot monoliths into production-ready microservices.';
+
+    function shareX(){
+        const t = encodeURIComponent(`${POST_TITLE}\n\n${POST_DESC}\n`);
+        window.open(`https://twitter.com/intent/tweet?text=${t}&url=${encodeURIComponent(POST_URL)}`, '_blank', 'width=580,height=400');
+    }
+    function shareLinkedIn(){
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(POST_URL)}`, '_blank', 'width=600,height=500');
+    }
+    function shareWhatsApp(){
+        const t = encodeURIComponent(`${POST_TITLE}\n${POST_DESC}\n${POST_URL}`);
+        window.open(`https://wa.me/?text=${t}`, '_blank');
+    }
+    function copyLink(){
+        navigator.clipboard.writeText(POST_URL).then(() => {
+            const btn = document.getElementById('copyBtn');
+            const lbl = document.getElementById('copyLabel');
+            btn.classList.add('ok');
+            lbl.textContent = 'Copied!';
+            setTimeout(() => { btn.classList.remove('ok'); lbl.textContent = 'Copy link'; }, 2200);
+        });
+    }
+    function nativeShare(){
+        if (navigator.share) {
+            navigator.share({ title: POST_TITLE, text: POST_DESC, url: POST_URL });
+        }
+    }
+
+    /* ── CANVAS FLYER DOWNLOAD ── */
+    async function downloadFlyer(){
+        const isWide = curFmt === 'wide';
+        const W = isWide ? 1200 : 1080;
+        const H = isWide ? 630 : 1080;
+        const canvas = document.createElement('canvas');
+        canvas.width = W; canvas.height = H;
+        const ctx = canvas.getContext('2d');
+        const s = W / 1200; // scale from 1200-base
+
+        await document.fonts.ready;
+
+        /* background */
+        ctx.fillStyle = '#0a0a0a';
+        ctx.fillRect(0, 0, W, H);
+
+        /* grid */
+        ctx.strokeStyle = '#1e1e1e';
+        ctx.lineWidth = 0.8;
+        const gs = 48 * s;
+        for (let x = 0; x <= W; x += gs){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+        for (let y = 0; y <= H; y += gs){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+        /* orange glow */
+        const g1 = ctx.createRadialGradient(W*.12, H*.18, 0, W*.12, H*.18, W*.55);
+        g1.addColorStop(0,'rgba(244,96,12,.22)'); g1.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle = g1; ctx.fillRect(0,0,W,H);
+        const g2 = ctx.createRadialGradient(W*.88, H*.84, 0, W*.88, H*.84, W*.35);
+        g2.addColorStop(0,'rgba(245,168,0,.06)'); g2.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle = g2; ctx.fillRect(0,0,W,H);
+
+        /* left bar */
+        ctx.fillStyle = '#f4600c';
+        ctx.fillRect(0, 0, 4*s, H);
+
+        /* logo mark using Path2D */
+        ctx.save();
+        const ls = 0.24 * s;
+        ctx.translate(64*s, 50*s);
+        ctx.scale(ls, ls);
+        ctx.fillStyle = '#f4600c';
+        ['M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z',
+         'M18.2837 0H148.284V40H18.2837V0Z',
+         'M59.2837 66H148.284V106H59.2837V66Z',
+         'M59.2837 106V165H18.2837V106H59.2837Z'
+        ].forEach(d => ctx.fill(new Path2D(d)));
+        ctx.restore();
+
+        /* brand name */
+        ctx.fillStyle = '#ededed';
+        ctx.font = `700 ${20*s}px 'Geist', system-ui, sans-serif`;
+        ctx.fillText('FractalX', 104*s, 76*s);
+        ctx.fillStyle = '#333';
+        ctx.font = `400 ${14*s}px 'Geist', system-ui, sans-serif`;
+        ctx.fillText('/ Blog', 164*s, 76*s);
+
+        /* tags */
+        const tags = [
+            {t:'Architecture', fg:'#f4600c', bg:'rgba(244,96,12,.12)', bd:'rgba(244,96,12,.3)'},
+            {t:'Java',          fg:'#555',    bg:'#0d0d0d',             bd:'#222'},
+            {t:'Spring Boot',   fg:'#555',    bg:'#0d0d0d',             bd:'#222'},
+            {t:'Code Generation',fg:'#f5a800',bg:'rgba(245,168,0,.10)',bd:'rgba(245,168,0,.25)'},
+        ];
+        ctx.font = `500 ${11*s}px 'Geist Mono', monospace`;
+        let tx = 64*s, ty = 104*s, th = 22*s, tp = 10*s, tr = 11*s;
+        for (const tag of tags){
+            const tw2 = ctx.measureText(tag.t).width + tp*2;
+            rr(ctx, tx, ty, tw2, th, tr, tag.bg, tag.bd);
+            ctx.fillStyle = tag.fg;
+            ctx.fillText(tag.t, tx+tp, ty+th*.72);
+            tx += tw2 + 7*s;
+        }
+
+        /* title */
+        const titleX = 64*s;
+        if (isWide){
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `800 ${52*s}px 'Geist', system-ui, sans-serif`;
+            ctx.fillText('The Core Science', titleX, 204*s);
+            ctx.fillText('Behind ', titleX, 268*s);
+            ctx.fillStyle = '#f4600c';
+            const bw = ctx.measureText('Behind ').width;
+            ctx.fillText('FractalX', titleX + bw, 268*s);
+        } else {
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `800 ${70*s}px 'Geist', system-ui, sans-serif`;
+            ctx.fillText('The Core', 64*s, 340*s);
+            ctx.fillText('Science', 64*s, 428*s);
+            ctx.fillStyle = '#f4600c';
+            ctx.fillText('Behind FractalX', 64*s, 516*s);
+        }
+
+        /* description */
+        ctx.fillStyle = '#3a3a3a';
+        ctx.font = `400 ${13*s}px 'Geist', system-ui, sans-serif`;
+        if (isWide){
+            ctx.fillText('Static AST analysis · Build-time code generation · NetScope gRPC · 30+ generators', titleX, 316*s);
+        } else {
+            ctx.fillText('Static AST analysis · Build-time code generation', 64*s, 570*s);
+            ctx.fillText('NetScope gRPC · Distributed sagas · 30+ generators', 64*s, 592*s);
+        }
+
+        /* divider */
+        ctx.strokeStyle = '#1f1f1f';
+        ctx.lineWidth = 1;
+        const divY = isWide ? 350*s : 630*s;
+        ctx.beginPath(); ctx.moveTo(titleX, divY); ctx.lineTo((isWide?620:1016)*s, divY); ctx.stroke();
+
+        /* author avatar */
+        const avY = isWide ? 385*s : 660*s;
+        const avR = 14*s;
+        const avX = (64+avR)*s;
+        ctx.beginPath();
+        ctx.arc(avX, avY, avR, 0, Math.PI*2);
+        const ag = ctx.createRadialGradient(avX-2*s, avY-2*s, 0, avX, avY, avR);
+        ag.addColorStop(0,'#f4600c'); ag.addColorStop(1,'#e0540a');
+        ctx.fillStyle = ag; ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.font = `700 ${12*s}px 'Geist', system-ui, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillText('F', avX, avY+4*s);
+        ctx.textAlign = 'left';
+
+        /* author text */
+        ctx.fillStyle = '#999';
+        ctx.font = `600 ${13*s}px 'Geist', system-ui, sans-serif`;
+        ctx.fillText('FractalX Team', (64+avR*2+8)*s, avY-2*s);
+        ctx.fillStyle = '#333';
+        ctx.font = `400 ${11*s}px 'Geist Mono', monospace`;
+        ctx.fillText('March 18, 2026  ·  12 min read', (64+avR*2+8)*s, avY+12*s);
+
+        /* URL */
+        ctx.fillStyle = '#2a2a2a';
+        ctx.font = `400 ${10*s}px 'Geist Mono', monospace`;
+        const urlY = isWide ? 598*s : 1040*s;
+        ctx.fillText('project-fractalx.github.io/FractalX-Web/blog/the-core-science-behind-fractalx', 64*s, urlY);
+
+        /* right code pane (wide only) */
+        if (isWide){
+            const rx = 660*s, ry = 40*s, rw = 496*s, rh = 560*s;
+            rr(ctx, rx, ry, rw, rh, 8*s, '#0d0d0d', '#1a1a1a');
+            /* code label */
+            ctx.fillStyle = '#2a2a2a';
+            ctx.font = `700 ${9*s}px 'Geist Mono', monospace`;
+            ctx.letterSpacing = '0.18em';
+            ctx.fillText('ORDERMODULE.JAVA', rx+20*s, ry+24*s);
+            ctx.letterSpacing = '0';
+            /* code lines */
+            const cl = 11*s, lh = 18*s;
+            let cy = ry+52*s;
+            const lines = [
+                [{c:'#f5a800',t:'@DecomposableModule'},{c:'#555',t:'('}],
+                [{c:'#555',t:'  serviceName = '},{c:'#50e3c2',t:'"order-service"'},{c:'#555',t:','}],
+                [{c:'#555',t:'  port = '},{c:'#b8c4e0',t:'8081'}],
+                [{c:'#555',t:')'}],
+                [{c:'#f4600c',t:'public class '},{c:'#3291ff',t:'OrderModule'},{c:'#555',t:' {'}],
+                [],
+                [{c:'#2d2d2d',t:'  // auto-detected dependency'}],
+                [{c:'#f4600c',t:'  private final '},{c:'#3291ff',t:'PaymentService'},{c:'#555',t:' ps;'}],
+                [],
+                [{c:'#f5a800',t:'  @DistributedSaga'},{c:'#555',t:'('}],
+                [{c:'#555',t:'    sagaId = '},{c:'#50e3c2',t:'"place-order-saga"'}],
+                [{c:'#555',t:'  )'}],
+                [{c:'#f4600c',t:'  public '},{c:'#3291ff',t:'Order'},{c:'#555',t:' placeOrder(...) {'}],
+                [{c:'#2d2d2d',t:'    // generates full saga orch.'}],
+                [{c:'#555',t:'  }'}],
+                [{c:'#555',t:'}'}],
+            ];
+            ctx.font = `400 ${cl}px 'Geist Mono', monospace`;
+            for (const segs of lines){
+                let lx = rx+20*s;
+                for (const seg of segs){
+                    ctx.fillStyle = seg.c;
+                    ctx.fillText(seg.t, lx, cy);
+                    lx += ctx.measureText(seg.t).width;
+                }
+                cy += lh;
+            }
+            /* generated badge */
+            const gy = ry+rh-34*s;
+            rr(ctx, rx+16*s, gy, rw-32*s, 22*s, 4*s, 'rgba(244,96,12,.07)', 'rgba(244,96,12,.18)');
+            ctx.fillStyle = '#f4600c';
+            ctx.font = `400 ${9*s}px 'Geist Mono', monospace`;
+            ctx.textAlign = 'center';
+            ctx.fillText('↳ generates order-service + fractalx-saga-orchestrator', rx+rw/2, gy+14.5*s);
+            ctx.textAlign = 'left';
+        }
+
+        /* download */
+        const link = document.createElement('a');
+        link.download = `fractalx-blog-${curFmt === 'wide' ? '1200x630' : '1080x1080'}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+
+    /* canvas util: rounded rect with fill + stroke */
+    function rr(ctx, x, y, w, h, r, fill, stroke){
+        ctx.beginPath();
+        ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+        ctx.arcTo(x+w,y,x+w,y+r,r);
+        ctx.lineTo(x+w,y+h-r);
+        ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+        ctx.lineTo(x+r,y+h);
+        ctx.arcTo(x,y+h,x,y+h-r,r);
+        ctx.lineTo(x,y+r);
+        ctx.arcTo(x,y,x+r,y,r);
+        ctx.closePath();
+        if (fill){ ctx.fillStyle=fill; ctx.fill(); }
+        if (stroke){ ctx.strokeStyle=stroke; ctx.lineWidth=1; ctx.stroke(); }
+    }
 </script>
 </body>
 </html>
