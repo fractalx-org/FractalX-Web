@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>The Core Science Behind FractalX — FractalX Blog</title>
+    <meta name="description" content="A deep dive into how FractalX uses static AST analysis and build-time code generation to automate the decomposition of monoliths into production-ready microservices."/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        (function(){
+            const saved = localStorage.getItem('frx-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isLight = saved === 'light' || (!saved && !prefersDark);
+            if (isLight) document.documentElement.classList.add('light');
+        })();
+    </script>
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+        :root{
+            --bg:#000;--bg1:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
+            --border:#1f1f1f;--border2:#272727;--border3:#333;--border4:#444;
+            --text:#ededed;--text2:#a1a1aa;--text3:#71717a;--text4:#3f3f46;--text5:#27272a;
+            --white:#fff;
+            --orange:#f4600c;--orange2:#e0540a;
+            --gold:#f5a800;--gold2:#d4920a;
+            --peri:#b8c4e0;--peri2:#8fa0c8;
+            --orange-dim:rgba(244,96,12,.10);--orange-glow:rgba(244,96,12,.18);
+            --gold-dim:rgba(245,168,0,.10);
+            --peri-dim:rgba(184,196,224,.08);
+            --green:#50e3c2;--green-dim:rgba(80,227,194,.08);
+            --blue:#3291ff;--blue-dim:rgba(50,145,255,.10);
+            --red:#ff4444;--red-dim:rgba(255,68,68,.08);
+            --nav-bg:rgba(0,0,0,.80);
+            --r:8px;--font:'Geist',sans-serif;--mono:'Geist Mono',monospace;
+        }
+
+        html.light{
+            --bg:#fff;--bg1:#fafafa;--bg2:#f4f4f5;--bg3:#e4e4e7;--bg4:#d4d4d8;
+            --border:#e4e4e7;--border2:#d4d4d8;--border3:#a1a1aa;--border4:#71717a;
+            --text:#09090b;--text2:#52525b;--text3:#71717a;--text4:#a1a1aa;--text5:#d4d4d8;
+            --white:#09090b;
+            --orange:#d4510a;--orange2:#c04608;
+            --gold:#c47a00;
+            --peri:#4a5fa8;
+            --orange-dim:rgba(212,81,10,.07);--orange-glow:rgba(212,81,10,.12);
+            --gold-dim:rgba(196,122,0,.07);
+            --peri-dim:rgba(74,95,168,.07);
+            --green:#067a6f;--green-dim:rgba(6,122,111,.07);
+            --blue:#0070f3;--blue-dim:rgba(0,112,243,.07);
+            --nav-bg:rgba(255,255,255,.85);
+        }
+
+        html{scroll-behavior:smooth}
+        body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s;overflow-x:hidden}
+        ::-webkit-scrollbar{width:4px}
+        ::-webkit-scrollbar-thumb{background:var(--border3);border-radius:4px}
+        a{color:var(--orange);text-decoration:none}
+        a:hover{text-decoration:underline}
+
+        /* ── NAVBAR ── */
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;background:var(--nav-bg);backdrop-filter:blur(16px) saturate(180%);border-bottom:1px solid var(--border);transition:background .2s,border-color .2s}
+        .nav-inner{max-width:1120px;margin:0 auto;padding:0 24px;width:100%;display:flex;align-items:center;gap:32px}
+        .nav-logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;color:var(--text);letter-spacing:-.2px;flex-shrink:0;text-decoration:none}
+        .nav-logo:hover{text-decoration:none}
+        .logo-mark{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;flex-shrink:0}
+        .logo-mark svg{width:14px;height:14px}
+        .nav-links{display:flex;align-items:center;gap:2px;margin-left:8px}
+        .nav-link{font-size:13.5px;color:var(--text2);padding:6px 11px;border-radius:6px;transition:color .15s,background .15s;white-space:nowrap;text-decoration:none}
+        .nav-link:hover{color:var(--text);background:var(--bg2);text-decoration:none}
+        .nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
+        .nav-badge{font-size:11px;font-family:var(--mono);color:var(--text3);background:var(--bg2);border:1px solid var(--border2);padding:3px 8px;border-radius:4px}
+
+        .tt{width:34px;height:34px;border-radius:7px;border:1px solid var(--border2);background:var(--bg1);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;padding:0;flex-shrink:0}
+        .tt:hover{border-color:var(--border3);background:var(--bg2)}
+        .tt svg{width:15px;height:15px;color:var(--text3);display:block;transition:color .15s}
+        .tt:hover svg{color:var(--text)}
+        .tt .ic-moon{display:block}
+        .tt .ic-sun{display:none}
+        html.light .tt .ic-moon{display:none}
+        html.light .tt .ic-sun{display:block}
+
+        .ham{width:34px;height:34px;border-radius:7px;border:1px solid var(--border2);background:var(--bg1);cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .15s;padding:0;flex-shrink:0}
+        .ham svg{width:16px;height:16px;color:var(--text2)}
+
+        .mob-menu{display:none;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--bg);z-index:99;padding:16px 24px;flex-direction:column;gap:4px}
+        .mob-menu.open{display:flex}
+        .mob-link{font-size:15px;color:var(--text2);padding:12px 8px;border-bottom:1px solid var(--border);text-decoration:none;transition:color .12s}
+        .mob-link:hover{color:var(--text);text-decoration:none}
+
+        @media(max-width:780px){
+            .nav-links{display:none}
+            .nav-badge{display:none}
+            .ham{display:inline-flex}
+        }
+
+        /* ── ARTICLE LAYOUT ── */
+        .article-wrap{max-width:720px;margin:0 auto;padding:88px 24px 100px}
+
+        /* back link */
+        .back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-family:var(--mono);color:var(--text3);margin-bottom:36px;transition:color .15s;text-decoration:none}
+        .back-link:hover{color:var(--text);text-decoration:none}
+        .back-link svg{width:14px;height:14px;transition:transform .15s}
+        .back-link:hover svg{transform:translateX(-3px)}
+
+        /* tags */
+        .post-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+        .post-tag{font-size:11.5px;font-family:var(--mono);font-weight:500;padding:3px 9px;border-radius:20px;background:var(--bg2);border:1px solid var(--border2);color:var(--text3);letter-spacing:.02em}
+        .post-tag.orange{background:var(--orange-dim);border-color:rgba(244,96,12,.25);color:var(--orange)}
+        .post-tag.gold{background:var(--gold-dim);border-color:rgba(245,168,0,.25);color:var(--gold)}
+        .post-tag.peri{background:var(--peri-dim);border-color:rgba(184,196,224,.2);color:var(--peri)}
+
+        /* article heading */
+        .article-h1{font-size:clamp(28px,5vw,42px);font-weight:800;letter-spacing:-1.2px;color:var(--white);line-height:1.12;margin-bottom:16px}
+        .article-lead{font-size:17px;color:var(--text2);line-height:1.75;margin-bottom:28px;padding-left:16px;border-left:3px solid var(--border3)}
+
+        /* author meta */
+        .pub-meta{display:flex;align-items:center;gap:10px;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:40px}
+        .pub-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange) 0%,var(--orange2) 100%);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:#fff;flex-shrink:0;font-family:var(--font)}
+        .pub-info{display:flex;flex-direction:column;gap:2px}
+        .pub-name{font-size:13.5px;font-weight:600;color:var(--text)}
+        .pub-details{font-size:12px;color:var(--text3);font-family:var(--mono)}
+        .pub-dot{margin:0 5px;color:var(--border4)}
+
+        /* ── HERO BANNER ── */
+        .art-hero{background:linear-gradient(135deg,#0d0d0d 0%,#161616 50%,#0d0d0d 100%);border:1px solid var(--border2);border-radius:12px;padding:40px 36px;margin-bottom:48px;position:relative;overflow:hidden}
+        .art-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,var(--orange-glow) 0%,transparent 55%),radial-gradient(ellipse at 80% 20%,rgba(244,96,12,.06) 0%,transparent 50%)}
+        .art-hero-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.2em;color:var(--text4);text-transform:uppercase;margin-bottom:10px;position:relative;z-index:1}
+        .art-hero-title{font-family:var(--mono);font-size:clamp(20px,4vw,30px);font-weight:500;color:var(--orange);line-height:1.3;margin-bottom:8px;position:relative;z-index:1}
+        .art-hero-sub{font-size:13.5px;color:var(--text3);position:relative;z-index:1;line-height:1.6}
+        .art-hero-badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;position:relative;z-index:1}
+        .art-badge{display:inline-flex;align-items:center;gap:5px;background:var(--orange-dim);border:1px solid rgba(244,96,12,.3);border-radius:6px;padding:4px 9px;font-family:var(--mono);font-size:11px;color:var(--orange)}
+        .art-badge::before{content:'●';font-size:7px;opacity:.7}
+
+        /* ── PROSE ── */
+        .prose p{font-size:16px;color:var(--text2);line-height:1.82;margin-bottom:22px}
+        .prose strong{color:var(--text);font-weight:600}
+        .prose em{font-style:italic;color:var(--text2)}
+        .prose a{color:var(--orange)}
+        .prose a:hover{text-decoration:underline}
+
+        .prose h2{font-size:22px;font-weight:700;color:var(--white);letter-spacing:-.4px;margin:52px 0 14px;padding-top:10px;border-top:1px solid var(--border);line-height:1.25}
+        .prose h2:first-child{border-top:none;margin-top:0}
+        .prose h3{font-size:15px;font-weight:600;color:var(--text);margin:32px 0 10px;letter-spacing:-.1px}
+
+        /* inline code */
+        .prose code{font-family:var(--mono);font-size:0.82em;background:var(--bg2);border:1px solid var(--border2);padding:2px 6px;border-radius:4px;color:var(--orange);white-space:nowrap}
+
+        /* blockquote */
+        .prose blockquote{margin:36px 0;padding:20px 24px;border-left:3px solid var(--orange);background:var(--orange-dim);border-radius:0 8px 8px 0}
+        .prose blockquote p{font-size:17px;color:var(--text);font-style:italic;margin:0;line-height:1.65}
+
+        /* callouts */
+        .callout{border:1px solid var(--border2);background:var(--bg1);border-radius:var(--r);padding:16px 20px;margin:28px 0;font-size:15px;line-height:1.7;color:var(--text2);display:flex;gap:12px;align-items:flex-start}
+        .callout-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+        .callout strong{color:var(--text);font-weight:600}
+        .callout.tip{border-color:rgba(244,96,12,.3);background:var(--orange-dim)}
+        .callout.tip .callout-body{color:var(--text2)}
+        .callout.info{border-color:rgba(50,145,255,.3);background:var(--blue-dim)}
+
+        /* divider */
+        .prose .hr{border:none;border-top:1px solid var(--border);margin:48px 0}
+
+        /* code blocks */
+        .prose pre{background:#0d0d0d;border:1px solid var(--border2);border-radius:10px;padding:22px 24px;overflow-x:auto;margin:24px 0;font-family:var(--mono);font-size:13px;line-height:1.65;color:#d4d4d4}
+        html.light .prose pre{background:#0d0d0d;border-color:#2a2a2a}
+        .prose pre .kw{color:var(--orange)}
+        .prose pre .ann{color:var(--gold)}
+        .prose pre .str{color:var(--green)}
+        .prose pre .cmt{color:var(--text3);font-style:italic}
+        .prose pre .num{color:var(--peri)}
+        .prose pre .cls{color:var(--blue)}
+        .prose pre .pn{color:#a0a0a0}
+
+        /* steps list */
+        .steps{list-style:none;margin:20px 0;display:flex;flex-direction:column;gap:0}
+        .steps li{display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--border);font-size:15.5px;color:var(--text2);line-height:1.7}
+        .steps li:last-child{border-bottom:none}
+        .step-num{flex-shrink:0;width:28px;height:28px;background:var(--orange);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:2px;font-family:var(--font)}
+        .steps strong{color:var(--text);font-weight:600}
+
+        /* output grid */
+        .output-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:24px 0}
+        .output-card{background:var(--bg);padding:18px 20px}
+        .output-card:hover{background:var(--bg1)}
+        .oc-title{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--orange);margin-bottom:6px}
+        .oc-desc{font-size:13px;color:var(--text3);line-height:1.55}
+        .oc-port{font-family:var(--mono);font-size:11px;color:var(--text4);margin-top:8px}
+
+        /* architecture box */
+        .arch-box{background:#0d0d0d;border:1px solid var(--border2);border-radius:10px;padding:24px;margin:24px 0;overflow-x:auto}
+        html.light .arch-box{background:#0d0d0d;border-color:#2a2a2a}
+        .arch-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--text4);text-transform:uppercase;margin-bottom:10px}
+        .arch-box pre{background:transparent;border:none;padding:0;margin:0;font-family:var(--mono);font-size:12.5px;color:#6ee7b7;line-height:1.6;white-space:pre}
+
+        /* comparison table */
+        .compare-wrap{overflow-x:auto;margin:24px 0}
+        .compare-table{width:100%;border-collapse:collapse;font-size:13.5px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+        .compare-table th{background:var(--bg2);color:var(--text);padding:11px 16px;text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.02em;border-bottom:1px solid var(--border2)}
+        .compare-table th:first-child{width:34%}
+        .compare-table td{padding:11px 16px;border-bottom:1px solid var(--border);color:var(--text3);vertical-align:top;line-height:1.55}
+        .compare-table tr:last-child td{border-bottom:none}
+        .compare-table tr:nth-child(even) td{background:var(--bg1)}
+        .compare-table td:first-child{color:var(--text);font-weight:500}
+        .compare-table .bad{color:var(--red)}
+        .compare-table .good{color:var(--orange);font-weight:600}
+        html.light .compare-table .good{color:var(--orange)}
+
+        /* hr dots */
+        .hr-dots{text-align:center;margin:48px 0;color:var(--border4);letter-spacing:10px;font-size:18px}
+
+        /* article footer nav */
+        .art-nav{display:flex;align-items:center;justify-content:space-between;padding:28px 0;border-top:1px solid var(--border);margin-top:56px;gap:16px;flex-wrap:wrap}
+        .art-nav-back{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-family:var(--mono);color:var(--text3);text-decoration:none;transition:color .15s}
+        .art-nav-back:hover{color:var(--text);text-decoration:none}
+        .art-nav-links{display:flex;gap:16px;align-items:center}
+        .art-nav-link{font-size:13px;color:var(--text3);text-decoration:none;transition:color .15s}
+        .art-nav-link:hover{color:var(--orange);text-decoration:none}
+
+        /* footer */
+        footer{border-top:1px solid var(--border);padding:40px 24px}
+        .foot-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+        .foot-logo{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--text2)}
+        .foot-links{display:flex;gap:20px;flex-wrap:wrap}
+        .foot-link{font-size:13px;color:var(--text3);transition:color .12s;text-decoration:none}
+        .foot-link:hover{color:var(--text);text-decoration:none}
+        .foot-copy{font-size:12px;color:var(--text4)}
+
+        @media(max-width:640px){
+            .article-wrap{padding:80px 20px 80px}
+            .art-hero{padding:28px 22px}
+            .output-grid{grid-template-columns:1fr}
+            .compare-table{font-size:12px}
+            .compare-table td,.compare-table th{padding:9px 11px}
+            .art-nav{flex-direction:column;align-items:flex-start}
+            .foot-inner{flex-direction:column;align-items:flex-start}
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-logo">
+            <div class="logo-mark">
+                <svg width="18" height="18" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="currentColor"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="currentColor"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="currentColor"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="currentColor"/></svg>
+            </div>
+            FractalX
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/docs" class="nav-link">Docs</a>
+            <a href="/blog" class="nav-link" style="color:var(--orange)">Blog</a>
+            <a href="https://github.com/Project-FractalX/FractalX" class="nav-link">GitHub</a>
+        </div>
+        <div class="nav-right">
+            <span class="nav-badge">v0.2.5</span>
+            <button class="tt" onclick="toggleTheme()" aria-label="Toggle theme">
+                <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+            <button class="ham" onclick="toggleMob()" aria-label="Menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="mob-menu" id="mob-menu">
+    <a href="/" class="mob-link" onclick="toggleMob()">Home</a>
+    <a href="/docs" class="mob-link" onclick="toggleMob()">Docs</a>
+    <a href="/blog" class="mob-link" onclick="toggleMob()">Blog</a>
+    <a href="https://github.com/Project-FractalX/FractalX" class="mob-link">GitHub</a>
+</div>
+
+<article class="article-wrap">
+
+    <a href="/blog" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Blog
+    </a>
+
+    <div class="post-tags">
+        <span class="post-tag orange">Architecture</span>
+        <span class="post-tag">Java</span>
+        <span class="post-tag">Spring Boot</span>
+        <span class="post-tag gold">Code Generation</span>
+        <span class="post-tag">Microservices</span>
+    </div>
+
+    <h1 class="article-h1">The Core Science Behind FractalX</h1>
+
+    <p class="article-lead">A deep dive into how FractalX uses static AST analysis and build-time code generation to automate the science of decomposing monoliths into production-ready microservices.</p>
+
+    <div class="pub-meta">
+        <div class="pub-avatar">F</div>
+        <div class="pub-info">
+            <span class="pub-name">FractalX Team</span>
+            <span class="pub-details">
+                March 18, 2026
+                <span class="pub-dot">·</span>
+                12 min read
+            </span>
+        </div>
+    </div>
+
+    <div class="art-hero">
+        <div class="art-hero-label">Introducing</div>
+        <div class="art-hero-title">FractalX Framework</div>
+        <div class="art-hero-sub">Static decomposition &nbsp;&middot;&nbsp; AST analysis &nbsp;&middot;&nbsp; Build-time code generation</div>
+        <div class="art-hero-badges">
+            <span class="art-badge">Apache 2.0</span>
+            <span class="art-badge">Java 17+</span>
+            <span class="art-badge">Spring Boot 3.2</span>
+            <span class="art-badge">v0.2.5 on Maven Central</span>
+        </div>
+    </div>
+
+    <div class="prose">
+
+        <h2>The Microservices Migration Tax</h2>
+
+        <p>Every engineering team that has tried to break apart a monolith knows the experience well. You sketch an architecture diagram on a whiteboard. It looks clean. Then you sit down to actually build it, and weeks disappear into scaffolding &mdash; Dockerfiles, service discovery configuration, gRPC proto files, circuit breaker wiring, distributed tracing setup, database schema splitting, saga orchestrators for long-running transactions, admin dashboards to observe all of it. None of that code is your product. All of it has to be written, reviewed, deployed, and maintained.</p>
+
+        <p>FractalX is a framework built on a simple thesis: <strong>this entire class of work should be automated.</strong> You describe your bounded contexts with annotations. A Maven plugin reads your source code at build time, analyzes it with a Java AST parser, and generates a complete distributed system &mdash; independently deployable Spring Boot services, a gateway, a service registry, a saga orchestrator, an admin UI, Docker Compose files, and startup scripts &mdash; as a fully-functional output directory.</p>
+
+        <blockquote>
+            <p>"No runtime agent. No bytecode manipulation. No manual wiring. Add three annotations, run one command, get a fully operational microservice platform."</p>
+        </blockquote>
+
+        <p>Your monolith keeps compiling and running as-is throughout the process. FractalX reads it <em>statically</em>. You can keep developing the monolith and re-decompose at any time.</p>
+
+        <hr class="hr">
+
+        <h2>How It Works &mdash; The 30-Second Version</h2>
+
+        <p>FractalX operates in two phases at build time.</p>
+
+        <ul class="steps">
+            <li>
+                <div class="step-num">1</div>
+                <div><strong>AST Analysis.</strong> FractalX uses JavaParser to parse your entire monolith source tree into a map of compilation units. It finds every class annotated with <code>@DecomposableModule</code>, identifies its package prefix, and scans all files in that prefix for imports referencing other modules&rsquo; packages. Cross-module dependencies are detected automatically from Spring field injection &mdash; no explicit dependency graph required.</div>
+            </li>
+            <li>
+                <div class="step-num">2</div>
+                <div><strong>Code Generation Pipeline.</strong> For each module, over 30 code generators run in sequence: a POM generator, application class generator, configuration generator, code copier, AST rewriter (which handles package renaming and cross-boundary type replacement), NetScope client generator (gRPC inter-service communication), resilience configurator (Resilience4j per dependency), OpenTelemetry injector, health metrics step, and more. After all services are generated, gateway, registry, admin, logger, and saga orchestrator generators run.</div>
+            </li>
+        </ul>
+
+        <p>The result is a directory called <code>fractalx-output/</code> containing everything needed to start your distributed system immediately &mdash; on bare metal with a shell script, or containerized with Docker Compose.</p>
+
+        <hr class="hr">
+
+        <h2>The Three Annotations</h2>
+
+        <p>The entire developer-facing API of FractalX fits into four annotations. Three of them cover nearly everything you&rsquo;ll ever need.</p>
+
+        <h3>@DecomposableModule &mdash; mark a bounded context</h3>
+
+        <p>Place this on one class per module. It acts as the root anchor for that service&rsquo;s package tree. FractalX reads the fields declared in this class to build the inter-service dependency graph.</p>
+
+<pre><code><span class="ann">@DecomposableModule</span>(
+    serviceName           = <span class="str">"order-service"</span>,
+    port                  = <span class="num">8081</span>,
+    independentDeployment = <span class="kw">true</span>,
+    ownedSchemas          = {<span class="str">"orders"</span>, <span class="str">"order_items"</span>}
+)
+<span class="ann">@Service</span>
+<span class="kw">public class</span> <span class="cls">OrderModule</span> {
+
+    <span class="cmt">// FractalX reads these field types to detect cross-service dependencies.</span>
+    <span class="cmt">// It will auto-generate a gRPC client for each.</span>
+    <span class="kw">private final</span> <span class="cls">PaymentService</span> paymentService;
+    <span class="kw">private final</span> <span class="cls">InventoryService</span> inventoryService;
+
+    <span class="ann">@DistributedSaga</span>(
+        sagaId             = <span class="str">"place-order-saga"</span>,
+        compensationMethod = <span class="str">"cancelOrder"</span>,
+        timeout            = <span class="num">30000</span>
+    )
+    <span class="kw">public</span> <span class="cls">Order</span> placeOrder(<span class="cls">Long</span> userId, <span class="cls">List</span>&lt;<span class="cls">OrderItem</span>&gt; items) {
+        <span class="cmt">// FractalX detects the cross-service calls here and</span>
+        <span class="cmt">// generates a full saga orchestrator from them.</span>
+        paymentService.charge(userId, calculateTotal(items));
+        inventoryService.reserve(items);
+        <span class="kw">return</span> orderRepository.save(<span class="kw">new</span> <span class="cls">Order</span>(userId, items));
+    }
+}</code></pre>
+
+        <h3>@DistributedSaga &mdash; generate saga orchestration</h3>
+
+        <p>Place this on a method inside a <code>@DecomposableModule</code> class. FractalX detects the sequence of cross-service calls in the method body, maps compensation methods by naming convention, and generates a complete <code>fractalx-saga-orchestrator</code> service &mdash; a state machine with forward steps, automatic compensation on failure, and retry-backed completion callbacks to the owning service.</p>
+
+        <h3>@ServiceBoundary &mdash; explicit gRPC exposure</h3>
+
+        <p>FractalX automatically detects which methods are called by other modules and marks them for gRPC exposure. <code>@ServiceBoundary</code> lets you be explicit when auto-detection isn&rsquo;t sufficient, or when you want to enforce allowed-caller constraints verified at build time.</p>
+
+        <div class="callout tip">
+            <span class="callout-icon">&#128161;</span>
+            <div class="callout-body"><strong>Key insight:</strong> Your monolith continues to compile and run as a normal Spring Boot application throughout the entire process. FractalX only reads it statically and produces microservices as a separate output. The annotations are stripped from the generated service code by the <code>AnnotationRemover</code> step, so they never appear in production deployments.</div>
+        </div>
+
+        <hr class="hr">
+
+        <h2>What Gets Generated</h2>
+
+        <p>Running <code>mvn fractalx:decompose</code> on a three-module e-commerce monolith produces the following output:</p>
+
+        <div class="output-grid">
+            <div class="output-card">
+                <div class="oc-title">order-service/</div>
+                <div class="oc-desc">Full Spring Boot project &mdash; pom.xml, Dockerfile, application.yml, source files, NetScope gRPC client for payment and inventory, Resilience4j config per dependency, OtelConfig.java, health endpoints.</div>
+                <div class="oc-port">:8081 HTTP &nbsp;&middot;&nbsp; :18081 gRPC</div>
+            </div>
+            <div class="output-card">
+                <div class="oc-title">fractalx-gateway/</div>
+                <div class="oc-desc">Spring Cloud Gateway with dynamic route resolution from the registry, CORS, rate limiting, circuit breakers at gateway level, distributed tracing on every forwarded request.</div>
+                <div class="oc-port">:9999 HTTP</div>
+            </div>
+            <div class="output-card">
+                <div class="oc-title">fractalx-saga-orchestrator/</div>
+                <div class="oc-desc">Generated only when <code>@DistributedSaga</code> is found. Full state machine, compensation on failure, transactional outbox pattern for at-least-once delivery &mdash; no message broker required.</div>
+                <div class="oc-port">:8099 HTTP</div>
+            </div>
+            <div class="output-card">
+                <div class="oc-title">admin-service/</div>
+                <div class="oc-desc">14-section operations dashboard &mdash; service health, distributed traces (via Jaeger), aggregated logs, saga instance monitoring, service topology map, live config editor with hot reload.</div>
+                <div class="oc-port">:9090 HTTP</div>
+            </div>
+            <div class="output-card">
+                <div class="oc-title">fractalx-registry/</div>
+                <div class="oc-desc">Lightweight custom service registry. Every generated service self-registers on startup. Gateway and admin query it for live routing and health dashboards. No Eureka, no Consul.</div>
+                <div class="oc-port">:8761 HTTP</div>
+            </div>
+            <div class="output-card">
+                <div class="oc-title">logger-service/</div>
+                <div class="oc-desc">Centralized structured log ingestion. Every service ships logs via FractalLogAppender, keyed by correlation ID and span ID. Queryable from the Admin UI.</div>
+                <div class="oc-port">:9099 HTTP</div>
+            </div>
+        </div>
+
+        <p>Beyond the services themselves, the output also includes a <code>docker-compose.yml</code> with multi-stage Dockerfiles, a <code>start-all.sh</code> that starts services in dependency order, a <code>stop-all.sh</code>, per-service Flyway migration scaffolds for database isolation, and an <code>API_CATALOG.md</code> documenting every generated endpoint.</p>
+
+        <div class="arch-box">
+            <div class="arch-label">Generated System Architecture</div>
+<pre>fractalx-registry :8761  &larr; all services self-register on startup
+
+fractalx-gateway  :9999  &larr; single entry point for all clients
+  &boxvr;&boxh; /api/orders/**    &rarr; order-service    :8081
+  &boxvr;&boxh; /api/payments/**  &rarr; payment-service  :8082
+  &boxvr;&boxh; /api/inventory/** &rarr; inventory-service :8083
+  &boxvr;&boxh; TracingFilter     (X-Correlation-Id, W3C traceparent)
+  &boxur;&boxh; RateLimiter + CircuitBreaker per route
+
+order-service :8081 &mdash;&mdash;[NetScope gRPC :18081]&mdash;&mdash;&rarr; payment-service :8082
+  &boxvr;&boxh; OtelConfig.java          (OTLP &rarr; Jaeger :4317)
+  &boxvr;&boxh; Resilience4j             (CircuitBreaker + Retry + TimeLimiter)
+  &boxur;&boxh; ServiceHealthConfig.java (TCP HealthIndicator per gRPC dep)
+
+logger-service  :9099  &larr; structured log ingest (correlationId, spanId)
+admin-service   :9090  &larr; ops dashboard (traces, logs, sagas, topology)
+jaeger          :16686 &larr; distributed trace store</pre>
+        </div>
+
+        <hr class="hr">
+
+        <h2>NetScope: gRPC Without the Proto Files</h2>
+
+        <p>One of the most interesting parts of FractalX is its inter-service communication layer, called <strong>NetScope</strong>. When FractalX detects that <code>order-service</code> depends on <code>PaymentService</code>, it does something clever: it reads the <code>PaymentService</code> class from the monolith source, extracts all of its public methods, and generates a <code>@NetScopeClient</code> interface in the calling service with matching signatures.</p>
+
+<pre><code><span class="cmt">// Generated in order-service — you never write this</span>
+<span class="ann">@NetScopeClient</span>(<span class="str">"payment-service"</span>)
+<span class="kw">public interface</span> <span class="cls">PaymentServiceClient</span> {
+    <span class="cls">PaymentResult</span> processPayment(<span class="cls">Long</span> customerId, <span class="cls">BigDecimal</span> amount, <span class="cls">Long</span> orderId);
+    <span class="kw">void</span> cancelProcessPayment(<span class="cls">Long</span> customerId, <span class="cls">BigDecimal</span> amount, <span class="cls">Long</span> orderId);
+}</code></pre>
+
+        <p>On the server side, FractalX adds <code>@NetworkPublic</code> to the methods in <code>payment-service</code> that are called by other modules. The gRPC port follows a fixed convention: HTTP port + 10,000. So a service on <code>:8082</code> exposes gRPC on <code>:18082</code>. Hosts are resolved dynamically from the registry at startup &mdash; no hardcoded hostnames anywhere.</p>
+
+        <p>NetScope also transparently propagates correlation IDs across every gRPC call via <code>NetScopeContextInterceptor</code>, which acts as both a client interceptor (injecting the ID into outgoing gRPC metadata) and a server interceptor (extracting it and placing it in the SLF4J MDC). This means every log line across every service in a single request shares the same correlation ID, visible in the Admin UI.</p>
+
+        <hr class="hr">
+
+        <h2>Resilience, Automatically</h2>
+
+        <p>Each generated service gets a Resilience4j configuration per upstream dependency &mdash; circuit breaker, retry policy, and time limiter &mdash; baked directly into its <code>application.yml</code>. You don&rsquo;t configure Resilience4j; FractalX generates the configuration based on the dependency graph it builds during analysis. At the gateway level, circuit breakers are independently generated per route.</p>
+
+        <p>The saga orchestrator adds another layer of resilience. When a saga step fails, compensation methods are invoked in reverse order. When an owner service is temporarily unavailable to receive a completion callback, the orchestrator retries every two seconds for up to ten attempts before marking the saga instance as a dead-letter &mdash; surfaced in the Admin UI for manual intervention.</p>
+
+        <hr class="hr">
+
+        <h2>Before and After</h2>
+
+        <div class="compare-wrap">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Capability</th>
+                        <th>Without FractalX</th>
+                        <th>With FractalX</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Service scaffolding</td>
+                        <td class="bad">Days per service</td>
+                        <td class="good">Seconds &mdash; fully generated</td>
+                    </tr>
+                    <tr>
+                        <td>Inter-service communication</td>
+                        <td class="bad">Write gRPC proto files manually</td>
+                        <td class="good">Auto-generated @NetScopeClient</td>
+                    </tr>
+                    <tr>
+                        <td>Distributed tracing</td>
+                        <td class="bad">Instrument every service</td>
+                        <td class="good">Auto-injected OtelConfig.java per service</td>
+                    </tr>
+                    <tr>
+                        <td>Service discovery</td>
+                        <td class="bad">Configure Eureka or Consul</td>
+                        <td class="good">Lightweight fractalx-registry auto-generated</td>
+                    </tr>
+                    <tr>
+                        <td>Circuit breaking &amp; retry</td>
+                        <td class="bad">Configure Resilience4j per service</td>
+                        <td class="good">Auto-generated per dependency</td>
+                    </tr>
+                    <tr>
+                        <td>Database isolation</td>
+                        <td class="bad">Manually split schemas</td>
+                        <td class="good">DataIsolationGenerator + Flyway scaffolds</td>
+                    </tr>
+                    <tr>
+                        <td>Distributed sagas</td>
+                        <td class="bad">Write orchestrator from scratch</td>
+                        <td class="good">Full saga service from @DistributedSaga</td>
+                    </tr>
+                    <tr>
+                        <td>Docker deployment</td>
+                        <td class="bad">Write Dockerfiles + Compose</td>
+                        <td class="good">Generated Dockerfile + docker-compose.yml</td>
+                    </tr>
+                    <tr>
+                        <td>Admin dashboard</td>
+                        <td class="bad">Build your own</td>
+                        <td class="good">14-section ops dashboard auto-generated</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr class="hr">
+
+        <h2>Getting Started in Five Minutes</h2>
+
+        <p>FractalX is available on Maven Central. Add the annotations dependency to your monolith, annotate your module classes, and run the plugin.</p>
+
+<pre><code><span class="cmt">&lt;!-- Step 1: Add to your monolith's pom.xml --&gt;</span>
+<span class="pn">&lt;dependency&gt;</span>
+    <span class="pn">&lt;groupId&gt;</span>org.fractalx<span class="pn">&lt;/groupId&gt;</span>
+    <span class="pn">&lt;artifactId&gt;</span>fractalx-annotations<span class="pn">&lt;/artifactId&gt;</span>
+    <span class="pn">&lt;version&gt;</span><span class="num">0.2.5</span><span class="pn">&lt;/version&gt;</span>
+<span class="pn">&lt;/dependency&gt;</span>
+
+<span class="cmt">&lt;!-- Step 2: Add the Maven plugin --&gt;</span>
+<span class="pn">&lt;plugin&gt;</span>
+    <span class="pn">&lt;groupId&gt;</span>org.fractalx<span class="pn">&lt;/groupId&gt;</span>
+    <span class="pn">&lt;artifactId&gt;</span>fractalx-maven-plugin<span class="pn">&lt;/artifactId&gt;</span>
+    <span class="pn">&lt;version&gt;</span><span class="num">0.2.5</span><span class="pn">&lt;/version&gt;</span>
+<span class="pn">&lt;/plugin&gt;</span></code></pre>
+
+<pre><code><span class="cmt"># Step 3: Annotate, then decompose</span>
+mvn fractalx:decompose
+
+<span class="cmt"># Step 4: Start everything</span>
+cd fractalx-output
+./start-all.sh
+
+<span class="cmt"># Or with Docker:</span>
+docker-compose up --build</code></pre>
+
+        <p>After the decomposition runs, you&rsquo;ll see a Vercel-style summary printed to the console listing every service URL. The Admin UI at <code>http://localhost:9090</code> gives you a live view of service health, distributed traces, aggregated logs, and saga instance status from the moment services start.</p>
+
+        <hr class="hr">
+
+        <h2>Static Verification</h2>
+
+        <p>FractalX ships a verifier goal, <code>mvn fractalx:verify</code>, that performs static analysis on the generated output without requiring any services to be running. It checks that every module has a unique service name and port, that all referenced cross-module dependencies were successfully resolved and have generated NetScope clients, that saga compensation methods follow naming conventions, and that <code>@ServiceBoundary</code> caller constraints are not violated. This makes it practical to add FractalX decomposition as a CI step, catching architectural violations before they reach deployment.</p>
+
+        <hr class="hr">
+
+        <h2>The Design Philosophy</h2>
+
+        <p>FractalX makes a deliberately conservative bet: <strong>keep your monolith</strong>. There&rsquo;s a strong argument in the industry &mdash; articulated well by teams at Stack Overflow, Shopify, and others &mdash; that a well-structured monolith is significantly easier to develop, test, and debug than a distributed system. FractalX doesn&rsquo;t ask you to abandon that. It asks you to structure your monolith into clear bounded contexts and then, when you&rsquo;re ready for independent scaling or team autonomy, produce the distributed system from that structure automatically.</p>
+
+        <p>The generated output is not a black box. Every file in <code>fractalx-output/</code> is readable, editable, plain Spring Boot Java code. If FractalX doesn&rsquo;t generate exactly what you need, you can modify the output. The framework&rsquo;s value is in eliminating the first 95% of the work &mdash; the scaffolding, wiring, and cross-cutting concerns &mdash; so your team can focus on the last 5% that is specific to your system.</p>
+
+        <hr class="hr">
+
+        <h2>Where to Go Next</h2>
+
+        <p>FractalX is open source under the Apache 2.0 license. The project lives on GitHub at <a href="https://github.com/Project-FractalX/FractalX" target="_blank" rel="noopener">github.com/Project-FractalX/FractalX</a>, and the annotations artifact is published to Maven Central under <code>org.fractalx:fractalx-annotations</code>. The repository includes a complete developer guide, a full annotations reference, and a working e-commerce monolith example you can clone and decompose immediately.</p>
+
+        <p>If you&rsquo;re maintaining a Spring Boot monolith and have ever stared down a microservices migration with dread, FractalX is worth an afternoon. The quick start takes about five minutes, and seeing a fully-wired distributed system emerge from your existing codebase with a single Maven command is &mdash; at minimum &mdash; a remarkable thing to witness.</p>
+
+        <div class="hr-dots">&middot; &middot; &middot;</div>
+
+        <div style="border-top:1px solid var(--border);padding-top:24px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:13px;color:var(--text3);font-family:var(--mono)">GitHub: <a href="https://github.com/Project-FractalX/FractalX" target="_blank" rel="noopener">github.com/Project-FractalX/FractalX</a></div>
+            <div style="font-size:13px;color:var(--text3);font-family:var(--mono)">Maven Central: <code>org.fractalx:fractalx-annotations:0.2.5</code></div>
+            <div style="font-size:13px;color:var(--text3);font-family:var(--mono)">License: Apache 2.0 &nbsp;&middot;&nbsp; Java 17+ &nbsp;&middot;&nbsp; Spring Boot 3.2.0</div>
+        </div>
+
+    </div><!-- /prose -->
+
+    <div class="art-nav">
+        <a href="/blog" class="art-nav-back">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            All posts
+        </a>
+        <div class="art-nav-links">
+            <a href="/docs" class="art-nav-link">Documentation</a>
+            <a href="https://github.com/Project-FractalX/FractalX" class="art-nav-link" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </div>
+
+</article>
+
+<footer>
+    <div class="foot-inner">
+        <div class="foot-logo">
+            <div class="logo-mark" style="width:22px;height:22px;border-radius:5px">
+                <svg width="18" height="18" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="currentColor"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="currentColor"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="currentColor"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="currentColor"/></svg>
+            </div>
+            FractalX
+        </div>
+        <div class="foot-links">
+            <a href="/" class="foot-link">Home</a>
+            <a href="/docs" class="foot-link">Docs</a>
+            <a href="/blog" class="foot-link">Blog</a>
+            <a href="https://github.com/Project-FractalX/FractalX" class="foot-link">GitHub</a>
+            <a href="/privacy" class="foot-link">Privacy Policy</a>
+            <a href="/terms" class="foot-link">Terms</a>
+        </div>
+        <div class="foot-copy">&copy; 2026 FractalX. Built with FractalX.</div>
+    </div>
+</footer>
+
+<script>
+    function toggleTheme(){
+        const isLight = document.documentElement.classList.toggle('light');
+        localStorage.setItem('frx-theme', isLight ? 'light' : 'dark');
+    }
+
+    let mobOpen = false;
+    function toggleMob(){
+        mobOpen = !mobOpen;
+        document.getElementById('mob-menu').classList.toggle('open', mobOpen);
+        document.body.style.overflow = mobOpen ? 'hidden' : '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && mobOpen) toggleMob(); });
+
+    const nav = document.querySelector('.nav');
+    window.addEventListener('scroll', () => {
+        nav.style.boxShadow = window.scrollY > 10 ? '0 1px 0 var(--border)' : '';
+    }, {passive:true});
+</script>
+</body>
+</html>
