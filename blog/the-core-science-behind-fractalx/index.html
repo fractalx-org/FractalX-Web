@@ -319,20 +319,20 @@
         .fc-bar{position:absolute;left:0;top:0;bottom:0;width:5px;background:#f4600c;z-index:3}
 
         /* Full-width single column - top group + bottom footer pinned via space-between */
-        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:1;padding:38px 60px 38px 72px;display:flex;flex-direction:column;justify-content:space-between;gap:14px}
+        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:1;padding:44px 64px 44px 72px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
         .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:64px 76px;display:flex;flex-direction:column;justify-content:space-between;gap:28px}
         .fc-right{display:none}
 
         /* Top content group */
-        .fc-top{display:flex;flex-direction:column;gap:14px}
+        .fc-top{display:flex;flex-direction:column;gap:18px}
         /* Footer group */
-        .fc-footer{display:flex;flex-direction:column;gap:14px}
+        .fc-footer{display:flex;flex-direction:column;gap:16px}
 
         /*
          * Font sizes are set for native 1200px render.
          * Modal renders at ~0.5× (desktop) or ~0.28× (mobile).
          * Values chosen so text stays readable at 0.28× scale.
-         * desktop(0.50×): title=44px, tags/desc=22px  |  mobile(0.25×): title=22px, tags/desc=11px
+         * desktop: title=44px, body=21px  |  mobile: title=25px, body=12px
          */
         .fc-brand{display:flex;align-items:center;gap:16px}
         .fc-bname{font-size:46px;font-weight:700;color:#ededed;letter-spacing:-.3px}
@@ -342,7 +342,7 @@
         .fc-bsec{font-size:38px;color:#555}
         html.light .fc-bsec{color:#71717a}
         .fc-tags{display:flex;gap:12px;flex-wrap:wrap}
-        .fc-tag{font-size:44px;font-family:'Geist Mono',monospace;font-weight:500;padding:10px 22px;border-radius:60px;letter-spacing:.03em;white-space:nowrap}
+        .fc-tag{font-size:30px;font-family:'Geist Mono',monospace;font-weight:500;padding:8px 20px;border-radius:60px;letter-spacing:.03em;white-space:nowrap}
         .fc-tag.or{background:rgba(244,96,12,.12);border:1px solid rgba(244,96,12,.3);color:#f4600c}
         .fc-tag.gd{background:rgba(245,168,0,.10);border:1px solid rgba(245,168,0,.25);color:#f5a800}
         html.light .fc-tag.gd{color:#c47a00;border-color:rgba(196,122,0,.3)}
@@ -352,17 +352,17 @@
         html.light .fc-title{color:#09090b}
         .fc-title .hl{color:#f4600c}
         html.light .fc-title .hl{color:#d4510a}
-        .fc-desc{font-size:42px;color:#555;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .fc-desc{font-size:30px;color:#555;line-height:1.5}
         html.light .fc-desc{color:#71717a}
         .fc-hr{border:none;border-top:2px solid #222;margin:0}
         html.light .fc-hr{border-top-color:#e4e4e7}
         .fc-author{display:flex;align-items:center;gap:16px}
-        .fc-av{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#f4600c,#e0540a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:28px}
-        .fc-aname{font-size:48px;font-weight:600;color:#aaa;display:block}
+        .fc-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#f4600c,#e0540a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:22px}
+        .fc-aname{font-size:34px;font-weight:600;color:#aaa;display:block}
         html.light .fc-aname{color:#52525b}
-        .fc-ameta{font-size:38px;color:#444;font-family:'Geist Mono',monospace;display:block}
+        .fc-ameta{font-size:28px;color:#444;font-family:'Geist Mono',monospace;display:block}
         html.light .fc-ameta{color:#a1a1aa}
-        .fc-url{font-size:30px;font-family:'Geist Mono',monospace;color:#333}
+        .fc-url{font-size:17px;font-family:'Geist Mono',monospace;color:#333}
         html.light .fc-url{color:#a1a1aa}
 
 
