@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>FractalX Blog is now live - FractalX Blog</title>
+    <meta name="description" content="The FractalX Blog is officially live. This is where we'll share technical deep-dives, architecture guides, and updates from the team."/>
+    <meta name="keywords" content="FractalX blog, announcement, Spring Boot, microservices, open source"/>
+    <meta name="author" content="FractalX Team"/>
+    <meta name="robots" content="index, follow"/>
+    <link rel="canonical" href="https://fractalx.org/blog/fractalx-blog-is-now-live/"/>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png"/>
+    <link rel="manifest" href="/site.webmanifest"/>
+    <meta name="theme-color" content="#000000"/>
+
+    <!-- Open Graph (article) -->
+    <meta property="og:type" content="article"/>
+    <meta property="og:site_name" content="FractalX"/>
+    <meta property="og:title" content="FractalX Blog is now live"/>
+    <meta property="og:description" content="The FractalX Blog is officially live. This is where we'll share technical deep-dives, architecture guides, and updates from the team."/>
+    <meta property="og:url" content="https://fractalx.org/blog/fractalx-blog-is-now-live/"/>
+    <meta property="og:image" content="https://fractalx.org/assets/og/blog.svg"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:image:alt" content="FractalX Blog is now live"/>
+    <meta property="article:published_time" content="2026-03-18T00:00:00Z"/>
+    <meta property="article:author" content="FractalX Team"/>
+    <meta property="article:tag" content="Announcement"/>
+    <meta property="article:tag" content="Updates"/>
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="FractalX Blog is now live"/>
+    <meta name="twitter:description" content="The FractalX Blog is officially live. This is where we'll share technical deep-dives, architecture guides, and updates from the team."/>
+    <meta name="twitter:image" content="https://fractalx.org/assets/og/blog.svg"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        (function(){
+            const saved = localStorage.getItem('frx-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isLight = saved === 'light' || (!saved && !prefersDark);
+            if (isLight) document.documentElement.classList.add('light');
+        })();
+    </script>
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+        :root{
+            --bg:#000;--bg1:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
+            --border:#1f1f1f;--border2:#272727;--border3:#333;--border4:#444;
+            --text:#ededed;--text2:#a1a1aa;--text3:#71717a;--text4:#3f3f46;--text5:#27272a;
+            --white:#fff;
+            --orange:#f4600c;--orange2:#e0540a;
+            --gold:#f5a800;--gold2:#d4920a;
+            --peri:#b8c4e0;--peri2:#8fa0c8;
+            --orange-dim:rgba(244,96,12,.10);--orange-glow:rgba(244,96,12,.18);
+            --gold-dim:rgba(245,168,0,.10);
+            --peri-dim:rgba(184,196,224,.08);
+            --green:#50e3c2;--green-dim:rgba(80,227,194,.08);
+            --blue:#3291ff;--blue-dim:rgba(50,145,255,.10);
+            --red:#ff4444;--red-dim:rgba(255,68,68,.08);
+            --nav-bg:rgba(0,0,0,.80);
+            --r:8px;--font:'Geist',sans-serif;--mono:'Geist Mono',monospace;
+        }
+
+        html.light{
+            --bg:#fff;--bg1:#fafafa;--bg2:#f4f4f5;--bg3:#e4e4e7;--bg4:#d4d4d8;
+            --border:#e4e4e7;--border2:#d4d4d8;--border3:#a1a1aa;--border4:#71717a;
+            --text:#09090b;--text2:#52525b;--text3:#71717a;--text4:#a1a1aa;--text5:#d4d4d8;
+            --white:#09090b;
+            --orange:#d4510a;--orange2:#c04608;
+            --gold:#c47a00;
+            --peri:#4a5fa8;
+            --orange-dim:rgba(212,81,10,.07);--orange-glow:rgba(212,81,10,.12);
+            --gold-dim:rgba(196,122,0,.07);
+            --peri-dim:rgba(74,95,168,.07);
+            --green:#067a6f;--green-dim:rgba(6,122,111,.07);
+            --blue:#0070f3;--blue-dim:rgba(0,112,243,.07);
+            --nav-bg:rgba(255,255,255,.85);
+        }
+
+        html{scroll-behavior:smooth}
+        body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s;overflow-x:hidden}
+        ::-webkit-scrollbar{width:4px}
+        ::-webkit-scrollbar-thumb{background:var(--border3);border-radius:4px}
+        a{color:var(--orange);text-decoration:none}
+        a:hover{text-decoration:underline}
+
+        /* ── NAVBAR ── */
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;background:var(--nav-bg);backdrop-filter:blur(16px) saturate(180%);border-bottom:1px solid var(--border);transition:background .2s,border-color .2s}
+        .nav-inner{max-width:1120px;margin:0 auto;padding:0 24px;width:100%;display:flex;align-items:center;gap:32px}
+        .nav-logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;color:var(--text);letter-spacing:-.2px;flex-shrink:0;cursor:pointer}
+        .logo-mark{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;flex-shrink:0}
+        .logo-mark svg{width:14px;height:14px}
+        .nav-links{display:flex;align-items:center;gap:2px;margin-left:8px}
+        .nav-link{font-size:13.5px;color:var(--text2);padding:6px 11px;border-radius:6px;transition:color .15s,background .15s;cursor:pointer;white-space:nowrap}
+        .nav-link:hover{color:var(--text);background:var(--bg2)}
+        .nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
+        .nav-badge{font-size:11px;font-family:var(--mono);color:var(--text3);background:var(--bg2);border:1px solid var(--border2);padding:3px 8px;border-radius:4px}
+        .nav-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:7px 14px;border-radius:7px;cursor:pointer;transition:all .15s;border:none;font-family:var(--font)}
+        .nav-btn.ghost{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+        .nav-btn.ghost:hover{color:var(--text);background:var(--bg2);border-color:var(--border3)}
+
+        .tt{width:34px;height:34px;border-radius:7px;border:1px solid var(--border2);background:var(--bg1);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;padding:0;flex-shrink:0}
+        .tt:hover{border-color:var(--border3);background:var(--bg2)}
+        .tt svg{width:15px;height:15px;color:var(--text3);display:block;transition:color .15s}
+        .tt:hover svg{color:var(--text)}
+        .tt .ic-moon{display:block}
+        .tt .ic-sun{display:none}
+        html.light .tt .ic-moon{display:none}
+        html.light .tt .ic-sun{display:block}
+
+        .ham{width:34px;height:34px;border-radius:7px;border:1px solid var(--border2);background:var(--bg1);cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .15s;padding:0;flex-shrink:0}
+        .ham:hover{border-color:var(--border3);background:var(--bg2)}
+        .ham svg{width:16px;height:16px;color:var(--text2)}
+
+        /* mobile menu */
+        .mob-menu{display:none;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--bg);z-index:99;padding:16px 24px;flex-direction:column;gap:4px;overflow-y:auto}
+        .mob-menu.open{display:flex}
+        .mob-link{font-size:15px;color:var(--text2);padding:12px 8px;border-bottom:1px solid var(--border);transition:color .12s}
+        .mob-link:hover{color:var(--text)}
+        .mob-link.active{color:var(--orange)}
+
+        @media(max-width:780px){
+            .nav-links{display:none}
+            .nav-badge{display:none}
+            .ham{display:inline-flex}
+        }
+
+        /* ── ARTICLE ── */
+        .article-wrap{max-width:720px;margin:0 auto;padding:96px 24px 80px}
+
+        .back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-family:var(--mono);color:var(--text3);text-decoration:none;margin-bottom:32px;transition:color .15s}
+        .back-link:hover{color:var(--text);text-decoration:none}
+        .back-link svg{width:14px;height:14px}
+
+        .post-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+        .post-tag{font-size:11px;font-family:var(--mono);font-weight:500;padding:3px 8px;border-radius:20px;background:var(--bg2);border:1px solid var(--border2);color:var(--text3);letter-spacing:.02em}
+        .post-tag.orange{background:var(--orange-dim);border-color:rgba(244,96,12,.25);color:var(--orange)}
+        .post-tag.green{background:var(--green-dim);border-color:rgba(80,227,194,.25);color:var(--green)}
+
+        .article-h1{font-size:clamp(28px,5vw,42px);font-weight:800;letter-spacing:-1.2px;line-height:1.1;color:var(--white);margin-bottom:16px}
+        .article-lead{font-size:17px;color:var(--text2);line-height:1.75;margin-bottom:28px}
+
+        .pub-meta{display:flex;align-items:center;gap:10px;padding:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:40px}
+        .pub-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--orange) 0%,var(--orange2) 100%);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+        .pub-info{display:flex;flex-direction:column;gap:2px}
+        .pub-name{font-size:13.5px;font-weight:600;color:var(--text)}
+        .pub-details{font-size:12px;color:var(--text3);font-family:var(--mono)}
+        .pub-dot{margin:0 4px}
+
+        /* ── PROSE ── */
+        .prose{font-size:16px;line-height:1.8;color:var(--text2)}
+        .prose p{margin-bottom:24px}
+        .prose h2{font-size:22px;font-weight:700;color:var(--white);letter-spacing:-.4px;margin:40px 0 16px}
+        .prose h3{font-size:18px;font-weight:600;color:var(--white);letter-spacing:-.2px;margin:32px 0 12px}
+        .prose ul,.prose ol{margin:0 0 24px 20px;display:flex;flex-direction:column;gap:8px}
+        .prose li{color:var(--text2)}
+        .prose strong{color:var(--text);font-weight:600}
+        .prose a{color:var(--orange)}
+        .prose blockquote{border-left:3px solid var(--orange);padding:12px 20px;margin:24px 0;background:var(--bg1);border-radius:0 8px 8px 0}
+        .prose blockquote p{margin:0;color:var(--text2);font-style:italic}
+
+        .hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+        .hr-dots{text-align:center;margin:48px 0;color:var(--border4);letter-spacing:10px;font-size:18px}
+
+        /* article footer nav */
+        .art-nav{display:flex;align-items:center;justify-content:space-between;padding:28px 0;border-top:1px solid var(--border);margin-top:56px;gap:16px;flex-wrap:wrap}
+        .art-nav-back{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-family:var(--mono);color:var(--text3);text-decoration:none;transition:color .15s}
+        .art-nav-back:hover{color:var(--text);text-decoration:none}
+        .art-nav-links{display:flex;gap:16px;align-items:center}
+        .art-nav-link{font-size:13px;color:var(--text3);text-decoration:none;transition:color .15s}
+        .art-nav-link:hover{color:var(--orange);text-decoration:none}
+
+        /* footer */
+        footer{border-top:1px solid var(--border);padding:40px 24px}
+        .foot-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+        .foot-logo{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--text2)}
+        .foot-links{display:flex;gap:20px;flex-wrap:wrap}
+        .foot-link{font-size:13px;color:var(--text3);transition:color .12s;text-decoration:none}
+        .foot-link:hover{color:var(--text);text-decoration:none}
+        .foot-copy{font-size:12px;color:var(--text4)}
+
+        /* ── SHARE SECTION ── */
+        .share-section{padding:32px 0 0;border-top:1px solid var(--border);margin-top:48px;display:flex;flex-direction:column;gap:16px}
+        .share-section-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+        .share-label{font-size:12.5px;font-family:var(--mono);color:var(--text3);letter-spacing:.04em}
+        .share-inline-btns{display:flex;gap:8px;flex-wrap:wrap}
+        .sib{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;font-family:var(--font);border:1px solid var(--border2);background:var(--bg1);color:var(--text2);cursor:pointer;transition:all .15s;text-decoration:none}
+        .sib:hover{border-color:var(--border3);color:var(--text);background:var(--bg2);text-decoration:none}
+        .sib.primary{background:var(--orange);color:#fff;border-color:transparent}
+        .sib.primary:hover{background:var(--orange2)}
+        .sib svg{width:14px;height:14px;flex-shrink:0}
+
+        /* ── SHARE MODAL ── */
+        .share-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);backdrop-filter:blur(14px) saturate(120%);align-items:center;justify-content:center;padding:20px}
+        html.light .share-overlay{background:rgba(255,255,255,.80)}
+        .share-overlay.open{display:flex}
+        .share-modal{background:#0a0a0a;border:1px solid #272727;border-radius:16px;width:100%;max-width:660px;max-height:92vh;overflow-y:auto;padding:28px;animation:smin .2s ease}
+        .share-modal::-webkit-scrollbar{width:3px}
+        .share-modal::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:3px}
+        html.light .share-modal{background:var(--bg);border-color:var(--border2)}
+        html.light .share-modal::-webkit-scrollbar-thumb{background:var(--border3)}
+        @keyframes smin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .sm-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+        .sm-hd-l{display:flex;align-items:center;gap:9px}
+        .sm-hd-l svg{width:17px;height:17px;color:var(--orange)}
+        .sm-hd h3{font-size:15px;font-weight:600;color:var(--text)}
+        .sm-close{width:30px;height:30px;border-radius:6px;border:1px solid #272727;background:transparent;color:#52525b;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0;font-size:18px;line-height:1;font-family:sans-serif}
+        .sm-close:hover{border-color:#444;color:var(--text);background:#111}
+        html.light .sm-close{border-color:var(--border2);color:var(--text3)}
+        html.light .sm-close:hover{border-color:var(--border3);color:var(--text);background:var(--bg2)}
+
+        /* Flyer */
+        .flyer-wrap{border-radius:10px;overflow:hidden;border:1px solid #1f1f1f;margin-bottom:14px;position:relative}
+        html.light .flyer-wrap{border-color:var(--border2)}
+        .flyer-card{width:1200px;background:#0a0a0a;position:relative;overflow:hidden;display:flex;transform-origin:top left}
+        html.light .flyer-card{background:#ffffff}
+        .flyer-card.wide{height:630px}
+        .flyer-card.sq{height:1080px;flex-direction:column}
+        .flyer-card::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(#1e1e1e 1px,transparent 1px),linear-gradient(90deg,#1e1e1e 1px,transparent 1px);background-size:48px 48px;opacity:.6}
+        html.light .flyer-card::before{background-image:linear-gradient(#e4e4e7 1px,transparent 1px),linear-gradient(90deg,#e4e4e7 1px,transparent 1px);opacity:.7}
+        .flyer-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 55% at 12% 20%,rgba(244,96,12,.22) 0%,transparent 100%),radial-gradient(ellipse 32% 32% at 88% 82%,rgba(245,168,0,.06) 0%,transparent 100%)}
+        html.light .flyer-card::after{background:radial-gradient(ellipse 55% 55% at 12% 20%,rgba(244,96,12,.10) 0%,transparent 100%),radial-gradient(ellipse 32% 32% at 88% 82%,rgba(245,168,0,.05) 0%,transparent 100%)}
+        .fc-bar{position:absolute;left:0;top:0;bottom:0;width:5px;background:#f4600c;z-index:3}
+        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:1;padding:44px 64px 44px 72px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+        .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:64px 76px;display:flex;flex-direction:column;justify-content:space-between;gap:28px}
+        .fc-top{display:flex;flex-direction:column;gap:18px}
+        .fc-footer{display:flex;flex-direction:column;gap:16px}
+        .fc-brand{display:flex;align-items:center;gap:16px}
+        .fc-bname{font-size:46px;font-weight:700;color:#ededed;letter-spacing:-.3px}
+        html.light .fc-bname{color:#09090b}
+        .fc-bsep{font-size:38px;color:#2a2a2a}
+        html.light .fc-bsep{color:#d4d4d8}
+        .fc-bsec{font-size:38px;color:#555}
+        html.light .fc-bsec{color:#71717a}
+        .fc-tags{display:flex;gap:12px;flex-wrap:wrap}
+        .fc-tag{font-size:30px;font-family:'Geist Mono',monospace;font-weight:500;padding:8px 20px;border-radius:60px;letter-spacing:.03em;white-space:nowrap}
+        .fc-tag.or{background:rgba(244,96,12,.12);border:1px solid rgba(244,96,12,.3);color:#f4600c}
+        .fc-tag.gn{background:rgba(80,227,194,.10);border:1px solid rgba(80,227,194,.25);color:#50e3c2}
+        html.light .fc-tag.gn{color:#067a6f;border-color:rgba(6,122,111,.3)}
+        .fc-tag.df{background:#0d0d0d;border:1px solid #272727;color:#666}
+        html.light .fc-tag.df{background:#f4f4f5;border-color:#e4e4e7;color:#71717a}
+        .fc-title{font-size:88px;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.08}
+        html.light .fc-title{color:#09090b}
+        .fc-title .hl{color:#f4600c}
+        html.light .fc-title .hl{color:#d4510a}
+        .fc-desc{font-size:30px;color:#555;line-height:1.5}
+        html.light .fc-desc{color:#71717a}
+        .fc-hr{border:none;border-top:2px solid #222;margin:0}
+        html.light .fc-hr{border-top-color:#e4e4e7}
+        .fc-author{display:flex;align-items:center;gap:16px}
+        .fc-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#f4600c,#e0540a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:22px}
+        .fc-aname{font-size:34px;font-weight:600;color:#aaa;display:block}
+        html.light .fc-aname{color:#52525b}
+        .fc-ameta{font-size:28px;color:#444;font-family:'Geist Mono',monospace;display:block}
+        html.light .fc-ameta{color:#a1a1aa}
+        .fc-url{font-size:17px;font-family:'Geist Mono',monospace;color:#333}
+        html.light .fc-url{color:#a1a1aa}
+
+        /* Format toggle */
+        .sm-fmt{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+        .sm-fmt span{font-size:11.5px;font-family:'Geist Mono',monospace;color:#444}
+        html.light .sm-fmt span{color:var(--text3)}
+        .fmtb{padding:4px 12px;border-radius:6px;border:1px solid #1f1f1f;background:transparent;font-size:11px;font-family:'Geist Mono',monospace;color:#555;cursor:pointer;transition:all .15s}
+        .fmtb.on{border-color:#f4600c;color:#f4600c;background:rgba(244,96,12,.10)}
+        .fmtb:hover:not(.on){border-color:#333;color:#999}
+        html.light .fmtb{border-color:var(--border2);color:var(--text3)}
+        html.light .fmtb:hover:not(.on){border-color:var(--border3);color:var(--text2)}
+
+        /* Download */
+        .sm-dl{width:100%;padding:11px;border-radius:8px;border:none;background:#f4600c;color:#fff;font-size:13.5px;font-weight:500;font-family:'Geist',system-ui,sans-serif;cursor:pointer;transition:background .15s;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+        .sm-dl:hover{background:#e0540a}
+        .sm-dl svg{width:15px;height:15px}
+
+        /* Share buttons */
+        .sm-sh-lbl{font-size:10.5px;font-family:'Geist Mono',monospace;color:#333;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+        html.light .sm-sh-lbl{color:var(--text4)}
+        .sm-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .shb{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 14px;border-radius:8px;border:1px solid #1a1a1a;background:#0d0d0d;color:#555;font-size:13px;font-weight:500;font-family:'Geist',system-ui,sans-serif;cursor:pointer;transition:all .15s;text-decoration:none}
+        .shb:hover{border-color:#2a2a2a;color:#ededed;background:#111;text-decoration:none}
+        .shb svg{width:15px;height:15px;flex-shrink:0}
+        .shb.ok{border-color:#f4600c;color:#f4600c;background:rgba(244,96,12,.10)}
+        html.light .shb{border-color:var(--border);background:var(--bg1);color:var(--text3)}
+        html.light .shb:hover{border-color:var(--border3);color:var(--text);background:var(--bg2);text-decoration:none}
+        html.light .shb.ok{border-color:var(--orange);color:var(--orange);background:var(--orange-dim)}
+
+        @media(max-width:640px){
+            .article-wrap{padding:80px 20px 80px}
+            .sm-btns{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-logo">
+            <div class="logo-mark">
+                <svg width="18" height="18" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="currentColor"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="currentColor"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="currentColor"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="currentColor"/></svg>
+            </div>
+            FractalX
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/docs" class="nav-link">Docs</a>
+            <a href="/blog" class="nav-link" style="color:var(--orange)">Blog</a>
+            <a href="https://github.com/Project-FractalX/FractalX" class="nav-link">GitHub</a>
+        </div>
+        <div class="nav-right">
+            <span class="nav-badge">v0.2.5</span>
+            <button class="tt" onclick="toggleTheme()" aria-label="Toggle theme">
+                <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+            <button class="ham" onclick="toggleMob()" aria-label="Menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="mob-menu" id="mob-menu">
+    <a href="/" class="mob-link" onclick="toggleMob()">Home</a>
+    <a href="/docs" class="mob-link" onclick="toggleMob()">Docs</a>
+    <a href="/blog" class="mob-link active" onclick="toggleMob()">Blog</a>
+    <a href="https://github.com/Project-FractalX/FractalX" class="mob-link">GitHub</a>
+</div>
+
+<article class="article-wrap">
+
+    <a href="/blog" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Blog
+    </a>
+
+    <div class="post-tags">
+        <span class="post-tag orange">Announcement</span>
+        <span class="post-tag green">Updates</span>
+    </div>
+
+    <h1 class="article-h1">FractalX Blog is now live</h1>
+
+    <p class="article-lead">We now have a dedicated space to share what we&rsquo;re building, how it works, and where we&rsquo;re taking it next.</p>
+
+    <div class="pub-meta">
+        <div class="pub-avatar">F</div>
+        <div class="pub-info">
+            <span class="pub-name">FractalX Team</span>
+            <span class="pub-details">
+                March 18, 2026
+                <span class="pub-dot">&middot;</span>
+                2 min read
+            </span>
+        </div>
+        <div style="display:flex;gap:8px;margin-left:auto;flex-shrink:0;flex-wrap:wrap">
+            <button class="sib" onclick="openShareModal()" style="padding:6px 12px;font-size:12px">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                Share
+            </button>
+        </div>
+    </div>
+
+    <div class="prose">
+
+        <p>The FractalX Blog is officially live. After spending the past months building and refining the framework itself, we&rsquo;re ready to start writing about what we&rsquo;ve learned along the way.</p>
+
+        <p>FractalX started as a straightforward question: <strong>why does migrating a Spring Boot monolith to microservices require so much hand-written scaffolding?</strong> Every team goes through the same motion &mdash; writing Dockerfiles, configuring service discovery, wiring Resilience4j, generating gRPC definitions, setting up distributed tracing. None of that is product code. All of it takes weeks.</p>
+
+        <p>We built FractalX to automate that entire class of work. You annotate your bounded contexts, run one Maven command, and get a fully-wired distributed system as output. The blog is where we&rsquo;ll explain the decisions behind it.</p>
+
+        <hr class="hr">
+
+        <h2>What you can expect here</h2>
+
+        <p>We&rsquo;ll write about three things primarily:</p>
+
+        <ul>
+            <li><strong>Technical deep-dives.</strong> How the AST analysis pipeline works, how NetScope generates gRPC clients without proto files, how the saga orchestrator gets built from a single annotation, and the design choices behind the 30+ code generators that run on every decomposition.</li>
+            <li><strong>Architecture guides.</strong> Practical writing on structuring Spring Boot monoliths for decomposition, bounded context identification, database isolation strategies, and operating the generated distributed system in production.</li>
+            <li><strong>Project updates.</strong> New releases, new features, and changes to the framework as FractalX continues to develop.</li>
+        </ul>
+
+        <hr class="hr">
+
+        <h2>Start with the first post</h2>
+
+        <p>If you&rsquo;re new to FractalX, the best place to start is our first post: <a href="/blog/the-core-science-behind-fractalx">The Core Science Behind FractalX</a>. It covers the full picture &mdash; how static AST analysis works, what the 30+ code generators produce, how NetScope handles inter-service gRPC communication, and how distributed sagas are generated from a single <code style="font-family:var(--mono);font-size:14px;background:var(--bg2);padding:2px 6px;border-radius:4px;color:var(--text)">@DistributedSaga</code> annotation.</p>
+
+        <p>FractalX is open source under Apache 2.0. The framework, documentation, and the working e-commerce example are all on <a href="https://github.com/Project-FractalX/FractalX" target="_blank" rel="noopener">GitHub</a>.</p>
+
+        <div class="hr-dots">&middot; &middot; &middot;</div>
+
+        <div style="border-top:1px solid var(--border);padding-top:24px;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:13px;color:var(--text3);font-family:var(--mono)">GitHub: <a href="https://github.com/Project-FractalX/FractalX" target="_blank" rel="noopener">github.com/Project-FractalX/FractalX</a></div>
+            <div style="font-size:13px;color:var(--text3);font-family:var(--mono)">Docs: <a href="/docs">fractalx.org/docs</a></div>
+        </div>
+
+    </div><!-- /prose -->
+
+    <!-- ── SHARE SECTION ── -->
+    <div class="share-section">
+        <div class="share-section-top">
+            <span class="share-label">Share this post.</span>
+            <div class="share-inline-btns">
+                <button class="sib primary" onclick="openShareModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                    Share &amp; download
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="art-nav">
+        <a href="/blog" class="art-nav-back">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            All posts
+        </a>
+        <div class="art-nav-links">
+            <a href="/docs" class="art-nav-link">Documentation</a>
+            <a href="https://github.com/Project-FractalX/FractalX" class="art-nav-link" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </div>
+
+</article>
+
+<footer>
+    <div class="foot-inner">
+        <div class="foot-logo">
+            <div class="logo-mark" style="width:22px;height:22px;border-radius:5px">
+                <svg width="18" height="18" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="currentColor"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="currentColor"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="currentColor"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="currentColor"/></svg>
+            </div>
+            FractalX
+        </div>
+        <div class="foot-links">
+            <a href="/" class="foot-link">Home</a>
+            <a href="/docs" class="foot-link">Docs</a>
+            <a href="/blog" class="foot-link">Blog</a>
+            <a href="https://github.com/Project-FractalX/FractalX" class="foot-link">GitHub</a>
+            <a href="/privacy" class="foot-link">Privacy Policy</a>
+            <a href="/terms" class="foot-link">Terms</a>
+        </div>
+        <div class="foot-copy">&copy; 2026 FractalX.</div>
+    </div>
+</footer>
+
+<!-- ── SHARE MODAL ── -->
+<div class="share-overlay" id="shareOverlay" onclick="closeShareModal(event)">
+    <div class="share-modal" onclick="event.stopPropagation()">
+
+        <div class="sm-hd">
+            <div class="sm-hd-l">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <h3>Share this post</h3>
+            </div>
+            <button class="sm-close" onclick="closeShareModal()">&times;</button>
+        </div>
+
+        <!-- Flyer preview -->
+        <div class="flyer-wrap" id="flyerWrap">
+            <div class="flyer-card wide" id="flyerCard">
+                <div class="fc-bar"></div>
+                <div class="fc-left">
+                    <div class="fc-top">
+                        <div class="fc-brand">
+                            <svg width="34" height="38" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="#f4600c"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="#f4600c"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="#f4600c"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="#f4600c"/></svg>
+                            <span class="fc-bname">FractalX</span>
+                            <span class="fc-bsep">/</span>
+                            <span class="fc-bsec">Blog</span>
+                        </div>
+                        <div class="fc-tags">
+                            <span class="fc-tag or">Announcement</span>
+                            <span class="fc-tag gn">Updates</span>
+                        </div>
+                        <div class="fc-title">FractalX Blog<br>is now <span class="hl">live</span></div>
+                        <div class="fc-desc">Technical deep-dives, architecture guides, and updates &mdash; from the FractalX team.</div>
+                    </div>
+                    <div class="fc-footer">
+                        <hr class="fc-hr">
+                        <div class="fc-author">
+                            <div class="fc-av">F</div>
+                            <div>
+                                <span class="fc-aname">FractalX Team</span>
+                                <span class="fc-ameta">March 18, 2026 &nbsp;&middot;&nbsp; 2 min read</span>
+                            </div>
+                        </div>
+                        <div class="fc-url">fractalx.org/blog</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Format toggle -->
+        <div class="sm-fmt">
+            <span>Format:</span>
+            <button class="fmtb on" id="fmtWide" onclick="setFmt('wide')">16:9</button>
+            <button class="fmtb" id="fmtSq" onclick="setFmt('sq')">1:1</button>
+        </div>
+
+        <!-- Download -->
+        <button class="sm-dl" onclick="downloadFlyer()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download as PNG
+        </button>
+
+        <!-- Share buttons -->
+        <div class="sm-sh-lbl">Share to</div>
+        <div class="sm-btns">
+            <button class="shb" onclick="shareX(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.259 5.631L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                Post on X
+            </button>
+            <button class="shb" onclick="shareLinkedIn(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                LinkedIn
+            </button>
+            <button class="shb" onclick="shareWhatsApp(this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                WhatsApp
+            </button>
+            <button class="shb" id="copyBtn" onclick="copyLink()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                <span id="copyLabel">Copy link</span>
+            </button>
+            <button class="shb" onclick="nativeShare(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                More options
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    /* ── THEME ── */
+    function toggleTheme(){
+        const isLight = document.documentElement.classList.toggle('light');
+        localStorage.setItem('frx-theme', isLight ? 'light' : 'dark');
+    }
+
+    /* ── MOBILE MENU ── */
+    let mobOpen = false;
+    function toggleMob(){
+        mobOpen = !mobOpen;
+        document.getElementById('mob-menu').classList.toggle('open', mobOpen);
+        document.body.style.overflow = mobOpen ? 'hidden' : '';
+    }
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { if (mobOpen) toggleMob(); closeShareModal(); }
+    });
+
+    const nav = document.querySelector('.nav');
+    window.addEventListener('scroll', () => {
+        nav.style.boxShadow = window.scrollY > 10 ? '0 1px 0 var(--border)' : '';
+    }, {passive:true});
+
+    /* ── FLYER SCALING ── */
+    function scaleFlyer(){
+        const wrap = document.getElementById('flyerWrap');
+        const card = document.getElementById('flyerCard');
+        if (!wrap || !card) return;
+        const nativeW = 1200;
+        const nativeH = card.classList.contains('sq') ? 1080 : 630;
+        const wrapW = wrap.clientWidth;
+        const scale = wrapW / nativeW;
+        card.style.transform = 'scale(' + scale + ')';
+        wrap.style.height = (nativeH * scale) + 'px';
+    }
+    window.addEventListener('resize', scaleFlyer);
+
+    /* ── SHARE MODAL ── */
+    function openShareModal(){
+        document.getElementById('shareOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(scaleFlyer);
+    }
+    function closeShareModal(e){
+        if (e && e.target !== document.getElementById('shareOverlay')) return;
+        document.getElementById('shareOverlay').classList.remove('open');
+        if (!mobOpen) document.body.style.overflow = '';
+    }
+
+    /* ── FORMAT TOGGLE ── */
+    let curFmt = 'wide';
+    function setFmt(f){
+        curFmt = f;
+        const card = document.getElementById('flyerCard');
+        card.classList.toggle('wide', f === 'wide');
+        card.classList.toggle('sq', f === 'sq');
+        document.getElementById('fmtWide').classList.toggle('on', f === 'wide');
+        document.getElementById('fmtSq').classList.toggle('on', f === 'sq');
+        requestAnimationFrame(scaleFlyer);
+    }
+
+    /* ── SHARE CONSTANTS ── */
+    const POST_URL = 'https://fractalx.org/blog/fractalx-blog-is-now-live/';
+    const POST_TITLE = 'FractalX Blog is now live';
+    const POST_DESC = 'The FractalX Blog is officially live — technical deep-dives, architecture guides, and updates from the team building the open-source static decomposition framework for Spring Boot.';
+
+    /* ── SHARE ACTIONS ── */
+    function shareX(btn){
+        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(POST_TITLE) + '&url=' + encodeURIComponent(POST_URL), '_blank', 'width=600,height=400');
+    }
+    function shareLinkedIn(btn){
+        window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(POST_URL), '_blank', 'width=600,height=500');
+    }
+    function shareWhatsApp(btn){
+        window.open('https://wa.me/?text=' + encodeURIComponent(POST_TITLE + ' ' + POST_URL), '_blank');
+    }
+    function copyLink(){
+        navigator.clipboard.writeText(POST_URL).then(() => {
+            const btn = document.getElementById('copyBtn');
+            const lbl = document.getElementById('copyLabel');
+            btn.classList.add('ok');
+            lbl.textContent = 'Copied!';
+            setTimeout(() => { btn.classList.remove('ok'); lbl.textContent = 'Copy link'; }, 2000);
+        });
+    }
+    async function nativeShare(btn){
+        if (navigator.share) {
+            try { await navigator.share({ title: POST_TITLE, text: POST_DESC, url: POST_URL }); } catch(_){}
+        } else {
+            copyLink();
+        }
+    }
+
+    /* ── DOWNLOAD FLYER ── */
+    async function downloadFlyer(){
+        const isWide = curFmt === 'wide';
+        const isLight = document.documentElement.classList.contains('light');
+        const W = isWide ? 1200 : 1080;
+        const H = isWide ? 630 : 1080;
+        const canvas = document.createElement('canvas');
+        canvas.width = W; canvas.height = H;
+        const ctx = canvas.getContext('2d');
+        const s = W / 1200;
+
+        const T = isLight ? {
+            bg:'#ffffff', grid:'#e4e4e7', gridOpacity:.7,
+            glowOrange:'rgba(244,96,12,.10)', glowGold:'rgba(245,168,0,.05)',
+            brandName:'#09090b', brandSep:'#d4d4d8', brandSec:'#71717a',
+            tagOrFg:'#d4510a', tagOrBg:'rgba(212,81,10,.08)', tagOrBd:'rgba(212,81,10,.25)',
+            tagGnFg:'#067a6f', tagGnBg:'rgba(6,122,111,.08)', tagGnBd:'rgba(6,122,111,.25)',
+            titleColor:'#09090b', accentColor:'#d4510a',
+            descColor:'#71717a', divider:'#e4e4e7',
+            authorName:'#52525b', authorMeta:'#a1a1aa', url:'#a1a1aa',
+        } : {
+            bg:'#0a0a0a', grid:'#1e1e1e', gridOpacity:.6,
+            glowOrange:'rgba(244,96,12,.22)', glowGold:'rgba(245,168,0,.06)',
+            brandName:'#ededed', brandSep:'#2a2a2a', brandSec:'#555',
+            tagOrFg:'#f4600c', tagOrBg:'rgba(244,96,12,.12)', tagOrBd:'rgba(244,96,12,.3)',
+            tagGnFg:'#50e3c2', tagGnBg:'rgba(80,227,194,.10)', tagGnBd:'rgba(80,227,194,.25)',
+            titleColor:'#ffffff', accentColor:'#f4600c',
+            descColor:'#555', divider:'#1f1f1f',
+            authorName:'#999', authorMeta:'#444', url:'#2a2a2a',
+        };
+
+        await document.fonts.ready;
+        ctx.fillStyle = T.bg; ctx.fillRect(0,0,W,H);
+        ctx.globalAlpha = T.gridOpacity; ctx.strokeStyle = T.grid; ctx.lineWidth = 0.8;
+        const gs = 48*s;
+        for (let x=0;x<=W;x+=gs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+        for (let y=0;y<=H;y+=gs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+        ctx.globalAlpha = 1;
+        const g1=ctx.createRadialGradient(W*.12,H*.18,0,W*.12,H*.18,W*.55);
+        g1.addColorStop(0,T.glowOrange);g1.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=g1;ctx.fillRect(0,0,W,H);
+        const g2=ctx.createRadialGradient(W*.88,H*.84,0,W*.88,H*.84,W*.35);
+        g2.addColorStop(0,T.glowGold);g2.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=g2;ctx.fillRect(0,0,W,H);
+        ctx.fillStyle='#f4600c';ctx.fillRect(0,0,5*s,H);
+
+        // Logo
+        ctx.save();const ls=0.24*s;ctx.translate(80*s,50*s);ctx.scale(ls,ls);ctx.fillStyle='#f4600c';
+        ['M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z','M18.2837 0H148.284V40H18.2837V0Z','M59.2837 66H148.284V106H59.2837V66Z','M59.2837 106V165H18.2837V106H59.2837Z'].forEach(d=>ctx.fill(new Path2D(d)));
+        ctx.restore();
+
+        // Brand
+        ctx.fillStyle=T.brandName;ctx.font=`700 ${20*s}px 'Geist',system-ui,sans-serif`;ctx.fillText('FractalX',122*s,76*s);
+        ctx.fillStyle=T.brandSep;ctx.font=`400 ${16*s}px 'Geist',system-ui,sans-serif`;ctx.fillText('/',198*s,74*s);
+        ctx.fillStyle=T.brandSec;ctx.fillText('Blog',214*s,74*s);
+
+        // Tags
+        const tags=[
+            {t:'Announcement',fg:T.tagOrFg,bg:T.tagOrBg,bd:T.tagOrBd},
+            {t:'Updates',fg:T.tagGnFg,bg:T.tagGnBg,bd:T.tagGnBd},
+        ];
+        ctx.font=`500 ${11*s}px 'Geist Mono',monospace`;
+        let tx=80*s, ty=110*s;
+        tags.forEach(tag=>{
+            const tw=ctx.measureText(tag.t).width+24*s;
+            const th=28*s; const tr=14*s;
+            ctx.fillStyle=tag.bg;
+            ctx.beginPath();ctx.roundRect(tx,ty,tw,th,tr);ctx.fill();
+            ctx.strokeStyle=tag.bd;ctx.lineWidth=1;
+            ctx.beginPath();ctx.roundRect(tx,ty,tw,th,tr);ctx.stroke();
+            ctx.fillStyle=tag.fg;ctx.fillText(tag.t,tx+12*s,ty+th*.68);
+            tx+=tw+10*s;
+        });
+
+        // Title
+        ctx.fillStyle=T.titleColor;ctx.font=`800 ${isWide?38*s:44*s}px 'Geist',system-ui,sans-serif`;
+        ctx.fillText('FractalX Blog',80*s,isWide?195*s:230*s);
+        ctx.fillStyle=T.accentColor;
+        ctx.fillText('is now live',80*s,isWide?248*s:290*s);
+
+        // Description
+        ctx.fillStyle=T.descColor;ctx.font=`400 ${13*s}px 'Geist',system-ui,sans-serif`;
+        ctx.fillText('Technical deep-dives, architecture guides, and updates — from the FractalX team.',80*s,isWide?295*s:345*s);
+
+        // Divider
+        ctx.strokeStyle=T.divider;ctx.lineWidth=1;
+        ctx.beginPath();ctx.moveTo(80*s,isWide?H-120*s:H-160*s);ctx.lineTo(W-80*s,isWide?H-120*s:H-160*s);ctx.stroke();
+
+        // Author
+        const ay=isWide?H-95*s:H-130*s;
+        ctx.fillStyle='#f4600c';
+        ctx.beginPath();ctx.arc(80*s+22*s,ay+22*s,22*s,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#fff';ctx.font=`700 ${14*s}px 'Geist',system-ui,sans-serif`;ctx.textAlign='center';
+        ctx.fillText('F',80*s+22*s,ay+27*s);
+        ctx.textAlign='left';
+        ctx.fillStyle=T.authorName;ctx.font=`600 ${14*s}px 'Geist',system-ui,sans-serif`;ctx.fillText('FractalX Team',80*s+52*s,ay+16*s);
+        ctx.fillStyle=T.authorMeta;ctx.font=`400 ${11*s}px 'Geist Mono',monospace`;ctx.fillText('March 18, 2026  ·  2 min read',80*s+52*s,ay+33*s);
+
+        // URL
+        ctx.fillStyle=T.url;ctx.font=`400 ${8*s}px 'Geist Mono',monospace`;
+        ctx.fillText('fractalx.org/blog',80*s,H-18*s);
+
+        const link = document.createElement('a');
+        link.download = 'fractalx-blog-is-now-live.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+</script>
+</body>
+</html>
