@@ -289,40 +289,39 @@
         .sm-close{width:30px;height:30px;border-radius:6px;border:1px solid #272727;background:transparent;color:#52525b;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0;font-size:18px;line-height:1;font-family:sans-serif}
         .sm-close:hover{border-color:#444;color:var(--text);background:#111}
 
-        /* Flyer preview */
-        .flyer-wrap{border-radius:10px;overflow:hidden;border:1px solid #1f1f1f;margin-bottom:14px}
-        .flyer-card{width:100%;background:#0a0a0a;position:relative;overflow:hidden;display:flex}
-        .flyer-card.wide{aspect-ratio:1200/630}
-        .flyer-card.sq{aspect-ratio:1/1;flex-direction:column}
-        .flyer-card::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(#1e1e1e 1px,transparent 1px),linear-gradient(90deg,#1e1e1e 1px,transparent 1px);background-size:calc(100%/25) calc(100%/13.125);opacity:.6}
-        .flyer-card.sq::before{background-size:calc(100%/22) calc(100%/22)}
+        /* Flyer preview — fixed 1200px native, scaled to fit modal */
+        .flyer-wrap{border-radius:10px;overflow:hidden;border:1px solid #1f1f1f;margin-bottom:14px;position:relative}
+        .flyer-card{width:1200px;background:#0a0a0a;position:relative;overflow:hidden;display:flex;transform-origin:top left}
+        .flyer-card.wide{height:630px}
+        .flyer-card.sq{height:1080px;flex-direction:column}
+        .flyer-card::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(#1e1e1e 1px,transparent 1px),linear-gradient(90deg,#1e1e1e 1px,transparent 1px);background-size:48px 48px;opacity:.6}
         .flyer-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 55% at 12% 20%,rgba(244,96,12,.22) 0%,transparent 100%),radial-gradient(ellipse 32% 32% at 88% 82%,rgba(245,168,0,.06) 0%,transparent 100%)}
-        .fc-bar{position:absolute;left:0;top:0;bottom:0;width:4px;background:#f4600c;z-index:3}
+        .fc-bar{position:absolute;left:0;top:0;bottom:0;width:5px;background:#f4600c;z-index:3}
 
-        /* Both formats: full-width single column */
-        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:1;padding:clamp(20px,5%,48px);display:flex;flex-direction:column;gap:clamp(7px,1.4%,14px)}
-        .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:clamp(24px,6%,56px);display:flex;flex-direction:column;gap:clamp(8px,1.8%,18px)}
+        /* Full-width single column for both formats */
+        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:1;padding:52px 64px;display:flex;flex-direction:column;gap:16px}
+        .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:72px 80px;display:flex;flex-direction:column;gap:20px}
         .fc-right{display:none}
 
-        /* Flyer content elements */
-        .fc-brand{display:flex;align-items:center;gap:7px}
-        .fc-bname{font-size:clamp(11px,2%,17px);font-weight:700;color:#ededed;letter-spacing:-.2px}
-        .fc-bsep{font-size:clamp(10px,1.8%,15px);color:#2a2a2a}
-        .fc-bsec{font-size:clamp(10px,1.8%,15px);color:#444}
-        .fc-tags{display:flex;gap:clamp(3px,.7%,6px);flex-wrap:wrap}
-        .fc-tag{font-size:clamp(7px,1.1%,10px);font-family:'Geist Mono',monospace;font-weight:500;padding:clamp(2px,.4%,3px) clamp(5px,.9%,8px);border-radius:20px;letter-spacing:.03em;white-space:nowrap}
+        /* Flyer content elements — absolute px at 1200px native size */
+        .fc-brand{display:flex;align-items:center;gap:9px}
+        .fc-bname{font-size:18px;font-weight:700;color:#ededed;letter-spacing:-.2px}
+        .fc-bsep{font-size:16px;color:#2a2a2a}
+        .fc-bsec{font-size:16px;color:#555}
+        .fc-tags{display:flex;gap:7px;flex-wrap:wrap}
+        .fc-tag{font-size:12px;font-family:'Geist Mono',monospace;font-weight:500;padding:4px 11px;border-radius:20px;letter-spacing:.03em;white-space:nowrap}
         .fc-tag.or{background:rgba(244,96,12,.12);border:1px solid rgba(244,96,12,.3);color:#f4600c}
         .fc-tag.gd{background:rgba(245,168,0,.10);border:1px solid rgba(245,168,0,.25);color:#f5a800}
-        .fc-tag.df{background:#0d0d0d;border:1px solid #272727;color:#555}
-        .fc-title{font-size:clamp(15px,3.2%,34px);font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.15}
+        .fc-tag.df{background:#0d0d0d;border:1px solid #272727;color:#666}
+        .fc-title{font-size:54px;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.1}
         .fc-title .hl{color:#f4600c}
-        .fc-desc{font-size:clamp(8px,1.4%,13px);color:#444;line-height:1.5;flex:1}
+        .fc-desc{font-size:17px;color:#555;line-height:1.55;flex:1}
         .fc-hr{border:none;border-top:1px solid #1a1a1a;margin:0}
-        .fc-author{display:flex;align-items:center;gap:clamp(5px,.9%,9px)}
-        .fc-av{width:clamp(16px,2.8%,24px);height:clamp(16px,2.8%,24px);border-radius:50%;background:linear-gradient(135deg,#f4600c,#e0540a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:clamp(7px,1.1%,10px)}
-        .fc-aname{font-size:clamp(8px,1.3%,12px);font-weight:600;color:#aaa;display:block}
-        .fc-ameta{font-size:clamp(7px,1.1%,10px);color:#333;font-family:'Geist Mono',monospace;display:block}
-        .fc-url{font-size:clamp(7px,1.1%,10px);font-family:'Geist Mono',monospace;color:#2a2a2a;margin-top:auto}
+        .fc-author{display:flex;align-items:center;gap:10px}
+        .fc-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#f4600c,#e0540a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:12px}
+        .fc-aname{font-size:14px;font-weight:600;color:#aaa;display:block}
+        .fc-ameta{font-size:12px;color:#444;font-family:'Geist Mono',monospace;display:block}
+        .fc-url{font-size:13px;font-family:'Geist Mono',monospace;color:#333;margin-top:auto}
 
 
         /* Format toggle */
@@ -770,7 +769,6 @@ docker-compose up --build</code></pre>
         <div class="art-nav-links">
             <a href="/docs" class="art-nav-link">Documentation</a>
             <a href="https://github.com/Project-FractalX/FractalX" class="art-nav-link" target="_blank" rel="noopener">GitHub</a>
-            <a href="https://medium.com/@sathnidukottage/the-core-science-behind-fractalx-dfbdc6cffd7e" class="art-nav-link" target="_blank" rel="noopener">Read on Medium ↗</a>
         </div>
     </div>
 
@@ -809,14 +807,14 @@ docker-compose up --build</code></pre>
         </div>
 
         <!-- Flyer preview -->
-        <div class="flyer-wrap">
+        <div class="flyer-wrap" id="flyerWrap">
             <div class="flyer-card wide" id="flyerCard">
                 <div class="fc-bar"></div>
 
                 <!-- Left content -->
                 <div class="fc-left">
                     <div class="fc-brand">
-                        <svg width="16" height="18" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="#f4600c"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="#f4600c"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="#f4600c"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="#f4600c"/></svg>
+                        <svg width="36" height="40" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="#f4600c"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="#f4600c"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="#f4600c"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="#f4600c"/></svg>
                         <span class="fc-bname">FractalX</span>
                         <span class="fc-bsep">/</span>
                         <span class="fc-bsec">Blog</span>
@@ -911,10 +909,25 @@ docker-compose up --build</code></pre>
         nav.style.boxShadow = window.scrollY > 10 ? '0 1px 0 var(--border)' : '';
     }, {passive:true});
 
+    /* ── FLYER SCALING ── */
+    function scaleFlyer(){
+        const wrap = document.getElementById('flyerWrap');
+        const card = document.getElementById('flyerCard');
+        if (!wrap || !card) return;
+        const nativeW = 1200;
+        const nativeH = card.classList.contains('sq') ? 1080 : 630;
+        const wrapW = wrap.clientWidth;
+        const scale = wrapW / nativeW;
+        card.style.transform = 'scale(' + scale + ')';
+        wrap.style.height = (nativeH * scale) + 'px';
+    }
+    window.addEventListener('resize', scaleFlyer);
+
     /* ── SHARE MODAL ── */
     function openShareModal(){
         document.getElementById('shareOverlay').classList.add('open');
         document.body.style.overflow = 'hidden';
+        requestAnimationFrame(scaleFlyer);
     }
     function closeShareModal(e){
         if (e && e.target !== document.getElementById('shareOverlay')) return;
@@ -931,6 +944,7 @@ docker-compose up --build</code></pre>
         card.classList.toggle('sq', f === 'sq');
         document.getElementById('fmtWide').classList.toggle('on', f === 'wide');
         document.getElementById('fmtSq').classList.toggle('on', f === 'sq');
+        requestAnimationFrame(scaleFlyer);
     }
 
     /* ── SHARE URLS ── */
