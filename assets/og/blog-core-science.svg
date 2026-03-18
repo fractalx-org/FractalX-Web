@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="10%" cy="10%" r="60%">
+      <stop offset="0%" stop-color="#f4600c" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="95%" cy="95%" r="45%">
+      <stop offset="0%" stop-color="#f5a800" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#1f1f1f" stroke-width="0.8"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.5"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+  <rect x="0" y="0" width="4" height="630" fill="#f4600c"/>
+
+  <!-- Logo -->
+  <g transform="translate(64, 52) scale(0.22)">
+    <path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="#f4600c"/>
+    <path d="M18.2837 0H148.284V40H18.2837V0Z" fill="#f4600c"/>
+    <path d="M59.2837 66H148.284V106H59.2837V66Z" fill="#f4600c"/>
+    <path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="#f4600c"/>
+  </g>
+  <text x="102" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="700" fill="#ededed" letter-spacing="-0.5">FractalX</text>
+  <text x="148" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#3f3f46">/ Blog</text>
+
+  <!-- Tags -->
+  <rect x="64" y="106" width="100" height="22" rx="11" fill="rgba(244,96,12,0.12)" stroke="rgba(244,96,12,0.3)" stroke-width="1"/>
+  <text x="114" y="121" font-family="ui-monospace, monospace" font-size="11" fill="#f4600c" text-anchor="middle">Architecture</text>
+
+  <rect x="174" y="106" width="58" height="22" rx="11" fill="#111" stroke="#272727" stroke-width="1"/>
+  <text x="203" y="121" font-family="ui-monospace, monospace" font-size="11" fill="#71717a" text-anchor="middle">Java</text>
+
+  <rect x="242" y="106" width="98" height="22" rx="11" fill="#111" stroke="#272727" stroke-width="1"/>
+  <text x="291" y="121" font-family="ui-monospace, monospace" font-size="11" fill="#71717a" text-anchor="middle">Spring Boot</text>
+
+  <rect x="350" y="106" width="118" height="22" rx="11" fill="rgba(245,168,0,0.10)" stroke="rgba(245,168,0,0.25)" stroke-width="1"/>
+  <text x="409" y="121" font-family="ui-monospace, monospace" font-size="11" fill="#f5a800" text-anchor="middle">Code Generation</text>
+
+  <!-- Main title -->
+  <text x="64" y="222" font-family="system-ui, -apple-system, sans-serif" font-size="60" font-weight="800" fill="#ffffff" letter-spacing="-2">The Core Science</text>
+  <text x="64" y="296" font-family="system-ui, -apple-system, sans-serif" font-size="60" font-weight="800" fill="#f4600c" letter-spacing="-2">Behind FractalX</text>
+
+  <!-- Description -->
+  <text x="64" y="350" font-family="system-ui, -apple-system, sans-serif" font-size="19" fill="#71717a">How FractalX uses static AST analysis and build-time code</text>
+  <text x="64" y="376" font-family="system-ui, -apple-system, sans-serif" font-size="19" fill="#71717a">generation to automate monolith decomposition.</text>
+
+  <!-- Divider -->
+  <line x1="64" y1="414" x2="500" y2="414" stroke="#1f1f1f" stroke-width="1"/>
+
+  <!-- Author -->
+  <circle cx="80" cy="444" r="14" fill="#f4600c"/>
+  <text x="80" y="449" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">F</text>
+  <text x="104" y="440" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#ededed">FractalX Team</text>
+  <text x="104" y="457" font-family="ui-monospace, monospace" font-size="12" fill="#52525b">March 18, 2026  ·  12 min read</text>
+
+  <!-- Read on Medium badge -->
+  <rect x="64" y="490" width="162" height="30" rx="6" fill="#111" stroke="#272727" stroke-width="1"/>
+  <text x="145" y="509" font-family="ui-monospace, monospace" font-size="12" fill="#a1a1aa" text-anchor="middle">Read on Medium ↗</text>
+
+  <!-- Bottom URL -->
+  <text x="64" y="596" font-family="ui-monospace, monospace" font-size="13" fill="#3f3f46">project-fractalx.github.io/FractalX-Web/blog/the-core-science-behind-fractalx</text>
+
+  <!-- Right: code snippet decoration -->
+  <rect x="740" y="90" width="420" height="450" rx="10" fill="#0d0d0d" stroke="#1f1f1f" stroke-width="1.5"/>
+  <rect x="740" y="90" width="420" height="36" rx="10" fill="#111"/>
+  <rect x="740" y="116" width="420" height="10" fill="#111"/>
+  <circle cx="763" cy="108" r="5" fill="#333"/>
+  <circle cx="781" cy="108" r="5" fill="#333"/>
+  <circle cx="799" cy="108" r="5" fill="#333"/>
+  <text x="950" y="112" font-family="ui-monospace, monospace" font-size="10" fill="#3f3f46" text-anchor="middle">OrderModule.java</text>
+
+  <text x="760" y="150" font-family="ui-monospace, monospace" font-size="11.5" fill="#f5a800">@DecomposableModule(</text>
+  <text x="760" y="169" font-family="ui-monospace, monospace" font-size="11.5" fill="#71717a">    serviceName = </text>
+  <text x="893" y="169" font-family="ui-monospace, monospace" font-size="11.5" fill="#50e3c2">"order-service"</text>
+  <text x="996" y="169" font-family="ui-monospace, monospace" font-size="11.5" fill="#71717a">,</text>
+  <text x="760" y="188" font-family="ui-monospace, monospace" font-size="11.5" fill="#71717a">    port = </text>
+  <text x="831" y="188" font-family="ui-monospace, monospace" font-size="11.5" fill="#b8c4e0">8081</text>
+  <text x="760" y="207" font-family="ui-monospace, monospace" font-size="11.5" fill="#71717a">)</text>
+  <text x="760" y="226" font-family="ui-monospace, monospace" font-size="11.5" fill="#f4600c">public class </text>
+  <text x="851" y="226" font-family="ui-monospace, monospace" font-size="11.5" fill="#3291ff">OrderModule</text>
+  <text x="940" y="226" font-family="ui-monospace, monospace" font-size="11.5" fill="#71717a"> {</text>
+
+  <text x="760" y="258" font-family="ui-monospace, monospace" font-size="11.5" fill="#3f3f46">  // auto-detected dependency</text>
+  <text x="760" y="277" font-family="ui-monospace, monospace" font-size="11.5" fill="#f4600c">  private final </text>
+  <text x="869" y="277" font-family="ui-monospace, monospace" font-size="11.5" fill="#3291ff">PaymentService</text>
+  <text x="978" y="277" font-family="ui-monospace, monospace" font-size="11.5" fill="#a1a1aa"> ps;</text>
+
+  <text x="760" y="309" font-family="ui-monospace, monospace" font-size="11.5" fill="#f5a800">  @DistributedSaga(</text>
+  <text x="760" y="328" font-family="ui-monospace, monospace" font-size="11.5" fill="#71717a">    sagaId = </text>
+  <text x="833" y="328" font-family="ui-monospace, monospace" font-size="11.5" fill="#50e3c2">"place-order-saga"</text>
+  <text x="760" y="347" font-family="ui-monospace, monospace" font-size="11.5" fill="#71717a">  )</text>
+  <text x="760" y="366" font-family="ui-monospace, monospace" font-size="11.5" fill="#f4600c">  public </text>
+  <text x="811" y="366" font-family="ui-monospace, monospace" font-size="11.5" fill="#3291ff">Order</text>
+  <text x="843" y="366" font-family="ui-monospace, monospace" font-size="11.5" fill="#a1a1aa"> placeOrder(...) {</text>
+
+  <text x="760" y="398" font-family="ui-monospace, monospace" font-size="11.5" fill="#3f3f46">    // generates full saga</text>
+  <text x="760" y="417" font-family="ui-monospace, monospace" font-size="11.5" fill="#3f3f46">    // orchestrator service</text>
+
+  <text x="760" y="449" font-family="ui-monospace, monospace" font-size="11.5" fill="#71717a">  }</text>
+  <text x="760" y="468" font-family="ui-monospace, monospace" font-size="11.5" fill="#71717a">}</text>
+
+  <!-- Generated label -->
+  <rect x="760" y="500" width="380" height="24" rx="4" fill="rgba(244,96,12,0.07)" stroke="rgba(244,96,12,0.2)" stroke-width="1"/>
+  <text x="950" y="516" font-family="ui-monospace, monospace" font-size="11" fill="#f4600c" text-anchor="middle">↳ generates order-service + saga-orchestrator</text>
+</svg>

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="12%" cy="15%" r="50%">
+      <stop offset="0%" stop-color="#f4600c" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#1f1f1f" stroke-width="0.8"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.5"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect x="0" y="0" width="4" height="630" fill="#f4600c"/>
+
+  <!-- Logo -->
+  <g transform="translate(64, 56) scale(0.22)">
+    <path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="#f4600c"/>
+    <path d="M18.2837 0H148.284V40H18.2837V0Z" fill="#f4600c"/>
+    <path d="M59.2837 66H148.284V106H59.2837V66Z" fill="#f4600c"/>
+    <path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="#f4600c"/>
+  </g>
+  <text x="102" y="84" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#ededed" letter-spacing="-0.5">FractalX</text>
+
+  <!-- Section label -->
+  <rect x="64" y="108" width="58" height="22" rx="11" fill="rgba(244,96,12,0.12)" stroke="rgba(244,96,12,0.3)" stroke-width="1"/>
+  <text x="93" y="123" font-family="ui-monospace, monospace" font-size="11" font-weight="600" fill="#f4600c" text-anchor="middle" letter-spacing="1.5">BLOG</text>
+
+  <!-- Heading -->
+  <text x="64" y="228" font-family="system-ui, -apple-system, sans-serif" font-size="68" font-weight="800" fill="#ffffff" letter-spacing="-2">From the</text>
+  <text x="64" y="312" font-family="system-ui, -apple-system, sans-serif" font-size="68" font-weight="800" fill="#ffffff" letter-spacing="-2">FractalX Team</text>
+
+  <!-- Underline accent -->
+  <rect x="64" y="328" width="320" height="3" rx="1.5" fill="#f4600c" opacity="0.6"/>
+
+  <!-- Description -->
+  <text x="64" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#71717a">Technical deep-dives, architecture guides, and</text>
+  <text x="64" y="410" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#71717a">updates on building the static decomposition framework.</text>
+
+  <!-- Post preview card on the right -->
+  <rect x="700" y="100" width="440" height="420" rx="10" fill="#0d0d0d" stroke="#1f1f1f" stroke-width="1.5"/>
+
+  <rect x="720" y="124" width="88" height="20" rx="10" fill="rgba(244,96,12,0.12)" stroke="rgba(244,96,12,0.25)" stroke-width="1"/>
+  <text x="764" y="138" font-family="ui-monospace, monospace" font-size="10" fill="#f4600c" text-anchor="middle">Architecture</text>
+
+  <rect x="818" y="124" width="58" height="20" rx="10" fill="#111" stroke="#272727" stroke-width="1"/>
+  <text x="847" y="138" font-family="ui-monospace, monospace" font-size="10" fill="#71717a" text-anchor="middle">Java</text>
+
+  <rect x="886" y="124" width="92" height="20" rx="10" fill="#111" stroke="#272727" stroke-width="1"/>
+  <text x="932" y="138" font-family="ui-monospace, monospace" font-size="10" fill="#71717a" text-anchor="middle">Spring Boot</text>
+
+  <text x="720" y="196" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="700" fill="#ededed" letter-spacing="-0.5">The Core Science Behind</text>
+  <text x="720" y="224" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="700" fill="#ededed" letter-spacing="-0.5">FractalX</text>
+
+  <text x="720" y="264" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#52525b">A deep dive into static AST analysis and</text>
+  <text x="720" y="282" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#52525b">build-time code generation to automate</text>
+  <text x="720" y="300" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#52525b">monolith decomposition...</text>
+
+  <line x1="720" y1="334" x2="1120" y2="334" stroke="#1f1f1f" stroke-width="1"/>
+
+  <circle cx="736" cy="364" r="12" fill="#f4600c"/>
+  <text x="736" y="369" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">F</text>
+  <text x="758" y="362" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#a1a1aa">FractalX Team</text>
+  <text x="758" y="377" font-family="ui-monospace, monospace" font-size="11" fill="#52525b">Mar 18, 2026 · 12 min read</text>
+
+  <text x="720" y="430" font-family="ui-monospace, monospace" font-size="12" fill="#f4600c">Read post →</text>
+
+  <!-- Bottom bar -->
+  <line x1="64" y1="575" x2="620" y2="575" stroke="#1f1f1f" stroke-width="1"/>
+  <text x="64" y="598" font-family="ui-monospace, monospace" font-size="13" fill="#3f3f46">project-fractalx.github.io/FractalX-Web/blog</text>
+</svg>

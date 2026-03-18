@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="15%" cy="20%" r="55%">
+      <stop offset="0%" stop-color="#f4600c" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="90%" cy="80%" r="40%">
+      <stop offset="0%" stop-color="#f5a800" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#1f1f1f" stroke-width="0.8"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <!-- Grid -->
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.6"/>
+  <!-- Glows -->
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- Left orange accent bar -->
+  <rect x="0" y="0" width="4" height="630" fill="#f4600c"/>
+
+  <!-- Logo mark -->
+  <g transform="translate(64, 56) scale(0.22)">
+    <path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="#f4600c"/>
+    <path d="M18.2837 0H148.284V40H18.2837V0Z" fill="#f4600c"/>
+    <path d="M59.2837 66H148.284V106H59.2837V66Z" fill="#f4600c"/>
+    <path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="#f4600c"/>
+  </g>
+  <!-- Logo text -->
+  <text x="102" y="84" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#ededed" letter-spacing="-0.5">FractalX</text>
+
+  <!-- Version badge -->
+  <rect x="64" y="104" width="90" height="24" rx="4" fill="#111" stroke="#272727" stroke-width="1"/>
+  <text x="109" y="120" font-family="ui-monospace, monospace" font-size="11" fill="#71717a" text-anchor="middle" letter-spacing="0.3">v0.2.5</text>
+
+  <!-- Main headline -->
+  <text x="64" y="240" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="800" fill="#ffffff" letter-spacing="-2.5">Monolith to</text>
+  <text x="64" y="330" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="800" fill="#ffffff" letter-spacing="-2.5">Microservices.</text>
+  <text x="64" y="416" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="800" fill="#f4600c" letter-spacing="-2.5">One Command.</text>
+
+  <!-- Description -->
+  <text x="64" y="476" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#71717a" letter-spacing="-0.2">Static AST analysis · Build-time code generation · Zero runtime agents</text>
+
+  <!-- Tags row -->
+  <rect x="64" y="510" width="120" height="28" rx="14" fill="#1a1a1a" stroke="#272727" stroke-width="1"/>
+  <text x="124" y="529" font-family="ui-monospace, monospace" font-size="12" fill="#a1a1aa" text-anchor="middle">Java 17+</text>
+
+  <rect x="196" y="510" width="138" height="28" rx="14" fill="#1a1a1a" stroke="#272727" stroke-width="1"/>
+  <text x="265" y="529" font-family="ui-monospace, monospace" font-size="12" fill="#a1a1aa" text-anchor="middle">Spring Boot 3.2</text>
+
+  <rect x="346" y="510" width="108" height="28" rx="14" fill="rgba(244,96,12,0.12)" stroke="rgba(244,96,12,0.3)" stroke-width="1"/>
+  <text x="400" y="529" font-family="ui-monospace, monospace" font-size="12" fill="#f4600c" text-anchor="middle">Apache 2.0</text>
+
+  <rect x="466" y="510" width="124" height="28" rx="14" fill="rgba(244,96,12,0.12)" stroke="rgba(244,96,12,0.3)" stroke-width="1"/>
+  <text x="528" y="529" font-family="ui-monospace, monospace" font-size="12" fill="#f4600c" text-anchor="middle">Maven Central</text>
+
+  <!-- Bottom URL -->
+  <text x="64" y="592" font-family="ui-monospace, monospace" font-size="14" fill="#3f3f46">project-fractalx.github.io/FractalX-Web</text>
+
+  <!-- Right side decoration: terminal mockup -->
+  <rect x="760" y="160" width="380" height="280" rx="10" fill="#0d0d0d" stroke="#1f1f1f" stroke-width="1.5"/>
+  <rect x="760" y="160" width="380" height="36" rx="10" fill="#161616"/>
+  <rect x="760" y="186" width="380" height="10" fill="#161616"/>
+  <circle cx="785" cy="178" r="5" fill="#ff5f57"/>
+  <circle cx="803" cy="178" r="5" fill="#ffbd2e"/>
+  <circle cx="821" cy="178" r="5" fill="#28c840"/>
+  <text x="920" y="182" font-family="ui-monospace, monospace" font-size="11" fill="#3f3f46" text-anchor="middle">fractalx — zsh</text>
+
+  <text x="780" y="222" font-family="ui-monospace, monospace" font-size="12" fill="#f4600c">$</text>
+  <text x="796" y="222" font-family="ui-monospace, monospace" font-size="12" fill="#ededed"> mvn fractalx:decompose</text>
+
+  <text x="780" y="245" font-family="ui-monospace, monospace" font-size="11" fill="#50e3c2">[INFO] FractalX 0.2.5 — starting</text>
+  <text x="780" y="264" font-family="ui-monospace, monospace" font-size="11" fill="#71717a">Parsing 52 source files    ████████ 100%</text>
+  <text x="780" y="283" font-family="ui-monospace, monospace" font-size="11" fill="#71717a">Analysing dependencies     ████████ 100%</text>
+  <text x="780" y="302" font-family="ui-monospace, monospace" font-size="11" fill="#71717a">Generating 9 microservices ████████ 100%</text>
+  <text x="780" y="321" font-family="ui-monospace, monospace" font-size="11" fill="#50e3c2">[INFO] BUILD SUCCESS — 1.48s</text>
+
+  <text x="780" y="350" font-family="ui-monospace, monospace" font-size="12" fill="#f4600c">$</text>
+  <text x="796" y="350" font-family="ui-monospace, monospace" font-size="12" fill="#ededed"> ./start-all.sh</text>
+
+  <text x="780" y="373" font-family="ui-monospace, monospace" font-size="11" fill="#71717a">All services healthy</text>
+  <text x="780" y="392" font-family="ui-monospace, monospace" font-size="11" fill="#50e3c2">Admin → localhost:9090 ▊</text>
+</svg>

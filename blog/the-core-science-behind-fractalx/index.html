@@ -4,7 +4,43 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>The Core Science Behind FractalX — FractalX Blog</title>
-    <meta name="description" content="A deep dive into how FractalX uses static AST analysis and build-time code generation to automate the decomposition of monoliths into production-ready microservices."/>
+    <meta name="description" content="A deep dive into how FractalX uses static AST analysis and build-time code generation to automate monolith decomposition — covering NetScope gRPC, distributed sagas, resilience wiring, and 30+ code generators."/>
+    <meta name="keywords" content="FractalX, AST analysis, code generation, Spring Boot microservices, gRPC, distributed saga, Resilience4j, Java monolith decomposition"/>
+    <meta name="author" content="FractalX Team"/>
+    <meta name="robots" content="index, follow"/>
+    <link rel="canonical" href="https://project-fractalx.github.io/FractalX-Web/blog/the-core-science-behind-fractalx/"/>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png"/>
+    <link rel="manifest" href="/site.webmanifest"/>
+    <meta name="theme-color" content="#000000"/>
+
+    <!-- Open Graph (article) -->
+    <meta property="og:type" content="article"/>
+    <meta property="og:site_name" content="FractalX"/>
+    <meta property="og:title" content="The Core Science Behind FractalX"/>
+    <meta property="og:description" content="A deep dive into static AST analysis and build-time code generation — how FractalX automates the full decomposition of Spring Boot monoliths into production-ready microservices."/>
+    <meta property="og:url" content="https://project-fractalx.github.io/FractalX-Web/blog/the-core-science-behind-fractalx/"/>
+    <meta property="og:image" content="https://project-fractalx.github.io/FractalX-Web/assets/og/blog-core-science.svg"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:image:alt" content="The Core Science Behind FractalX — AST analysis, code generation, gRPC, sagas"/>
+    <meta property="article:published_time" content="2026-03-18T00:00:00Z"/>
+    <meta property="article:author" content="FractalX Team"/>
+    <meta property="article:tag" content="Java"/>
+    <meta property="article:tag" content="Spring Boot"/>
+    <meta property="article:tag" content="Microservices"/>
+    <meta property="article:tag" content="Code Generation"/>
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="The Core Science Behind FractalX"/>
+    <meta name="twitter:description" content="A deep dive into static AST analysis and build-time code generation — how FractalX automates the full decomposition of Spring Boot monoliths into production-ready microservices."/>
+    <meta name="twitter:image" content="https://project-fractalx.github.io/FractalX-Web/assets/og/blog-core-science.svg"/>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script>
@@ -164,6 +200,7 @@
 
         /* code blocks */
         .prose pre{background:#0d0d0d;border:1px solid var(--border2);border-radius:10px;padding:22px 24px;overflow-x:auto;margin:24px 0;font-family:var(--mono);font-size:13px;line-height:1.65;color:#d4d4d4}
+        .prose pre code{background:none;border:none;padding:0;border-radius:0;color:inherit;font-size:inherit;white-space:pre}
         html.light .prose pre{background:#0d0d0d;border-color:#2a2a2a}
         .prose pre .kw{color:var(--orange)}
         .prose pre .ann{color:var(--gold)}
@@ -301,6 +338,8 @@
                 March 18, 2026
                 <span class="pub-dot">·</span>
                 12 min read
+                <span class="pub-dot">·</span>
+                <a href="https://medium.com/@sathnidukottage/the-core-science-behind-fractalx-dfbdc6cffd7e" target="_blank" rel="noopener" style="color:var(--orange);text-decoration:none;font-family:var(--mono);font-size:12px">Read on Medium ↗</a>
             </span>
         </div>
     </div>
@@ -623,6 +662,7 @@ docker-compose up --build</code></pre>
         <div class="art-nav-links">
             <a href="/docs" class="art-nav-link">Documentation</a>
             <a href="https://github.com/Project-FractalX/FractalX" class="art-nav-link" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://medium.com/@sathnidukottage/the-core-science-behind-fractalx-dfbdc6cffd7e" class="art-nav-link" target="_blank" rel="noopener">Read on Medium ↗</a>
         </div>
     </div>
 
