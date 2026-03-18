@@ -319,43 +319,48 @@
         .fc-bar{position:absolute;left:0;top:0;bottom:0;width:5px;background:#f4600c;z-index:3}
 
         /* Full-width single column - top group + bottom footer pinned via space-between */
-        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:1;padding:56px 76px 56px 80px;display:flex;flex-direction:column;justify-content:space-between;gap:28px}
-        .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:76px 88px;display:flex;flex-direction:column;justify-content:space-between;gap:36px}
+        .flyer-card.wide .fc-left{position:relative;z-index:2;flex:1;padding:44px 64px 44px 72px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+        .flyer-card.sq .fc-left{position:relative;z-index:2;flex:1;padding:64px 76px;display:flex;flex-direction:column;justify-content:space-between;gap:28px}
         .fc-right{display:none}
 
         /* Top content group */
-        .fc-top{display:flex;flex-direction:column;gap:14px}
+        .fc-top{display:flex;flex-direction:column;gap:18px}
         /* Footer group */
-        .fc-footer{display:flex;flex-direction:column;gap:12px}
+        .fc-footer{display:flex;flex-direction:column;gap:16px}
 
-        /* Flyer content elements - absolute px at 1200px native size */
-        .fc-brand{display:flex;align-items:center;gap:12px}
-        .fc-bname{font-size:26px;font-weight:700;color:#ededed;letter-spacing:-.3px}
+        /*
+         * Font sizes are set for native 1200px render.
+         * Modal renders at ~0.5× (desktop) or ~0.28× (mobile).
+         * Values chosen so text stays readable at 0.28× scale.
+         * desktop: title=44px, body=21px  |  mobile: title=25px, body=12px
+         */
+        .fc-brand{display:flex;align-items:center;gap:16px}
+        .fc-bname{font-size:46px;font-weight:700;color:#ededed;letter-spacing:-.3px}
         html.light .fc-bname{color:#09090b}
-        .fc-bsep{font-size:22px;color:#2a2a2a}
+        .fc-bsep{font-size:38px;color:#2a2a2a}
         html.light .fc-bsep{color:#d4d4d8}
-        .fc-bsec{font-size:22px;color:#555}
+        .fc-bsec{font-size:38px;color:#555}
         html.light .fc-bsec{color:#71717a}
-        .fc-tags{display:flex;gap:8px;flex-wrap:wrap}
-        .fc-tag{font-size:17px;font-family:'Geist Mono',monospace;font-weight:500;padding:5px 13px;border-radius:40px;letter-spacing:.03em;white-space:nowrap}
+        .fc-tags{display:flex;gap:12px;flex-wrap:wrap}
+        .fc-tag{font-size:30px;font-family:'Geist Mono',monospace;font-weight:500;padding:8px 20px;border-radius:60px;letter-spacing:.03em;white-space:nowrap}
         .fc-tag.or{background:rgba(244,96,12,.12);border:1px solid rgba(244,96,12,.3);color:#f4600c}
         .fc-tag.gd{background:rgba(245,168,0,.10);border:1px solid rgba(245,168,0,.25);color:#f5a800}
         html.light .fc-tag.gd{color:#c47a00;border-color:rgba(196,122,0,.3)}
         .fc-tag.df{background:#0d0d0d;border:1px solid #272727;color:#666}
         html.light .fc-tag.df{background:#f4f4f5;border-color:#e4e4e7;color:#71717a}
-        .fc-title{font-size:66px;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.08}
+        .fc-title{font-size:88px;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.08}
         html.light .fc-title{color:#09090b}
         .fc-title .hl{color:#f4600c}
         html.light .fc-title .hl{color:#d4510a}
-        .fc-desc{font-size:20px;color:#555;line-height:1.55}
+        .fc-desc{font-size:30px;color:#555;line-height:1.5}
         html.light .fc-desc{color:#71717a}
-        .fc-hr{border:none;border-top:1px solid #222;margin:0}
+        .fc-hr{border:none;border-top:2px solid #222;margin:0}
         html.light .fc-hr{border-top-color:#e4e4e7}
-        .fc-author{display:flex;align-items:center;gap:12px}
-        .fc-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#f4600c,#e0540a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:16px}
-        .fc-aname{font-size:20px;font-weight:600;color:#aaa;display:block}
+        .fc-author{display:flex;align-items:center;gap:16px}
+        .fc-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#f4600c,#e0540a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:22px}
+        .fc-aname{font-size:34px;font-weight:600;color:#aaa;display:block}
         html.light .fc-aname{color:#52525b}
-        .fc-ameta{font-size:17px;color:#444;font-family:'Geist Mono',monospace;display:block}
+        .fc-ameta{font-size:28px;color:#444;font-family:'Geist Mono',monospace;display:block}
         html.light .fc-ameta{color:#a1a1aa}
         .fc-url{font-size:17px;font-family:'Geist Mono',monospace;color:#333}
         html.light .fc-url{color:#a1a1aa}
@@ -834,7 +839,7 @@ docker-compose up --build</code></pre>
             <a href="/privacy" class="foot-link">Privacy Policy</a>
             <a href="/terms" class="foot-link">Terms</a>
         </div>
-        <div class="foot-copy">&copy; 2026 FractalX. Built with FractalX.</div>
+        <div class="foot-copy">&copy; 2026 FractalX.</div>
     </div>
 </footer>
 
