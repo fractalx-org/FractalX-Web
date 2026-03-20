@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Contribute - FractalX</title>
+    <meta name="description" content="Learn how to contribute to FractalX - the open-source static decomposition framework for Spring Boot applications. Report bugs, submit PRs, improve docs, and more."/>
+    <meta name="robots" content="index, follow"/>
+    <link rel="canonical" href="https://fractalx.org/contribute/"/>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png"/>
+    <link rel="manifest" href="/site.webmanifest"/>
+    <meta name="theme-color" content="#000000"/>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="FractalX"/>
+    <meta property="og:title" content="Contribute - FractalX"/>
+    <meta property="og:description" content="FractalX is open source and welcomes contributions. Find out how to report bugs, submit pull requests, improve documentation, and get involved."/>
+    <meta property="og:url" content="https://fractalx.org/contribute/"/>
+    <meta property="og:image" content="https://fractalx.org/assets/og/home.svg"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        (function(){
+            const saved = localStorage.getItem('frx-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isLight = saved === 'light' || (!saved && !prefersDark);
+            if (isLight) document.documentElement.classList.add('light');
+        })();
+    </script>
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+        :root{
+            --bg:#000;--bg1:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
+            --border:#1f1f1f;--border2:#272727;--border3:#333;--border4:#444;
+            --text:#ededed;--text2:#a1a1aa;--text3:#71717a;--text4:#3f3f46;--text5:#27272a;
+            --white:#fff;
+            --orange:#f4600c;--orange2:#e0540a;
+            --gold:#f5a800;
+            --peri:#b8c4e0;
+            --green:#4ade80;
+            --orange-dim:rgba(244,96,12,.10);--orange-glow:rgba(244,96,12,.18);
+            --gold-dim:rgba(245,168,0,.10);
+            --peri-dim:rgba(184,196,224,.10);
+            --green-dim:rgba(74,222,128,.10);
+            --nav-bg:rgba(0,0,0,.80);
+            --link:#f4600c;
+            --r:8px;--font:'Geist',sans-serif;--mono:'Geist Mono',monospace;
+        }
+
+        html.light{
+            --bg:#fff;--bg1:#fafafa;--bg2:#f4f4f5;--bg3:#e4e4e7;--bg4:#d4d4d8;
+            --border:#e4e4e7;--border2:#d4d4d8;--border3:#a1a1aa;--border4:#71717a;
+            --text:#09090b;--text2:#52525b;--text3:#71717a;--text4:#a1a1aa;--text5:#d4d4d8;
+            --white:#09090b;
+            --orange:#d4510a;--orange2:#c04608;
+            --nav-bg:rgba(255,255,255,.85);
+            --link:#d4510a;
+        }
+
+        html{scroll-behavior:smooth}
+        body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s;overflow-x:hidden}
+        ::-webkit-scrollbar{width:4px}
+        ::-webkit-scrollbar-thumb{background:var(--border3);border-radius:4px}
+        a{color:var(--link);text-decoration:none}
+        a:hover{text-decoration:underline}
+
+        /* NAV */
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;background:var(--nav-bg);backdrop-filter:blur(16px) saturate(180%);border-bottom:1px solid var(--border);transition:background .2s,border-color .2s}
+        .nav-inner{max-width:1120px;margin:0 auto;padding:0 24px;width:100%;display:flex;align-items:center;gap:32px}
+        .nav-logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;color:var(--text);letter-spacing:-.2px;cursor:pointer}
+        .logo-mark{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;flex-shrink:0}
+        .logo-mark svg{width:14px;height:14px}
+        .nav-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+        .tt{width:34px;height:34px;border-radius:7px;border:1px solid var(--border2);background:var(--bg1);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;padding:0}
+        .tt:hover{border-color:var(--border3);background:var(--bg2)}
+        .tt svg{width:15px;height:15px;color:var(--text3);display:block}
+        .tt .ic-moon{display:block}
+        .tt .ic-sun{display:none}
+        html.light .tt .ic-moon{display:none}
+        html.light .tt .ic-sun{display:block}
+
+        /* CONTENT */
+        .page-wrap{max-width:760px;margin:0 auto;padding:100px 24px 80px}
+        .page-label{font-size:11.5px;font-family:var(--mono);color:var(--orange);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;font-weight:500}
+        .page-title{font-size:clamp(28px,5vw,42px);font-weight:800;letter-spacing:-1.5px;color:var(--white);line-height:1.1;margin-bottom:10px}
+        .page-sub{font-size:16px;color:var(--text2);line-height:1.7;margin-bottom:52px;max-width:560px}
+
+        /* CARDS GRID */
+        .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 48px}
+        .card{border:1px solid var(--border2);border-radius:10px;padding:22px 22px 20px;background:var(--bg1);transition:border-color .15s,background .15s;display:flex;flex-direction:column;gap:10px}
+        .card:hover{border-color:var(--border3);background:var(--bg2)}
+        .card-icon{width:36px;height:36px;border-radius:8px;display:grid;place-items:center;flex-shrink:0}
+        .card-icon svg{width:18px;height:18px}
+        .card-icon.orange{background:var(--orange-dim);color:var(--orange)}
+        .card-icon.gold{background:var(--gold-dim);color:var(--gold)}
+        .card-icon.peri{background:var(--peri-dim);color:var(--peri)}
+        .card-icon.green{background:var(--green-dim);color:var(--green)}
+        .card-title{font-size:14px;font-weight:700;color:var(--white);letter-spacing:-.2px}
+        .card-body{font-size:13.5px;color:var(--text2);line-height:1.7;flex:1}
+        .card-link{font-size:12.5px;font-family:var(--mono);color:var(--orange);display:inline-flex;align-items:center;gap:5px;margin-top:4px;transition:color .12s}
+        .card-link:hover{color:var(--text);text-decoration:none}
+        .card-link svg{width:11px;height:11px}
+
+        /* PROSE */
+        .prose h2{font-size:20px;font-weight:700;color:var(--white);letter-spacing:-.3px;margin:44px 0 12px;padding-top:8px;border-top:1px solid var(--border)}
+        .prose h2:first-child{border-top:none;margin-top:0}
+        .prose p{font-size:14.5px;color:var(--text2);line-height:1.8;margin-bottom:14px}
+        .prose ul{margin:10px 0 14px 20px}
+        .prose ul li{font-size:14.5px;color:var(--text2);line-height:1.8;margin-bottom:6px}
+        .prose ol{margin:10px 0 14px 20px}
+        .prose ol li{font-size:14.5px;color:var(--text2);line-height:1.8;margin-bottom:8px}
+        .prose strong{color:var(--text);font-weight:600}
+        .prose code{font-family:var(--mono);font-size:12.5px;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;color:var(--peri)}
+        .prose .highlight{background:var(--orange-dim);border:1px solid rgba(244,96,12,.2);border-radius:var(--r);padding:16px 20px;margin:24px 0}
+        .prose .highlight p{margin:0;color:var(--orange);font-size:14px}
+
+        /* CTA BUTTON */
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:7px;font-size:13.5px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .15s;border:1px solid transparent}
+        .btn-primary{background:var(--orange);color:#fff;border-color:var(--orange)}
+        .btn-primary:hover{background:var(--orange2);border-color:var(--orange2);text-decoration:none}
+        .btn-secondary{background:var(--bg2);color:var(--text2);border-color:var(--border2)}
+        .btn-secondary:hover{border-color:var(--border3);color:var(--text);background:var(--bg3);text-decoration:none}
+        .btn svg{width:15px;height:15px}
+        .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+
+        /* FOOTER */
+        footer{border-top:1px solid var(--border);padding:40px 24px}
+        .foot-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+        .foot-logo{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--text2)}
+        .foot-links{display:flex;gap:20px}
+        .foot-link{font-size:13px;color:var(--text3);transition:color .12s;cursor:pointer;text-decoration:none}
+        .foot-link:hover{color:var(--text);text-decoration:none}
+        .foot-copy{font-size:12px;color:var(--text4)}
+
+        @media(max-width:640px){
+            .cards{grid-template-columns:1fr}
+            .page-wrap{padding:88px 20px 60px}
+            .foot-inner{flex-direction:column;align-items:flex-start}
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <a class="nav-logo" href="/">
+            <div class="logo-mark">
+                <svg width="18" height="18" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="currentColor"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="currentColor"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="currentColor"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="currentColor"/></svg>
+            </div>
+            FractalX
+        </a>
+        <div class="nav-right">
+            <button class="tt" onclick="toggleTheme()" aria-label="Toggle theme">
+                <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<main class="page-wrap">
+    <div class="page-label">Open Source</div>
+    <h1 class="page-title">Contribute to FractalX</h1>
+    <p class="page-sub">FractalX is open source and community-driven. Whether you write code, find bugs, improve docs, or spread the word — every contribution matters.</p>
+
+    <div class="cards">
+        <!-- Bug Reports -->
+        <div class="card">
+            <div class="card-icon orange">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="card-title">Report a Bug</div>
+            <div class="card-body">Found something broken? Open an issue on GitHub with reproduction steps and we'll take a look.</div>
+            <a href="https://github.com/Project-FractalX/FractalX/issues/new?template=bug_report.md" target="_blank" rel="noopener" class="card-link">
+                Open issue
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+        </div>
+
+        <!-- Feature Requests -->
+        <div class="card">
+            <div class="card-icon gold">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="card-title">Request a Feature</div>
+            <div class="card-body">Have an idea that would make FractalX better? Share it in a GitHub discussion or feature request issue.</div>
+            <a href="https://github.com/Project-FractalX/FractalX/issues/new?template=feature_request.md" target="_blank" rel="noopener" class="card-link">
+                Request feature
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+        </div>
+
+        <!-- Pull Requests -->
+        <div class="card">
+            <div class="card-icon peri">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+            </div>
+            <div class="card-title">Submit a Pull Request</div>
+            <div class="card-body">Ready to write some code? Fork the repo, make your changes, and open a pull request. Small improvements are just as welcome as big ones.</div>
+            <a href="https://github.com/Project-FractalX/FractalX/pulls" target="_blank" rel="noopener" class="card-link">
+                View pull requests
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+        </div>
+
+        <!-- Docs -->
+        <div class="card">
+            <div class="card-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
+            <div class="card-title">Improve the Docs</div>
+            <div class="card-body">Clear documentation helps everyone. Fix typos, add examples, or clarify explanations in the FractalX docs.</div>
+            <a href="https://github.com/Project-FractalX/FractalX/issues/new" target="_blank" rel="noopener" class="card-link">
+                Suggest a doc fix
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <div class="prose">
+        <h2>Getting Started</h2>
+        <p>New contributors are always welcome. Here's how to get up and running quickly:</p>
+        <ol>
+            <li><strong>Fork</strong> the <a href="https://github.com/Project-FractalX/FractalX" target="_blank" rel="noopener">FractalX repository</a> on GitHub.</li>
+            <li><strong>Clone</strong> your fork locally: <code>git clone https://github.com/&lt;your-username&gt;/FractalX.git</code></li>
+            <li><strong>Create a branch</strong> for your change: <code>git checkout -b fix/your-change</code></li>
+            <li><strong>Make your changes</strong> and commit them with a clear message.</li>
+            <li><strong>Push</strong> to your fork and open a pull request against <code>main</code>.</li>
+        </ol>
+        <p>For larger changes, please open an issue first to discuss the approach before investing a lot of time in implementation.</p>
+
+        <h2>What to Work On</h2>
+        <p>Not sure where to start? Check out issues labelled <strong>good first issue</strong> or <strong>help wanted</strong> on GitHub — these are curated specifically for new contributors:</p>
+        <div class="btn-row">
+            <a href="https://github.com/Project-FractalX/FractalX/issues?q=is%3Aopen+label%3A%22good+first+issue%22" target="_blank" rel="noopener" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Good first issues
+            </a>
+            <a href="https://github.com/Project-FractalX/FractalX/issues?q=is%3Aopen+label%3A%22help+wanted%22" target="_blank" rel="noopener" class="btn btn-secondary">
+                Help wanted
+            </a>
+        </div>
+
+        <h2>Code of Conduct</h2>
+        <p>FractalX is committed to providing a welcoming and inclusive environment. All contributors are expected to treat one another with respect. Harassment or discrimination of any kind will not be tolerated.</p>
+        <p>By participating in this project you agree to abide by the <a href="https://github.com/Project-FractalX/FractalX/blob/main/CODE_OF_CONDUCT.md" target="_blank" rel="noopener">Code of Conduct</a>.</p>
+
+        <h2>License</h2>
+        <p>FractalX is licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache License 2.0</a>. By contributing, you agree that your contributions will be licensed under the same terms.</p>
+
+        <h2>Questions?</h2>
+        <p>If you're unsure about anything, feel free to <a href="https://github.com/Project-FractalX/FractalX/issues" target="_blank" rel="noopener">open an issue</a> and ask. No question is too small.</p>
+    </div>
+</main>
+
+<footer>
+    <div class="foot-inner">
+        <div class="foot-logo">
+            <div class="logo-mark" style="width:22px;height:22px;border-radius:5px">
+                <svg width="18" height="18" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="currentColor"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="currentColor"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="currentColor"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="currentColor"/></svg>
+            </div>
+            FractalX
+        </div>
+        <div class="foot-links">
+            <a href="/" class="foot-link">Home</a>
+            <a href="/docs" class="foot-link">Docs</a>
+            <a href="/blog" class="foot-link">Blog</a>
+            <a href="https://github.com/Project-FractalX/FractalX" class="foot-link">GitHub</a>
+            <a href="/privacy" class="foot-link">Privacy Policy</a>
+            <a href="/terms" class="foot-link">Terms</a>
+        </div>
+        <div class="foot-copy">&copy; 2026 FractalX.</div>
+    </div>
+</footer>
+
+<script>
+    function toggleTheme(){
+        const isLight = document.documentElement.classList.toggle('light');
+        localStorage.setItem('frx-theme', isLight ? 'light' : 'dark');
+    }
+</script>
+</body>
+</html>
