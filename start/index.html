@@ -1179,7 +1179,7 @@ function genPom(spec) {
 
     <properties>
         <java.version>${spec.javaVersion}</java.version>
-        <fractalx.version>0.3.1-SNAPSHOT</fractalx.version>
+        <fractalx.version>0.3.2-SNAPSHOT</fractalx.version>
     </properties>
 
     <dependencies>
@@ -1454,6 +1454,9 @@ fractalx:
 }
 
 function genModuleMarker(spec, svc) {
+    // The *Module class is a PURE MARKER — no fields, no logic, no constructors.
+    // FractalX's ModuleAnalyzer reads @DecomposableModule from the AST for metadata,
+    // and detects cross-module calls from field injections in the *Service classes.
     const pkg  = resolvedPackage(spec) + '.' + svcPackage(svc);
     const pfx  = svcPrefix(svc);
     const deps = (svc.deps||[]).map(d => {
@@ -1462,40 +1465,35 @@ function genModuleMarker(spec, svc) {
     }).filter(Boolean).join(', ');
     const depLine = deps ? `    dependencies = {${deps}},\n` : '';
 
-    const imports = (svc.deps||[]).map(d => {
+    const moduleImports = (svc.deps||[]).map(d => {
         const depSvc = spec.services.find(s => s.name === d);
-        return depSvc ? `import ${resolvedPackage(spec)}.${svcPackage(depSvc)}.${svcPrefix(depSvc)}Module;` : '';
+        return depSvc
+            ? `import ${resolvedPackage(spec)}.${svcPackage(depSvc)}.${svcPrefix(depSvc)}Module;`
+            : '';
     }).filter(Boolean).join('\n');
-
-    // Build constructor-injected dependency fields so ReflectiveModuleAnalyzer
-    // can detect cross-module deps from bytecode (Lombok expands @AllArgsConstructor).
-    const depFieldLines = (svc.deps||[]).map(d => {
-        const depSvc = spec.services.find(s => s.name === d);
-        if (!depSvc) return null;
-        const depPfx = svcPrefix(depSvc);
-        return `    private final ${depPfx}Service ${depPfx[0].toLowerCase()+depPfx.slice(1)}Service;`;
-    }).filter(Boolean).join('\n');
-    const depFieldImports = (svc.deps||[]).map(d => {
-        const depSvc = spec.services.find(s => s.name === d);
-        return depSvc ? `import ${resolvedPackage(spec)}.${svcPackage(depSvc)}.${svcPrefix(depSvc)}Service;` : '';
-    }).filter(Boolean).join('\n');
-
-    const hasFields = depFieldLines.length > 0;
-    const lombokImport = hasFields ? `import lombok.AllArgsConstructor;\n` : '';
-    const lombokAnnotation = hasFields ? `@AllArgsConstructor\n` : '';
 
     return `package ${pkg};
 
 import org.fractalx.annotations.DecomposableModule;
-${lombokImport}${imports ? imports+'\n' : ''}${depFieldImports ? depFieldImports+'\n' : ''}
+${moduleImports ? moduleImports+'\n' : ''}
+/**
+ * Service boundary marker for ${svc.name}.
+ *
+ * FractalX reads this annotation during {@code mvn fractalx:decompose} to:
+ *  - identify the bounded context and its HTTP port
+ *  - resolve cross-module dependencies listed in {@code dependencies}
+ *  - generate a standalone Spring Boot service with NetScope gRPC wiring
+ *
+ * Do NOT add fields, constructors, or business logic here.
+ * Cross-module @Service dependencies live in ${pfx}Service.java.
+ */
 @DecomposableModule(
     serviceName = "${svc.name}",
     port = ${svc.port},
 ${depLine}    ownedSchemas = {"${resolvedSchema(svc)}"},
     independentDeployment = true
 )
-${lombokAnnotation}public class ${pfx}Module {
-${hasFields ? depFieldLines+'\n\n    // Cross-module dependencies injected via constructor.\n    // FractalX rewires these to @NetScopeClient interfaces after decomposition.\n' : '    // Marker class — FractalX identifies this service boundary via @DecomposableModule.\n    // Add cross-module @Service fields here to have them detected by ReflectiveModuleAnalyzer.\n'}}
+public class ${pfx}Module {}
 `;
 }
 
@@ -1631,18 +1629,66 @@ public class ${entity.name}Controller {
 }
 
 function genServiceClass(spec, svc) {
-    const pkg      = resolvedPackage(spec) + '.' + svcPackage(svc);
-    const cls      = svcPrefix(svc)+'Service';
-    const idType   = svc.db === 'mongodb' ? 'String' : 'Long';
+    const pkg        = resolvedPackage(spec) + '.' + svcPackage(svc);
+    const cls        = svcPrefix(svc)+'Service';
+    const idType     = svc.db === 'mongodb' ? 'String' : 'Long';
     const ownedSagas = spec.sagas.filter(s => s.owner === svc.name);
 
-    const repoParams = svc.entities.map(e => `${e.name}Repository ${e.name[0].toLowerCase()+e.name.slice(1)}Repository`).join(', ');
-    const repoAssigns = svc.entities.map(e => {
-        const v = e.name[0].toLowerCase()+e.name.slice(1)+'Repository';
-        return `        this.${v} = ${v};`;
-    }).join('\n');
-    const repoFields = svc.entities.map(e => `    private final ${e.name}Repository ${e.name[0].toLowerCase()+e.name.slice(1)}Repository;`).join('\n');
+    // ── Own-repo fields ──────────────────────────────────────────────────────
+    const repoFields = svc.entities.map(e =>
+        `    private final ${e.name}Repository ${e.name[0].toLowerCase()+e.name.slice(1)}Repository;`
+    ).join('\n');
 
+    // ── Cross-module service fields (FractalX AST scanner reads these to build
+    //    CrossModuleCall graph; after decompose they become @NetScopeClient stubs)
+    const crossFields = (svc.deps||[]).map(d => {
+        const depSvc = spec.services.find(s => s.name === d);
+        if (!depSvc) return null;
+        const depPfx = svcPrefix(depSvc);
+        return `    private final ${depPfx}Service ${depPfx[0].toLowerCase()+depPfx.slice(1)}Service;`;
+    }).filter(Boolean).join('\n');
+
+    const crossImports = (svc.deps||[]).map(d => {
+        const depSvc = spec.services.find(s => s.name === d);
+        return depSvc
+            ? `import ${resolvedPackage(spec)}.${svcPackage(depSvc)}.${svcPrefix(depSvc)}Service;`
+            : '';
+    }).filter(Boolean).join('\n');
+
+    const allFields = [repoFields, crossFields].filter(Boolean).join('\n');
+
+    // ── Constructor (explicit — Lombok @RequiredArgsConstructor not used here
+    //    so the project compiles without annotation processing being required) ─
+    const allCtorParams = [
+        ...svc.entities.map(e => `${e.name}Repository ${e.name[0].toLowerCase()+e.name.slice(1)}Repository`),
+        ...(svc.deps||[]).map(d => {
+            const depSvc = spec.services.find(s => s.name === d);
+            if (!depSvc) return null;
+            const depPfx = svcPrefix(depSvc);
+            return `${depPfx}Service ${depPfx[0].toLowerCase()+depPfx.slice(1)}Service`;
+        }).filter(Boolean),
+    ];
+    const allCtorAssigns = [
+        ...svc.entities.map(e => {
+            const v = e.name[0].toLowerCase()+e.name.slice(1)+'Repository';
+            return `        this.${v} = ${v};`;
+        }),
+        ...(svc.deps||[]).map(d => {
+            const depSvc = spec.services.find(s => s.name === d);
+            if (!depSvc) return null;
+            const depPfx = svcPrefix(depSvc);
+            const v = depPfx[0].toLowerCase()+depPfx.slice(1)+'Service';
+            return `        this.${v} = ${v};`;
+        }).filter(Boolean),
+    ];
+
+    const ctorBlock = allCtorParams.length > 0 ? `
+    public ${cls}(${allCtorParams.join(', ')}) {
+${allCtorAssigns.join('\n')}
+    }
+` : '';
+
+    // ── CRUD methods ─────────────────────────────────────────────────────────
     const crudMethods = svc.entities.map(e => {
         const rVar = e.name[0].toLowerCase()+e.name.slice(1)+'Repository';
         const vn   = e.name[0].toLowerCase()+e.name.slice(1);
@@ -1669,6 +1715,7 @@ function genServiceClass(spec, svc) {
     }`;
     }).join('\n');
 
+    // ── Saga methods ─────────────────────────────────────────────────────────
     const sagaMethods = ownedSagas.map(saga => {
         const method = toCamel(saga.sagaId);
         return `
@@ -1686,28 +1733,17 @@ ${saga.compensation ? `
     }).join('\n');
 
     const sagaImport = ownedSagas.length ? `import org.fractalx.annotations.DistributedSaga;\n` : '';
-    const hasRepos   = svc.entities.length > 0;
-    // @RequiredArgsConstructor is preferred for @Service classes — generates the same
-    // constructor that ReflectiveModuleAnalyzer reads from bytecode for dep detection.
-    const lombokCtor = hasRepos
-        ? `import lombok.RequiredArgsConstructor;\n`
-        : '';
-    const lombokAnnot = hasRepos ? `@RequiredArgsConstructor\n` : '';
 
     return `package ${pkg};
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-${lombokCtor}${sagaImport}
+${sagaImport}${crossImports ? crossImports+'\n' : ''}
 @Service
-${lombokAnnot}public class ${cls} {
+public class ${cls} {
 
-${repoFields}
-${hasRepos ? '' : `
-    public ${cls}(${repoParams}) {
-${repoAssigns}
-    }
-`}${crudMethods}
+${allFields}
+${ctorBlock}${crudMethods}
 ${sagaMethods}
 }
 `;
