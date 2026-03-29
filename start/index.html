@@ -656,6 +656,7 @@ function renderSvcCard(svc) {
         </div>
     `).join('');
 
+    const warn = svcNameWarning(svc);
     return `
     <div class="svc-card" id="svc-${svc.id}">
         <div class="svc-header" onclick="toggleSvc('${svc.id}')">
@@ -669,11 +670,12 @@ function renderSvcCard(svc) {
             </button>
             <svg class="svc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="m6 9 6 6 6-6"/></svg>
         </div>
+        ${warn ? `<div style="padding:7px 16px;font-size:12px;background:rgba(245,168,0,.08);border-bottom:1px solid rgba(245,168,0,.2);color:var(--gold);display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>${warn}</div>` : ''}
         <div class="svc-body" id="svc-body-${svc.id}">
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Service name</label>
-                    <input class="form-input" value="${svc.name}" oninput="updateSvc('${svc.id}','name',this.value)" placeholder="order-service"/>
+                    <input class="form-input" value="${svc.name}" oninput="updateSvc('${svc.id}','name',this.value)" placeholder="order-service" style="${warn ? 'border-color:var(--gold)' : ''}"/>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Port</label>
@@ -1084,8 +1086,11 @@ function buildSpec() {
 // ── DERIVED HELPERS ─────────────────────────────────────────────────────────
 
 function resolvedPackage(spec) {
-    const suffix = spec.artifactId.replace(/[^a-zA-Z0-9]/g,'').toLowerCase();
-    return spec.groupId + '.' + suffix;
+    // Each dot-separated segment of groupId must also not be a reserved word.
+    const safeSeg = seg => safePkg(seg.replace(/[^a-zA-Z0-9]/g,'')) || 'pkg';
+    const safeGroup = spec.groupId.split('.').map(safeSeg).join('.');
+    const suffix = safePkg(spec.artifactId.replace(/[^a-zA-Z0-9]/g,'')) || 'app';
+    return safeGroup + '.' + suffix;
 }
 
 function appClassName(spec) {
@@ -1094,14 +1099,45 @@ function appClassName(spec) {
         .join('') + 'Application';
 }
 
+// All Java reserved keywords + common problematic identifiers.
+// A package segment matching any of these gets '_svc' appended.
+const JAVA_RESERVED = new Set([
+    'abstract','assert','boolean','break','byte','case','catch','char','class',
+    'const','continue','default','do','double','else','enum','extends','final',
+    'finally','float','for','goto','if','implements','import','instanceof','int',
+    'interface','long','native','new','package','private','protected','public',
+    'return','short','static','strictfp','super','switch','synchronized','this',
+    'throw','throws','transient','try','void','volatile','while',
+    // also guard module / record / var (context-sensitive but safer to avoid)
+    'module','record','var','yield','sealed','permits','when',
+]);
+
+function safePkg(segment) {
+    const s = segment.toLowerCase();
+    return JAVA_RESERVED.has(s) ? s + 'svc' : s;
+}
+
 function svcPackage(svc) {
-    return svc.name.replace(/-service$/,'').replace(/[^a-zA-Z0-9]/g,'').toLowerCase();
+    const base = svc.name.replace(/-service$/,'').replace(/[^a-zA-Z0-9]/g,'');
+    return safePkg(base);
 }
 
 function svcPrefix(svc) {
+    // Class names are upper-camel — reserved words are only a problem as package
+    // names, not as class prefixes, so no change needed here.
     return svc.name.replace(/-service$/,'').split(/[^a-zA-Z0-9]+/)
         .map(p => p ? p[0].toUpperCase()+p.slice(1).toLowerCase() : '')
         .join('');
+}
+
+// Returns a non-empty warning string if svc.name would produce a bad package,
+// or '' if fine. Used by renderSvcCard to show an inline hint.
+function svcNameWarning(svc) {
+    const raw = svc.name.replace(/-service$/,'').replace(/[^a-zA-Z0-9]/g,'').toLowerCase();
+    if (!raw) return 'Name produces an empty package segment — add more characters.';
+    if (JAVA_RESERVED.has(raw)) return `"${raw}" is a Java reserved keyword — package will be "${raw}svc" to avoid compile errors.`;
+    if (/^[0-9]/.test(raw)) return 'Package name starts with a digit — prefix with a letter.';
+    return '';
 }
 
 function resolvedSchema(svc) {
