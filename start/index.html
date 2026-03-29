@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>FractalX Initializr — Scaffold Your Modular Monolith</title>
-    <meta name="description" content="Generate a production-ready FractalX-annotated monolith with services, entities, sagas, and full infrastructure — ready for mvn fractalx:decompose on day one."/>
+    <title>FractalX Initializr — Start Modular, Decompose When Ready</title>
+    <meta name="description" content="Generate a FractalX-annotated Spring Boot monolith with @DecomposableModule bounded contexts, JPA entities, @DistributedSaga sagas, and full infrastructure. Run mvn fractalx:decompose when ready to extract production microservices with NetScope gRPC wiring, gateway, registry, and observability stack."/>
     <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -305,9 +305,9 @@
 
 <!-- PAGE HEADER -->
 <div class="page-header">
-    <div class="page-header-tag"><span class="dot"></span>mvn fractalx:init</div>
+    <div class="page-header-tag"><span class="dot"></span>mvn fractalx:decompose</div>
     <h1 class="page-h">FractalX <span class="hl">Initializr</span></h1>
-    <p class="page-sub">Spring Initializr for distributed systems. Define your bounded contexts, download a decomposition-ready monolith.</p>
+    <p class="page-sub">Start as a monolith, decompose into microservices when ready. Define bounded contexts, entities, sagas, and infra — download a project annotated and ready for <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">mvn fractalx:decompose</code>.</p>
 </div>
 
 <!-- MAIN -->
@@ -345,9 +345,10 @@
                     <div class="form-group">
                         <label class="form-label">Spring Boot</label>
                         <select class="form-select" id="springBoot" onchange="updatePreview()">
-                            <option value="3.4.1">3.4.1</option>
+                            <option value="3.4.1">3.4.1 (latest)</option>
                             <option value="3.3.6">3.3.6</option>
-                            <option value="3.2.5" selected>3.2.5</option>
+                            <option value="3.2.5" selected>3.2.5 ★ recommended</option>
+                            <option value="3.2.0">3.2.0</option>
                         </select>
                     </div>
                 </div>
@@ -386,7 +387,7 @@
         <div class="form-panel" data-step="2">
             <div style="padding:28px 32px 0">
                 <div class="panel-title">Dependencies</div>
-                <div class="panel-sub">Check which services call other services. This populates <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">dependencies={}</code> on each <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@DecomposableModule</code>.</div>
+                <div class="panel-sub">Check which services call other services. This populates <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">dependencies={}</code> on each <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@DecomposableModule</code>, and injects matching <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@Service</code> fields into the module marker class for Lombok-based bytecode analysis.</div>
             </div>
             <div style="padding:16px 32px 0" id="dep-matrix-container">
                 <div class="dep-matrix" id="dep-matrix"></div>
@@ -397,7 +398,7 @@
         <div class="form-panel" data-step="3">
             <div style="padding:28px 32px 0">
                 <div class="panel-title">Distributed Sagas</div>
-                <div class="panel-sub">Define multi-service transactions. Annotates orchestrator methods with <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@DistributedSaga</code>.</div>
+                <div class="panel-sub">Define multi-service transactions. Each saga is annotated with <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@DistributedSaga</code> on an owner service method. After decomposition, FractalX generates a standalone <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">fractalx-saga-orchestrator</code> service with forward steps, compensation, and JPA-tracked <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">SagaInstance</code> state.</div>
             </div>
             <div style="padding:16px 32px 0">
                 <div class="saga-list" id="saga-list"></div>
@@ -412,7 +413,7 @@
         <div class="form-panel" data-step="4">
             <div style="padding:28px 32px 0">
                 <div class="panel-title">Infrastructure</div>
-                <div class="panel-sub">Choose which infrastructure components to generate alongside the monolith source.</div>
+                <div class="panel-sub">Choose which infrastructure components FractalX generates during <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">mvn fractalx:decompose</code>. The service registry always starts first — all other services depend on it.</div>
             </div>
             <div style="padding:16px 32px 0">
                 <div class="toggle-grid" id="infra-toggles">
@@ -444,6 +445,16 @@
                     <div class="toggle-card" data-key="kubernetes" onclick="toggleInfra(this)">
                         <span class="toggle-icon">☸️</span>
                         <div class="toggle-info"><div class="toggle-name">Kubernetes</div><div class="toggle-desc">k8s/ manifests per service</div></div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-card" data-key="observability" onclick="toggleInfra(this)">
+                        <span class="toggle-icon">🔭</span>
+                        <div class="toggle-info"><div class="toggle-name">Observability</div><div class="toggle-desc">Jaeger tracing + OTEL + logger-service</div></div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-card" data-key="saga" onclick="toggleInfra(this)">
+                        <span class="toggle-icon">🔄</span>
+                        <div class="toggle-info"><div class="toggle-name">Saga Orchestrator</div><div class="toggle-desc">fractalx-saga-orchestrator on port 8099</div></div>
                         <div class="toggle-switch"></div>
                     </div>
                 </div>
@@ -526,7 +537,7 @@ let services = [
 
 let sagas = [];
 
-const infra = { gateway: true, admin: true, registry: true, docker: true, ci: true, kubernetes: false };
+const infra = { gateway: true, admin: true, registry: true, docker: true, ci: true, kubernetes: false, observability: false, saga: false };
 
 function uid() { return Math.random().toString(36).slice(2,9); }
 
@@ -607,10 +618,10 @@ function getChipVal(group) {
 
 function updateSecDesc() {
     const desc = {
-        none: 'No authentication — suitable for internal services behind a trusted gateway.',
-        jwt:  'JWT Bearer Token (HMAC-SHA256). Adds spring-boot-starter-security + jjwt dependencies. Gateway validates tokens and propagates claims downstream.',
-        oauth2: 'OAuth2 Resource Server (OpenID Connect). Integrates with Keycloak, Auth0, or any OIDC-compliant provider. Adds spring-boot-starter-oauth2-resource-server.',
-        apikey: 'Static API Key header validation. Lightweight; suitable for service-to-service or partner APIs.',
+        none:   'No authentication — suitable for internal services behind a trusted gateway. Security can be enabled per-service after decomposition via fractalx-config.yml.',
+        jwt:    'JWT Bearer Token (HMAC-SHA256). Adds spring-boot-starter-security + jjwt-api. The generated fractalx-gateway validates tokens and forwards claims. Enable with fractalx.gateway.security.bearer.enabled=true after decomposition.',
+        oauth2: 'OAuth2 / OIDC Resource Server. Integrates with Keycloak, Auth0, or any OIDC provider. Adds spring-boot-starter-oauth2-resource-server. JWK Set URI is configurable via fractalx-config.yml oauth2JwksUri.',
+        apikey: 'Static API Key validation via X-Api-Key header or ?api_key= query param. Lightweight; suitable for service-to-service or partner APIs. Enable with fractalx.gateway.security.api-key.enabled=true.',
     };
     document.getElementById('sec-desc').textContent = desc[getChipVal('sec')] || '';
 }
@@ -937,6 +948,7 @@ function updatePreview() {
     if (infra.ci) { dir(1, '.github'); dir(2, 'workflows'); file(3, 'ci.yml'); }
     file(1, 'fractalx.yaml', true);
     file(1, 'README.md');
+    if (infra.kubernetes) { dir(1, 'k8s'); services.forEach(s => file(2, s.name+'-deployment.yml')); }
 
     dir(1, 'src');
     dir(2, 'main');
@@ -963,7 +975,7 @@ function updatePreview() {
     dir(3, 'resources');
     file(4, 'application.yml');
     file(4, 'application-dev.yml');
-    file(4, 'fractalx-config.yml');
+    file(4, 'fractalx-config.yml', true);
 
     const hasFlyway = services.some(s => s.db !== 'h2' && s.db !== 'mongodb' && s.db !== 'redis');
     if (hasFlyway) { dir(4, 'db'); dir(5, 'migration'); file(6, 'V1__init.sql'); }
@@ -1131,15 +1143,27 @@ function genPom(spec) {
 
     <properties>
         <java.version>${spec.javaVersion}</java.version>
-        <fractalx.version>0.3.1-SNAPSHOT</fractalx.version>
+        <fractalx.version>0.3.2-SNAPSHOT</fractalx.version>
     </properties>
 
     <dependencies>
-        <!-- FractalX annotations -->
+        <!-- FractalX -->
         <dependency>
             <groupId>org.fractalx</groupId>
             <artifactId>fractalx-annotations</artifactId>
             <version>\${fractalx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fractalx</groupId>
+            <artifactId>fractalx-runtime</artifactId>
+            <version>\${fractalx.version}</version>
+        </dependency>
+
+        <!-- Lombok (constructor injection; @AllArgsConstructor drives ReflectiveModuleAnalyzer) -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -1220,6 +1244,14 @@ ${isOAuth ? `
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
             <!-- Run: mvn fractalx:decompose  to extract microservices -->
             <plugin>
@@ -1236,13 +1268,16 @@ ${isOAuth ? `
 function genAppClass(spec) {
     const pkg = resolvedPackage(spec);
     const cls = appClassName(spec);
+    const hasSagas = spec.sagas && spec.sagas.length > 0;
+    const schedulingImport = hasSagas ? `import org.springframework.scheduling.annotation.EnableScheduling;\n` : '';
+    const schedulingAnnotation = hasSagas ? `@EnableScheduling\n` : '';
     return `package ${pkg};
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+${schedulingImport}
 @SpringBootApplication
-public class ${cls} {
+${schedulingAnnotation}public class ${cls} {
 
     public static void main(String[] args) {
         SpringApplication.run(${cls}.class, args);
@@ -1270,15 +1305,41 @@ class ${cls}Tests {
 }
 
 function genAppYml(spec) {
-    let yml = `spring:
+    const secBlock = spec.security === 'jwt' ? `
+  security:
+    enabled: false         # enable in gateway after decomposition
+    bearer:
+      enabled: true
+` : spec.security === 'oauth2' ? `
+  security:
+    enabled: false         # enable in gateway after decomposition
+    oauth2:
+      enabled: true
+      jwks-uri: \${OAUTH2_JWKS_URI:http://localhost:8080/realms/fractalx/protocol/openid-connect/certs}
+` : spec.security === 'apikey' ? `
+  security:
+    enabled: false         # enable in gateway after decomposition
+    api-key:
+      enabled: true
+` : '';
+
+    return `spring:
   application:
     name: ${spec.artifactId}
+  profiles:
+    active: dev            # override with: -Dspring.profiles.active=prod
 
+# FractalX platform config (read from fractalx-config.yml at decompose time)
+fractalx:
+  gateway-port: 9999
+  admin-port: 9090
+  registry-url: \${FRACTALX_REGISTRY_URL:http://localhost:8761}
+${secBlock}
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics,prometheus
   endpoint:
     health:
       show-details: when-authorized
@@ -1287,34 +1348,70 @@ logging:
   level:
     root: INFO
     ${resolvedPackage(spec)}: DEBUG
+    org.fractalx: DEBUG
 `;
-    return yml;
 }
 
 function genDevYml() {
-    return `spring:
+    return `# application-dev.yml — activated with spring.profiles.active=dev
+spring:
   h2:
     console:
       enabled: true
       path: /h2-console
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
 logging:
   level:
     root: DEBUG
     org.springframework.web: DEBUG
+    org.fractalx: DEBUG
 `;
 }
 
 function genFractalxConfig(spec) {
-    let cfg = `# FractalX per-service datasource configuration.
-# Each service gets this block as its application.yml after mvn fractalx:decompose.
+    const registryPort = 8761;
+    const gatewayPort  = 9999;
+    const adminPort    = 9090;
+    const loggerPort   = 9099;
+    const otelPort     = 4317;
 
+    let cfg = `# fractalx-config.yml — read by FractalX at decomposition time (mvn fractalx:decompose).
+# Keys under fractalx.services.<name> become per-service application.yml datasource config.
+# Top-level fractalx.* keys configure the platform infrastructure.
+
+fractalx:
+  registry-url: http://localhost:${registryPort}
+  gateway-port: ${gatewayPort}
+  admin-port: ${adminPort}
+  logger-url: http://localhost:${loggerPort}
+  otel-endpoint: http://localhost:${otelPort}
+
+  services:
 `;
     spec.services.forEach(svc => {
-        cfg += `${svc.name}:\n  datasource:\n`;
-        if (svc.db === 'postgresql') cfg += `    url: jdbc:postgresql://localhost:5432/${resolvedSchema(svc)}\n`;
-        else if (svc.db === 'mysql') cfg += `    url: jdbc:mysql://localhost:3306/${resolvedSchema(svc)}\n`;
-        else cfg += `    url: jdbc:h2:mem:${resolvedSchema(svc)};DB_CLOSE_DELAY=-1\n`;
+        cfg += `    ${svc.name}:\n`;
+        cfg += `      datasource:\n`;
+        if (svc.db === 'postgresql') {
+            cfg += `        url: jdbc:postgresql://localhost:5432/${resolvedSchema(svc)}\n`;
+            cfg += `        username: fractalx\n`;
+            cfg += `        password: fractalx\n`;
+        } else if (svc.db === 'mysql') {
+            cfg += `        url: jdbc:mysql://localhost:3306/${resolvedSchema(svc)}\n`;
+            cfg += `        username: fractalx\n`;
+            cfg += `        password: fractalx\n`;
+        } else if (svc.db === 'mongodb') {
+            cfg += `        uri: mongodb://localhost:27017/${resolvedSchema(svc)}\n`;
+        } else if (svc.db === 'redis') {
+            cfg += `        host: localhost\n`;
+            cfg += `        port: 6379\n`;
+        } else {
+            cfg += `        url: jdbc:h2:mem:${resolvedSchema(svc)};DB_CLOSE_DELAY=-1\n`;
+        }
         cfg += '\n';
     });
     return cfg;
@@ -1334,20 +1431,35 @@ function genModuleMarker(spec, svc) {
         return depSvc ? `import ${resolvedPackage(spec)}.${svcPackage(depSvc)}.${svcPrefix(depSvc)}Module;` : '';
     }).filter(Boolean).join('\n');
 
+    // Build constructor-injected dependency fields so ReflectiveModuleAnalyzer
+    // can detect cross-module deps from bytecode (Lombok expands @AllArgsConstructor).
+    const depFieldLines = (svc.deps||[]).map(d => {
+        const depSvc = spec.services.find(s => s.name === d);
+        if (!depSvc) return null;
+        const depPfx = svcPrefix(depSvc);
+        return `    private final ${depPfx}Service ${depPfx[0].toLowerCase()+depPfx.slice(1)}Service;`;
+    }).filter(Boolean).join('\n');
+    const depFieldImports = (svc.deps||[]).map(d => {
+        const depSvc = spec.services.find(s => s.name === d);
+        return depSvc ? `import ${resolvedPackage(spec)}.${svcPackage(depSvc)}.${svcPrefix(depSvc)}Service;` : '';
+    }).filter(Boolean).join('\n');
+
+    const hasFields = depFieldLines.length > 0;
+    const lombokImport = hasFields ? `import lombok.AllArgsConstructor;\n` : '';
+    const lombokAnnotation = hasFields ? `@AllArgsConstructor\n` : '';
+
     return `package ${pkg};
 
 import org.fractalx.annotations.DecomposableModule;
-${imports ? imports+'\n' : ''}
+${lombokImport}${imports ? imports+'\n' : ''}${depFieldImports ? depFieldImports+'\n' : ''}
 @DecomposableModule(
     serviceName = "${svc.name}",
     port = ${svc.port},
 ${depLine}    ownedSchemas = {"${resolvedSchema(svc)}"},
     independentDeployment = true
 )
-public class ${pfx}Module {
-    // Marker class — FractalX uses this annotation to identify the service boundary.
-    // Do not add business logic here.
-}
+${lombokAnnotation}public class ${pfx}Module {
+${hasFields ? depFieldLines+'\n\n    // Cross-module dependencies injected via constructor.\n    // FractalX rewires these to @NetScopeClient interfaces after decomposition.\n' : '    // Marker class — FractalX identifies this service boundary via @DecomposableModule.\n    // Add cross-module @Service fields here to have them detected by ReflectiveModuleAnalyzer.\n'}}
 `;
 }
 
@@ -1538,21 +1650,28 @@ ${saga.compensation ? `
     }).join('\n');
 
     const sagaImport = ownedSagas.length ? `import org.fractalx.annotations.DistributedSaga;\n` : '';
+    const hasRepos   = svc.entities.length > 0;
+    // @RequiredArgsConstructor is preferred for @Service classes — generates the same
+    // constructor that ReflectiveModuleAnalyzer reads from bytecode for dep detection.
+    const lombokCtor = hasRepos
+        ? `import lombok.RequiredArgsConstructor;\n`
+        : '';
+    const lombokAnnot = hasRepos ? `@RequiredArgsConstructor\n` : '';
 
     return `package ${pkg};
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-${sagaImport}
+${lombokCtor}${sagaImport}
 @Service
-public class ${cls} {
+${lombokAnnot}public class ${cls} {
 
 ${repoFields}
-
+${hasRepos ? '' : `
     public ${cls}(${repoParams}) {
 ${repoAssigns}
     }
-${crudMethods}
+`}${crudMethods}
 ${sagaMethods}
 }
 `;
@@ -1576,16 +1695,17 @@ function genFlyway(spec) {
 }
 
 function genDocker(spec) {
-    const hasPg = spec.services.some(s => s.db === 'postgresql');
-    const hasMy = spec.services.some(s => s.db === 'mysql');
-    const hasMg = spec.services.some(s => s.db === 'mongodb');
-    const hasRd = spec.services.some(s => s.db === 'redis');
+    const hasPg   = spec.services.some(s => s.db === 'postgresql');
+    const hasMy   = spec.services.some(s => s.db === 'mysql');
+    const hasMg   = spec.services.some(s => s.db === 'mongodb');
+    const hasRd   = spec.services.some(s => s.db === 'redis');
+    const hasObs  = spec.infra.observability;
 
-    if (!hasPg && !hasMy && !hasMg && !hasRd) {
+    if (!hasPg && !hasMy && !hasMg && !hasRd && !hasObs) {
         return `# All services use H2 in-memory — no containers needed for local dev.\nservices: {}\n`;
     }
 
-    let yml = `# docker-compose.dev.yml — local development databases
+    let yml = `# docker-compose.dev.yml — local development infrastructure
 # Run: docker compose -f docker-compose.dev.yml up -d
 
 services:
@@ -1633,11 +1753,34 @@ services:
       - redis_data:/data
 
 `;
-    yml += `volumes:\n`;
-    if (hasPg) yml += `  postgres_data:\n`;
-    if (hasMy) yml += `  mysql_data:\n`;
-    if (hasMg) yml += `  mongo_data:\n`;
-    if (hasRd) yml += `  redis_data:\n`;
+    if (hasObs) yml += `  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "16686:16686"   # Jaeger UI
+      - "4317:4317"     # OTLP gRPC
+      - "4318:4318"     # OTLP HTTP
+    restart: unless-stopped
+
+  logger-service:
+    image: fractalx/logger-service:latest
+    ports:
+      - "9099:9099"
+    environment:
+      FRACTALX_REGISTRY_URL: http://fractalx-registry:8761
+    restart: unless-stopped
+
+`;
+
+    const hasVolumes = hasPg || hasMy || hasMg || hasRd;
+    if (hasVolumes) {
+        yml += `volumes:\n`;
+        if (hasPg) yml += `  postgres_data:\n`;
+        if (hasMy) yml += `  mysql_data:\n`;
+        if (hasMg) yml += `  mongo_data:\n`;
+        if (hasRd) yml += `  redis_data:\n`;
+    }
     return yml;
 }
 
@@ -1749,12 +1892,14 @@ services:
     }
 
     yaml += `infrastructure:
-  gateway: ${infra.gateway}
-  admin: ${infra.admin}
-  serviceRegistry: ${infra.registry}
-  docker: ${infra.docker}
-  kubernetes: ${infra.kubernetes}
-  ci: ${infra.ci ? 'github-actions' : 'none'}
+  gateway: ${spec.infra.gateway}
+  admin: ${spec.infra.admin}
+  serviceRegistry: ${spec.infra.registry}
+  docker: ${spec.infra.docker}
+  kubernetes: ${spec.infra.kubernetes}
+  ci: ${spec.infra.ci ? 'github-actions' : 'none'}
+  observability: ${spec.infra.observability}
+  sagaOrchestrator: ${spec.infra.saga}
 
 security:
   type: ${spec.security}
@@ -1767,6 +1912,24 @@ function genReadme(spec) {
         `| \`${s.name}\` | ${s.port} | ${s.db} | ${s.entities.map(e=>e.name).join(', ')||'—'} |`
     ).join('\n');
 
+    const infraLines = [];
+    if (spec.infra.registry)     infraLines.push('- `fractalx-registry` — service registry (port 8761); all services register here on startup');
+    if (spec.infra.gateway)      infraLines.push('- `fractalx-gateway` — dynamic API gateway with circuit-breaker, rate-limiting, CORS (port 9999)');
+    if (spec.infra.admin)        infraLines.push('- `fractalx-admin` — topology dashboard, alert system, config management (port 9090)');
+    if (spec.infra.saga && spec.sagas && spec.sagas.length) infraLines.push('- `fractalx-saga-orchestrator` — distributed saga orchestration with compensation (port 8099)');
+    if (spec.infra.observability) infraLines.push('- Jaeger all-in-one — distributed tracing UI (port 16686); OTLP gRPC (port 4317)');
+    if (spec.infra.observability) infraLines.push('- `logger-service` — centralised structured log aggregation (port 9099)');
+
+    const sagaSection = spec.sagas && spec.sagas.length ? `
+## Distributed Sagas
+
+The following sagas are wired with \`@DistributedSaga\` and run through the saga orchestrator
+after decomposition:
+
+${spec.sagas.map(s => `- **\`${s.sagaId}\`** — owner: \`${s.owner}\`${s.compensation ? ', compensation: `'+s.compensation+'`' : ''}`).join('\n')}
+
+` : '';
+
     return `# ${spec.artifactId}
 
 > ${spec.description}
@@ -1778,11 +1941,11 @@ Generated by **[FractalX Initializr](https://fractalx.org/start/)** — decompos
 | Service | Port | Database | Entities |
 |---------|------|----------|----------|
 ${table}
-
+${infraLines.length ? '\n## Generated Infrastructure\n\n'+infraLines.join('\n')+'\n' : ''}${sagaSection}
 ## Getting Started
 
 \`\`\`bash
-# Start database containers (if using PostgreSQL / MySQL)
+# Start development infrastructure
 docker compose -f docker-compose.dev.yml up -d
 
 # Run the monolith
@@ -1797,20 +1960,32 @@ When you're ready to extract independent services:
 mvn fractalx:decompose
 \`\`\`
 
-FractalX reads the \`@DecomposableModule\` annotations on each bounded context
-and generates production-ready microservices, a gateway, admin dashboard, and service registry.
-
-### Validate before decomposing
+FractalX reads the \`@DecomposableModule\` annotations and generates:
+- A Spring Boot microservice per bounded context (NetScope gRPC client/server wiring)
+- API gateway with dynamic routing, circuit-breaker, and rate-limiting
+- Service registry (\`fractalx-registry\`) — all services self-register at startup
+- Admin dashboard with topology view, alert system, and config management
+- Distributed saga orchestrator (if sagas are defined)
+- Docker Compose + multi-stage Dockerfiles per service
+${spec.infra.observability ? '- OTEL tracing (`OtelConfig.java`) and health metrics per service\n' : ''}
+### Dry-run (validate without writing files)
 
 \`\`\`bash
 mvn fractalx:decompose -Dfractalx.generate=false
 \`\`\`
 
+### Cross-module communication
+
+After decomposition, cross-module \`@Service\` fields are replaced with \`@NetScopeClient\`
+interfaces. NetScope uses gRPC (HTTP port + 10000) for typed inter-service calls —
+no REST serialisation or service-mesh required.
+
 ## Built with
 
-- [FractalX](https://fractalx.org) — static decomposition framework
+- [FractalX](https://fractalx.org) v0.3.2 — static decomposition framework
 - Spring Boot ${spec.springBootVersion}
 - Java ${spec.javaVersion}
+- Lombok (constructor injection for boundary detection)
 `;
 }
 
