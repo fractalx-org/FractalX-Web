@@ -108,7 +108,7 @@
 
         /* SIDEBAR */
         .sb{position:fixed;top:0;left:0;width:var(--sb);height:100vh;background:var(--bg);border-right:1px solid var(--border);overflow-y:auto;z-index:200;display:flex;flex-direction:column;transition:background .2s,border-color .2s,transform .28s cubic-bezier(.4,0,.2,1)}
-        .sb-logo{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;transition:opacity .15s}
+        .sb-logo{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:pointer;transition:opacity .15s;text-decoration:none;color:inherit}
         .sb-logo:hover{opacity:.7}
         .logo-box{width:24px;height:24px;background:var(--logo-bg);border-radius:5px;display:grid;place-items:center;flex-shrink:0;transition:background .2s}
         .logo-box svg{width:12px;height:12px}
@@ -367,13 +367,13 @@
     <button class="sb-close" onclick="closeSidebar()" aria-label="Close menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
-    <div class="sb-logo" onclick="nav('getting-started')">
+    <a class="sb-logo" href="/" title="Back to homepage">
         <div class="logo-box">
             <svg width="14" height="14" viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="var(--logo-fg)"/><path d="M18.2837 0H148.284V40H18.2837V0Z" fill="var(--logo-fg)"/><path d="M59.2837 66H148.284V106H59.2837V66Z" fill="var(--logo-fg)"/><path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="var(--logo-fg)"/></svg>
         </div>
         <span class="logo-n">FractalX</span>
         <span class="logo-v">v0.2.4</span>
-    </div>
+    </a>
     <div class="sb-s">
         <svg class="si" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         <input type="text" placeholder="Search docs..." oninput="filt(this.value)"/>
