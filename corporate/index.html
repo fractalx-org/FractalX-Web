@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>FractalX for Enterprise - Partner with Us</title>
-    <meta name="description" content="Partner with FractalX to modernize your Spring Boot architecture. Priority support, architecture reviews, training, and enterprise integrations."/>
+    <title>FractalX Enterprise - Join the Waitlist</title>
+    <meta name="description" content="Join the FractalX Enterprise waitlist. Be first to access priority support, architecture reviews, and dedicated enterprise tooling for Spring Boot teams."/>
     <meta name="robots" content="index, follow"/>
     <link rel="canonical" href="https://fractalx.org/corporate/"/>
 
@@ -19,8 +19,8 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website"/>
     <meta property="og:site_name" content="FractalX"/>
-    <meta property="og:title" content="FractalX for Enterprise - Partner with Us"/>
-    <meta property="og:description" content="Partner with FractalX to modernize your Spring Boot architecture. Priority support, architecture reviews, training, and enterprise integrations."/>
+    <meta property="og:title" content="FractalX Enterprise - Join the Waitlist"/>
+    <meta property="og:description" content="Join the FractalX Enterprise waitlist. Be first to access priority support, architecture reviews, and dedicated enterprise tooling for Spring Boot teams."/>
     <meta property="og:url" content="https://fractalx.org/corporate/"/>
     <meta property="og:image" content="https://fractalx.org/assets/og/home.svg"/>
 
@@ -89,25 +89,40 @@
         .tt .ic-sun{display:none}
         html.light .tt .ic-moon{display:none}
         html.light .tt .ic-sun{display:block}
+        .nav-links{display:flex;align-items:center;gap:2px;margin-left:8px}
+        .nav-link{font-size:13.5px;color:var(--text2);padding:6px 11px;border-radius:6px;transition:color .15s,background .15s;text-decoration:none;white-space:nowrap}
+        .nav-link:hover{color:var(--text);background:var(--bg2);text-decoration:none}
+        .nav-link.active{color:var(--orange);background:var(--orange-dim)}
+        .ham{width:34px;height:34px;border-radius:7px;border:1px solid var(--border2);background:var(--bg1);cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .15s;padding:0;flex-shrink:0}
+        .ham:hover{border-color:var(--border3);background:var(--bg2)}
+        .ham svg{width:16px;height:16px;color:var(--text2)}
+        .mob-menu{display:none;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--bg);z-index:99;padding:16px 24px;flex-direction:column;gap:4px;overflow-y:auto}
+        .mob-menu.open{display:flex}
+        .mob-link{font-size:15px;color:var(--text2);padding:12px 8px;border-bottom:1px solid var(--border);transition:color .12s;text-decoration:none;display:block}
+        .mob-link:hover{color:var(--text)}
+        .mob-link.active{color:var(--orange)}
 
-        /* HERO */
-        .hero{padding:100px 24px 72px;background:var(--hero-grad);text-align:center}
-        .hero-inner{max-width:760px;margin:0 auto}
-        .hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-family:var(--mono);color:var(--orange);letter-spacing:.1em;text-transform:uppercase;background:var(--orange-dim);border:1px solid rgba(244,96,12,.18);border-radius:100px;padding:5px 12px;margin-bottom:24px;font-weight:500}
+        /* SPLIT HERO */
+        .split{padding:88px 24px 64px;background:var(--hero-grad)}
+        .split-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+        .split-left{padding-top:16px}
+        .hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-family:var(--mono);color:var(--orange);letter-spacing:.1em;text-transform:uppercase;background:var(--orange-dim);border:1px solid rgba(244,96,12,.18);border-radius:100px;padding:5px 12px;margin-bottom:22px;font-weight:500}
         .hero-badge svg{width:12px;height:12px}
-        h1{font-size:clamp(32px,6vw,58px);font-weight:800;letter-spacing:-2px;color:var(--white);line-height:1.08;margin-bottom:16px}
+        h1{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.8px;color:var(--white);line-height:1.1;margin-bottom:14px}
         h1 span{color:var(--orange)}
-        .hero-sub{font-size:17px;color:var(--text2);line-height:1.7;max-width:540px;margin:0 auto 36px}
+        .hero-sub{font-size:15.5px;color:var(--text2);line-height:1.75;margin-bottom:28px}
+        .hero-bullets{display:flex;flex-direction:column;gap:9px;margin-bottom:28px}
+        .hero-bullet{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--text2)}
+        .hero-bullet svg{width:14px;height:14px;color:var(--green);flex-shrink:0}
         .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .15s;border:1px solid transparent}
-        .btn-primary{background:var(--orange);color:#fff;border-color:var(--orange)}
-        .btn-primary:hover{background:var(--orange2);border-color:var(--orange2);text-decoration:none;box-shadow:0 0 24px var(--orange-glow)}
         .btn-ghost{background:transparent;color:var(--text2);border-color:var(--border2)}
         .btn-ghost:hover{border-color:var(--border3);color:var(--text);background:var(--bg2);text-decoration:none}
         .btn svg{width:15px;height:15px}
-        .hero-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+        /* FORM CARD (right side of split) */
+        .form-card{background:var(--bg1);border:1px solid var(--border2);border-radius:14px;padding:28px 28px 24px}
 
         /* SECTION */
-        section{padding:72px 24px}
+        section{padding:64px 24px}
         .section-inner{max-width:1120px;margin:0 auto}
         .section-label{font-size:11.5px;font-family:var(--mono);color:var(--orange);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;font-weight:500}
         .section-title{font-size:clamp(22px,4vw,34px);font-weight:800;letter-spacing:-1px;color:var(--white);line-height:1.15;margin-bottom:10px}
@@ -137,12 +152,10 @@
         /* DIVIDER */
         .divider{border:none;border-top:1px solid var(--border);margin:0}
 
-        /* FORM SECTION */
-        .form-section{padding:72px 24px 88px;background:var(--bg1)}
-        .form-wrap{max-width:600px;margin:0 auto}
-        .form-head{margin-bottom:36px}
-        .form-title{font-size:clamp(22px,4vw,32px);font-weight:800;letter-spacing:-1px;color:var(--white);line-height:1.15;margin-bottom:8px}
-        .form-sub{font-size:14.5px;color:var(--text2);line-height:1.7}
+        /* FORM CARD HEAD */
+        .form-card-head{margin-bottom:20px}
+        .form-card-title{font-size:17px;font-weight:700;color:var(--white);letter-spacing:-.4px;margin-bottom:4px}
+        .form-card-sub{font-size:13px;color:var(--text3);line-height:1.6}
 
         /* FORM FIELDS */
         .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
@@ -195,6 +208,11 @@
         .foot-link:hover{color:var(--text);text-decoration:none}
         .foot-copy{font-size:12px;color:var(--text4)}
 
+        @media(max-width:900px){.nav-links{display:none}.ham{display:inline-flex}}
+        @media(max-width:900px){
+            .split-inner{grid-template-columns:1fr;gap:36px}
+            .split-left{padding-top:0}
+        }
         @media(max-width:720px){
             .form-row{grid-template-columns:1fr}
             .process{grid-template-columns:1fr;gap:20px}
@@ -202,9 +220,9 @@
             .perks{grid-template-columns:1fr}
         }
         @media(max-width:640px){
-            .hero{padding:88px 20px 60px}
-            section{padding:56px 20px}
-            .form-section{padding:56px 20px 72px}
+            .split{padding:80px 20px 48px}
+            section{padding:48px 20px}
+            .form-card{padding:20px 18px}
             .foot-inner{flex-direction:column;align-items:flex-start}
             .trust-inner{gap:20px;justify-content:flex-start}
         }
@@ -220,42 +238,144 @@
             </div>
             FractalX
         </a>
+        <div class="nav-links">
+            <a href="/docs" class="nav-link">Docs</a>
+            <a href="/blog" class="nav-link">Blog</a>
+            <a href="/contribute" class="nav-link">Contribute</a>
+            <a href="/corporate" class="nav-link active">Enterprise</a>
+        </div>
         <div class="nav-right">
             <button class="tt" onclick="toggleTheme()" aria-label="Toggle theme">
                 <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                 <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
             </button>
+            <button class="ham" onclick="toggleMob()" aria-label="Menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
         </div>
     </div>
 </nav>
+<div class="mob-menu" id="mob-menu">
+    <a href="/docs" class="mob-link" onclick="toggleMob()">Docs</a>
+    <a href="/blog" class="mob-link" onclick="toggleMob()">Blog</a>
+    <a href="/contribute" class="mob-link" onclick="toggleMob()">Contribute</a>
+    <a href="/corporate" class="mob-link active" onclick="toggleMob()">Enterprise</a>
+</div>
 
-<!-- HERO -->
-<div class="hero">
-    <div class="hero-inner">
-        <div class="hero-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-            FractalX for Enterprise
+<!-- SPLIT HERO -->
+<div class="split" id="contact">
+    <div class="split-inner">
+
+        <!-- LEFT: pitch -->
+        <div class="split-left">
+            <div class="hero-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                Early Access
+            </div>
+            <h1>FractalX Enterprise<br>is <span>coming soon.</span></h1>
+            <p class="hero-sub">We're building a dedicated enterprise tier — priority support, architecture reviews, and hands-on migration consulting for teams running Spring Boot at scale.</p>
+            <div class="hero-bullets">
+                <div class="hero-bullet">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    First access before public launch
+                </div>
+                <div class="hero-bullet">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Founding pricing locked in for early members
+                </div>
+                <div class="hero-bullet">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Direct input into the features we build
+                </div>
+                <div class="hero-bullet">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    One-on-one onboarding with the core team
+                </div>
+            </div>
+            <a href="/docs" class="btn btn-ghost">View documentation</a>
         </div>
-        <h1>Modernize your architecture.<br><span>Scale with confidence.</span></h1>
-        <p class="hero-sub">Partner with FractalX to decompose your Spring Boot monolith into production-ready microservices — with dedicated support, architecture reviews, and hands-on guidance.</p>
-        <div class="hero-actions">
-            <a href="#contact" class="btn btn-primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                Get in touch
-            </a>
-            <a href="/docs" class="btn btn-ghost">
-                View docs
-            </a>
+
+        <!-- RIGHT: form card -->
+        <div class="split-right">
+            <div class="form-card">
+                <div class="form-card-head">
+                    <div class="form-card-title">Join the waitlist</div>
+                    <div class="form-card-sub">Reserve your spot. We'll reach out when enterprise access opens.</div>
+                </div>
+
+                <!-- SUCCESS STATE -->
+                <div id="form-success" class="form-notice success hidden">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <div class="form-notice-body">
+                        <strong>You're on the list!</strong>
+                        We'll be in touch when FractalX Enterprise launches.
+                    </div>
+                </div>
+
+                <!-- ERROR STATE -->
+                <div id="form-error" class="form-notice error hidden">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <div class="form-notice-body">
+                        <strong>Something went wrong.</strong>
+                        <span id="form-error-msg">Please try again in a moment.</span>
+                    </div>
+                </div>
+
+                <form id="partnership-form" novalidate>
+                    <!-- Honeypot — must stay empty -->
+                    <div class="form-hp" aria-hidden="true">
+                        <label for="hp-website">Leave this blank</label>
+                        <input type="text" id="hp-website" name="website" tabindex="-1" autocomplete="off"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Work email <span>*</span></label>
+                        <input class="form-input" type="email" id="email" name="email" placeholder="you@company.com" required maxlength="200" autocomplete="email"/>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="margin-bottom:0">
+                            <label class="form-label" for="name">Your name <span>optional</span></label>
+                            <input class="form-input" type="text" id="name" name="name" placeholder="Jane Smith" maxlength="100" autocomplete="name"/>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0">
+                            <label class="form-label" for="company">Company <span>optional</span></label>
+                            <input class="form-input" type="text" id="company" name="company" placeholder="Acme Corp" maxlength="100" autocomplete="organization"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top:14px">
+                        <label class="form-label" for="size">Team size <span>optional</span></label>
+                        <select class="form-select" id="size" name="size">
+                            <option value="" disabled selected>Select range</option>
+                            <option value="1-10">1 – 10 engineers</option>
+                            <option value="11-50">11 – 50 engineers</option>
+                            <option value="51-200">51 – 200 engineers</option>
+                            <option value="201+">201+ engineers</option>
+                        </select>
+                    </div>
+
+                    <div class="submit-row" style="margin-top:20px">
+                        <button type="submit" class="btn-submit" id="submit-btn">
+                            <span id="btn-label">Join the waitlist</span>
+                            <svg id="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        </button>
+                    </div>
+
+                    <p style="font-size:12px;color:var(--text4);margin-top:12px;text-align:center">No spam. No commitment. Unsubscribe any time.</p>
+                </form>
+            </div>
         </div>
+
     </div>
 </div>
 
 <!-- PERKS -->
 <section>
     <div class="section-inner">
-        <div class="section-label">What you get</div>
-        <h2 class="section-title">Everything your team needs to ship faster</h2>
-        <p class="section-sub">Enterprise partnerships come with dedicated resources and direct access to the FractalX team.</p>
+        <div class="section-label">What's included</div>
+        <h2 class="section-title">What FractalX Enterprise will offer</h2>
+        <p class="section-sub">We're designing the enterprise tier around real teams migrating real monoliths. Here's what's planned.</p>
         <div class="perks">
             <div class="perk">
                 <div class="perk-icon orange">
@@ -308,127 +428,35 @@
 <!-- PROCESS -->
 <section>
     <div class="section-inner">
-        <div class="section-label">How it works</div>
-        <h2 class="section-title">From inquiry to production in three steps</h2>
-        <p class="section-sub">We keep the process simple. No lengthy sales cycles — just a focused conversation and a clear path forward.</p>
+        <div class="section-label">What happens next</div>
+        <h2 class="section-title">How the waitlist works</h2>
+        <p class="section-sub">Simple, transparent, and no commitment required at any stage.</p>
         <div class="process">
             <div class="step">
                 <div class="step-num">01</div>
-                <div class="step-title">Tell us about your stack</div>
-                <div class="step-body">Fill in the form below with your company details and what you're trying to achieve. A few lines is enough to get started.</div>
+                <div class="step-title">Join the waitlist</div>
+                <div class="step-body">Drop your email above. That's all it takes — we only ask for more when it's useful to you.</div>
             </div>
             <div class="step">
                 <div class="step-num">02</div>
-                <div class="step-title">We schedule a call</div>
-                <div class="step-body">A member of the FractalX team will reach out within 1–2 business days to set up an architecture discovery session.</div>
+                <div class="step-title">We reach out early</div>
+                <div class="step-body">Waitlist members get early access before the public launch, along with a short intro call to understand your needs.</div>
             </div>
             <div class="step">
                 <div class="step-num">03</div>
-                <div class="step-title">Build your plan</div>
-                <div class="step-body">We put together a tailored migration plan and engagement scope. You decide the pace — we provide the expertise.</div>
+                <div class="step-title">Get onboarded first</div>
+                <div class="step-body">Early members get founding pricing, hands-on onboarding, and a direct line to the team throughout their migration.</div>
             </div>
         </div>
     </div>
 </section>
-
-<hr class="divider"/>
-
-<!-- CONTACT FORM -->
-<div class="form-section" id="contact">
-    <div class="form-wrap">
-        <div class="form-head">
-            <div class="section-label" style="margin-bottom:10px">Get in touch</div>
-            <div class="form-title">Start a conversation</div>
-            <p class="form-sub">Tell us a little about your company and what you're working on. We'll follow up within 1–2 business days.</p>
-        </div>
-
-        <!-- SUCCESS STATE -->
-        <div id="form-success" class="form-notice success hidden">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <div class="form-notice-body">
-                <strong>We got your message!</strong>
-                Someone from the FractalX team will be in touch shortly.
-            </div>
-        </div>
-
-        <!-- ERROR STATE -->
-        <div id="form-error" class="form-notice error hidden">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <div class="form-notice-body">
-                <strong>Something went wrong.</strong>
-                <span id="form-error-msg">Please try again in a moment.</span>
-            </div>
-        </div>
-
-        <form id="partnership-form" novalidate>
-            <!-- Honeypot — must stay empty -->
-            <div class="form-hp" aria-hidden="true">
-                <label for="hp-website">Leave this blank</label>
-                <input type="text" id="hp-website" name="website" tabindex="-1" autocomplete="off"/>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label" for="company">Company name <span>*</span></label>
-                    <input class="form-input" type="text" id="company" name="company" placeholder="Acme Corp" required maxlength="100" autocomplete="organization"/>
-                </div>
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label" for="email">Work email <span>*</span></label>
-                    <input class="form-input" type="email" id="email" name="email" placeholder="you@company.com" required maxlength="200" autocomplete="email"/>
-                </div>
-            </div>
-
-            <div class="form-row" style="margin-top:14px">
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label" for="size">Company size</label>
-                    <select class="form-select" id="size" name="size">
-                        <option value="" disabled selected>Select range</option>
-                        <option value="1-10">1 – 10 employees</option>
-                        <option value="11-50">11 – 50 employees</option>
-                        <option value="51-200">51 – 200 employees</option>
-                        <option value="201-1000">201 – 1,000 employees</option>
-                        <option value="1000+">1,000+ employees</option>
-                    </select>
-                </div>
-                <div class="form-group" style="margin-bottom:0">
-                    <label class="form-label" for="interest">Area of interest</label>
-                    <select class="form-select" id="interest" name="interest">
-                        <option value="" disabled selected>Select one</option>
-                        <option value="migration">Monolith migration</option>
-                        <option value="architecture-review">Architecture review</option>
-                        <option value="enterprise-support">Enterprise support</option>
-                        <option value="training">Team training</option>
-                        <option value="partnership">Technology partnership</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group" style="margin-top:14px">
-                <label class="form-label" for="message">Tell us more <span>optional</span></label>
-                <textarea class="form-textarea" id="message" name="message" placeholder="A brief description of your system, team size, timeline, or anything else useful..." maxlength="500" rows="4"></textarea>
-                <div class="form-footer">
-                    <div></div>
-                    <div class="char-count" id="char-count">0 / 500</div>
-                </div>
-            </div>
-
-            <div class="submit-row">
-                <button type="submit" class="btn-submit" id="submit-btn">
-                    <span id="btn-label">Send message</span>
-                    <svg id="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
 
 <!-- TRUST ROW -->
 <div class="trust">
     <div class="trust-inner">
         <div class="trust-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Response within 1–2 business days
+            No spam, ever
         </div>
         <div class="trust-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -436,7 +464,7 @@
         </div>
         <div class="trust-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Your data stays private
+            Unsubscribe any time
         </div>
         <div class="trust-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -474,15 +502,13 @@
         const isLight = document.documentElement.classList.toggle('light');
         localStorage.setItem('frx-theme', isLight ? 'light' : 'dark');
     }
-
-    // Character counter
-    const textarea = document.getElementById('message');
-    const charCount = document.getElementById('char-count');
-    textarea.addEventListener('input', () => {
-        const len = textarea.value.length;
-        charCount.textContent = len + ' / 500';
-        charCount.classList.toggle('warn', len > 450);
-    });
+    let mobOpen = false;
+    function toggleMob(){
+        mobOpen = !mobOpen;
+        document.getElementById('mob-menu').classList.toggle('open', mobOpen);
+        document.body.style.overflow = mobOpen ? 'hidden' : '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && mobOpen) toggleMob(); });
 
     // Form submit
     document.getElementById('partnership-form').addEventListener('submit', async (e) => {
@@ -496,37 +522,31 @@
         const errorEl = document.getElementById('form-error');
         const errorMsg = document.getElementById('form-error-msg');
 
-        // Hide previous notices
         successEl.classList.add('hidden');
         errorEl.classList.add('hidden');
 
-        // Client-side validation
-        const company = form.company.value.trim();
         const email = form.email.value.trim();
-        if (!company || !email) {
-            errorMsg.textContent = 'Company name and email are required.';
+        if (!email) {
+            errorMsg.textContent = 'Email is required.';
             errorEl.classList.remove('hidden');
             return;
         }
-        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        if (!emailOk) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             errorMsg.textContent = 'Please enter a valid email address.';
             errorEl.classList.remove('hidden');
             return;
         }
 
-        // Loading state
         btn.disabled = true;
-        btnLabel.textContent = 'Sending…';
+        btnLabel.textContent = 'Joining…';
         btnIcon.style.display = 'none';
         btn.insertAdjacentHTML('beforeend', '<div class="spinner" id="spin"></div>');
 
         const payload = {
-            company,
             email,
+            name: form.name.value.trim(),
+            company: form.company.value.trim(),
             size: form.size.value || '',
-            interest: form.interest.value || '',
-            message: form.message.value.trim(),
             website: form.website.value // honeypot
         };
 
@@ -540,7 +560,6 @@
 
             if (res.ok && data.success) {
                 form.reset();
-                charCount.textContent = '0 / 500';
                 successEl.classList.remove('hidden');
                 successEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             } else {
@@ -552,7 +571,7 @@
             errorEl.classList.remove('hidden');
         } finally {
             btn.disabled = false;
-            btnLabel.textContent = 'Send message';
+            btnLabel.textContent = 'Join the waitlist';
             btnIcon.style.display = '';
             document.getElementById('spin')?.remove();
         }
