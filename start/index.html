@@ -986,6 +986,8 @@ function updatePreview() {
     dir(3, 'java');
     pkgParts.forEach((p, i) => dir(3+i, p));
     file(baseIndent, appClass+'Tests.java');
+    dir(3, 'resources');
+    file(4, 'application.yml', true);  // test-profile overrides
 
     tree.innerHTML = rows.join('');
 }
@@ -1017,6 +1019,9 @@ async function generate() {
         zip.file(`${root}/src/main/resources/application.yml`, genAppYml(spec));
         zip.file(`${root}/src/main/resources/application-dev.yml`, genDevYml());
         zip.file(`${root}/src/main/resources/fractalx-config.yml`, genFractalxConfig(spec));
+
+        // Test-profile overrides: H2 for all JPA + fractalx-runtime auto-config disabled
+        zip.file(`${root}/src/test/resources/application.yml`, genTestYml(spec));
 
         // Per-service
         spec.services.forEach(svc => {
@@ -1179,7 +1184,7 @@ function genPom(spec) {
 
     <properties>
         <java.version>${spec.javaVersion}</java.version>
-        <fractalx.version>0.3.2-SNAPSHOT</fractalx.version>
+        <fractalx.version>0.3.1-SNAPSHOT</fractalx.version>
     </properties>
 
     <dependencies>
@@ -1325,18 +1330,79 @@ ${schedulingAnnotation}public class ${cls} {
 function genAppTest(spec) {
     const pkg = resolvedPackage(spec);
     const cls = appClassName(spec);
+    // webEnvironment = NONE: no Tomcat, no port binding — context wiring only.
+    // @ActiveProfiles("test"): picks up src/test/resources/application.yml which
+    //   forces H2 for all JPA and disables fractalx-runtime auto-configuration that
+    //   would otherwise try to reach a service registry or external endpoints.
     return `package ${pkg};
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@ActiveProfiles("test")
 class ${cls}Tests {
 
     @Test
     void contextLoads() {
+        // Verifies the Spring context assembles without errors.
+        // Full HTTP tests live in src/test/java/.../integration/.
     }
 }
+`;
+}
+
+function genTestYml(spec) {
+    const pkg = resolvedPackage(spec);
+    // Build a datasource block: force H2 for every service regardless of what
+    // was chosen in the wizard, so no external DB is required during mvn test.
+    const dsBlock = spec.services.some(s => s.db !== 'mongodb' && s.db !== 'redis')
+        ? `  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: false
+`
+        : '';
+
+    return `# src/test/resources/application.yml
+# Overrides main application.yml for the "test" Spring profile.
+# Activated automatically by @ActiveProfiles("test") in *Tests classes.
+
+spring:
+${dsBlock}  autoconfigure:
+    exclude:
+      # Disable fractalx-runtime auto-configurations that connect to external
+      # services (service registry, logger, OTEL collector) at context startup.
+      - com.fractalx.runtime.registry.FractalServiceRegistryAutoConfiguration
+      - com.fractalx.runtime.trace.TraceContextAutoConfiguration
+      - com.fractalx.runtime.logging.FractalLogAppenderAutoConfiguration
+
+fractalx:
+  registry-url: ''      # empty — prevents HTTP calls to registry on startup
+  logger-url: ''
+  otel-endpoint: ''
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+logging:
+  level:
+    root: WARN
+    ${pkg}: INFO
 `;
 }
 
