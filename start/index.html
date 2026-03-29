@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>FractalX Initializr — Scaffold Your Modular Monolith</title>
+    <meta name="description" content="Generate a production-ready FractalX-annotated monolith with services, entities, sagas, and full infrastructure — ready for mvn fractalx:decompose on day one."/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        (function(){
+            const saved = localStorage.getItem('frx-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (saved === 'light' || (!saved && !prefersDark)) document.documentElement.classList.add('light');
+        })();
+    </script>
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+        :root{
+            --bg:#000;--bg1:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
+            --border:#1f1f1f;--border2:#272727;--border3:#333;--border4:#444;
+            --text:#ededed;--text2:#a1a1aa;--text3:#71717a;--text4:#3f3f46;
+            --white:#fff;
+            --orange:#f4600c;--orange2:#e0540a;--orange-dim:rgba(244,96,12,.10);--orange-glow:rgba(244,96,12,.18);
+            --gold:#f5a800;--gold-dim:rgba(245,168,0,.10);
+            --green:#50e3c2;--green-dim:rgba(80,227,194,.08);
+            --blue:#3291ff;--blue-dim:rgba(50,145,255,.10);
+            --red:#ff4444;--red-dim:rgba(255,68,68,.08);
+            --nav-bg:rgba(0,0,0,.80);
+            --r:8px;--font:'Geist',sans-serif;--mono:'Geist Mono',monospace;
+        }
+        html.light{
+            --bg:#fff;--bg1:#fafafa;--bg2:#f4f4f5;--bg3:#e4e4e7;--bg4:#d4d4d8;
+            --border:#e4e4e7;--border2:#d4d4d8;--border3:#a1a1aa;--border4:#71717a;
+            --text:#09090b;--text2:#52525b;--text3:#71717a;--text4:#a1a1aa;
+            --white:#09090b;
+            --orange:#d4510a;--orange2:#c04608;--orange-dim:rgba(212,81,10,.07);--orange-glow:rgba(212,81,10,.12);
+            --gold:#c47a00;--gold-dim:rgba(196,122,0,.07);
+            --green:#067a6f;--green-dim:rgba(6,122,111,.07);
+            --blue:#0070f3;--blue-dim:rgba(0,112,243,.07);
+            --red:#cc0000;--red-dim:rgba(204,0,0,.07);
+            --nav-bg:rgba(255,255,255,.85);
+        }
+
+        html{scroll-behavior:smooth}
+        body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s;overflow-x:hidden;min-height:100vh}
+        ::-webkit-scrollbar{width:4px}
+        ::-webkit-scrollbar-thumb{background:var(--border3);border-radius:4px}
+        a{color:inherit;text-decoration:none}
+
+        /* NAV */
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;background:var(--nav-bg);backdrop-filter:blur(16px) saturate(180%);border-bottom:1px solid var(--border);transition:background .2s,border-color .2s}
+        .nav-inner{max-width:1320px;margin:0 auto;padding:0 24px;width:100%;display:flex;align-items:center;gap:32px}
+        .nav-logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;color:var(--text);letter-spacing:-.2px;flex-shrink:0}
+        .logo-mark{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;flex-shrink:0}
+        .logo-mark svg{width:14px;height:14px}
+        .nav-links{display:flex;align-items:center;gap:2px;margin-left:8px}
+        .nav-link{font-size:13.5px;color:var(--text2);padding:6px 11px;border-radius:6px;transition:color .15s,background .15s;cursor:pointer;white-space:nowrap}
+        .nav-link:hover{color:var(--text);background:var(--bg2)}
+        .nav-link.active{color:var(--orange);background:var(--orange-dim)}
+        .nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
+        .tt{width:34px;height:34px;border-radius:7px;border:1px solid var(--border2);background:var(--bg1);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;padding:0;flex-shrink:0}
+        .tt:hover{border-color:var(--border3);background:var(--bg2)}
+        .tt svg{width:15px;height:15px;color:var(--text3);display:block}
+        .tt .ic-moon{display:block}.tt .ic-sun{display:none}
+        html.light .tt .ic-moon{display:none}
+        html.light .tt .ic-sun{display:block}
+        .ham{display:none;width:36px;height:36px;border:1px solid var(--border2);background:var(--bg1);border-radius:7px;cursor:pointer;align-items:center;justify-content:center;padding:0;flex-shrink:0}
+        .ham svg{width:16px;height:16px;color:var(--text2)}
+        .mob-menu{display:none;position:fixed;top:56px;left:0;right:0;background:var(--bg1);border-bottom:1px solid var(--border);padding:12px 16px;z-index:99;flex-direction:column;gap:4px}
+        .mob-menu.open{display:flex}
+        .mob-link{font-size:14px;color:var(--text2);padding:10px 12px;border-radius:6px;transition:color .15s,background .15s}
+        .mob-link:hover{color:var(--text);background:var(--bg2)}
+        .mob-link.active{color:var(--orange);background:var(--orange-dim)}
+        @media(max-width:900px){.nav-links{display:none}.ham{display:inline-flex}}
+
+        /* PAGE HEADER */
+        .page-header{padding:80px 24px 32px;text-align:center;border-bottom:1px solid var(--border);background:var(--bg1)}
+        .page-header-tag{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-family:var(--mono);color:var(--text3);background:var(--bg2);border:1px solid var(--border2);padding:4px 12px;border-radius:20px;margin-bottom:16px}
+        .page-header-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange)}
+        .page-h{font-size:clamp(28px,5vw,46px);font-weight:800;letter-spacing:-1.5px;color:var(--white);margin-bottom:10px;line-height:1.1}
+        .page-h .hl{color:var(--orange)}
+        .page-sub{font-size:15px;color:var(--text2);max-width:500px;margin:0 auto}
+
+        /* MAIN LAYOUT */
+        .initializr{display:grid;grid-template-columns:220px 1fr 280px;min-height:calc(100vh - 56px - 120px);align-items:start}
+        @media(max-width:1100px){.initializr{grid-template-columns:200px 1fr 240px}}
+        @media(max-width:860px){.initializr{grid-template-columns:1fr}.preview-col{display:none}.steps-col{display:none}}
+
+        /* STEPS SIDEBAR */
+        .steps-col{border-right:1px solid var(--border);padding:24px 16px;position:sticky;top:56px;max-height:calc(100vh - 56px);overflow-y:auto}
+        .step-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s;margin-bottom:2px;font-size:13.5px;color:var(--text2)}
+        .step-item:hover{background:var(--bg2);color:var(--text)}
+        .step-item.active{background:var(--orange-dim);color:var(--orange)}
+        .step-item.done{color:var(--green)}
+        .step-item.done .step-num{background:var(--green-dim);color:var(--green);border-color:rgba(80,227,194,.2)}
+        .step-item.active .step-num{background:var(--orange-dim);color:var(--orange);border-color:rgba(244,96,12,.2)}
+        .step-num{width:22px;height:22px;border-radius:6px;border:1px solid var(--border3);background:var(--bg2);display:grid;place-items:center;font-size:11px;font-family:var(--mono);flex-shrink:0;font-weight:600;transition:all .15s}
+        .step-label{font-weight:500}
+        .steps-divider{height:1px;background:var(--border);margin:12px 0}
+
+        /* FORM AREA */
+        .form-col{border-right:1px solid var(--border);min-height:calc(100vh - 56px - 120px)}
+        .form-panel{display:none;padding:28px 32px;animation:fadein .15s}
+        .form-panel.active{display:block}
+        @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+        .panel-title{font-size:18px;font-weight:700;color:var(--white);letter-spacing:-.3px;margin-bottom:4px}
+        .panel-sub{font-size:13px;color:var(--text3);margin-bottom:24px}
+
+        /* FORM ELEMENTS */
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+        .form-row.single{grid-template-columns:1fr}
+        .form-row.triple{grid-template-columns:1fr 1fr 1fr}
+        .form-group{display:flex;flex-direction:column;gap:6px}
+        .form-label{font-size:12.5px;font-weight:500;color:var(--text2)}
+        .form-label span{color:var(--text3);font-weight:400}
+        .form-input{background:var(--bg1);border:1px solid var(--border2);border-radius:7px;padding:9px 12px;font-size:13.5px;color:var(--text);font-family:var(--font);transition:border-color .15s,box-shadow .15s;outline:none;width:100%}
+        .form-input:focus{border-color:var(--border3);box-shadow:0 0 0 3px var(--orange-dim)}
+        .form-select{background:var(--bg1);border:1px solid var(--border2);border-radius:7px;padding:9px 12px;font-size:13.5px;color:var(--text);font-family:var(--font);outline:none;width:100%;cursor:pointer;transition:border-color .15s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+        .form-select:focus{border-color:var(--border3);box-shadow:0 0 0 3px var(--orange-dim)}
+        html.light .form-input,html.light .form-select{background:var(--bg);border-color:var(--border2);color:var(--text)}
+        .hint{font-size:11.5px;color:var(--text3);margin-top:2px}
+
+        /* CHIPS (Java version, security type etc.) */
+        .chips{display:flex;flex-wrap:wrap;gap:8px}
+        .chip{padding:7px 14px;border-radius:7px;border:1px solid var(--border2);background:var(--bg1);font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--font)}
+        .chip:hover{border-color:var(--border3);color:var(--text)}
+        .chip.sel{border-color:var(--orange);background:var(--orange-dim);color:var(--orange)}
+
+        /* SERVICES */
+        .svc-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+        .svc-card{border:1px solid var(--border2);border-radius:10px;background:var(--bg1);overflow:hidden;transition:border-color .15s}
+        .svc-card:hover{border-color:var(--border3)}
+        .svc-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}
+        .svc-name{font-size:14px;font-weight:600;color:var(--white);flex:1;letter-spacing:-.2px}
+        .svc-meta{display:flex;align-items:center;gap:8px}
+        .svc-badge{font-size:11px;font-family:var(--mono);padding:3px 8px;border-radius:4px;background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+        .svc-badge.port{color:var(--blue);background:var(--blue-dim);border-color:rgba(50,145,255,.15)}
+        .svc-badge.db{color:var(--gold);background:var(--gold-dim);border-color:rgba(245,168,0,.15)}
+        .svc-chevron{color:var(--text4);transition:transform .15s;flex-shrink:0}
+        .svc-chevron.open{transform:rotate(180deg)}
+        .svc-body{display:none;border-top:1px solid var(--border);padding:16px}
+        .svc-body.open{display:block}
+        .svc-body .form-row{margin-bottom:12px}
+        .svc-del{width:28px;height:28px;border:1px solid var(--border2);background:transparent;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--text4);transition:all .15s;flex-shrink:0}
+        .svc-del:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+        .svc-del svg{width:13px;height:13px}
+
+        /* ENTITIES */
+        .entity-section{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+        .entity-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;letter-spacing:.03em;text-transform:uppercase}
+        .entity-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+        .entity-row{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:8px 12px}
+        .entity-name{font-size:13px;font-weight:600;color:var(--white);flex:1}
+        .entity-fields{font-size:11.5px;color:var(--text3);font-family:var(--mono);flex:2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .entity-del{width:24px;height:24px;border:none;background:transparent;cursor:pointer;color:var(--text4);display:flex;align-items:center;justify-content:center;border-radius:4px;padding:0;transition:color .15s,background .15s}
+        .entity-del:hover{color:var(--red);background:var(--red-dim)}
+        .entity-del svg{width:12px;height:12px}
+        .add-entity-btn{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text3);border:1px dashed var(--border2);background:transparent;border-radius:6px;padding:6px 12px;cursor:pointer;transition:all .15s;font-family:var(--font)}
+        .add-entity-btn:hover{color:var(--orange);border-color:var(--orange);background:var(--orange-dim)}
+        .entity-form{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:14px;margin-top:8px}
+        .entity-form.hidden{display:none}
+        .field-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+        .field-row .form-input{flex:1}
+        .field-del{width:28px;height:28px;border:1px solid var(--border2);border-radius:6px;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text4);transition:all .15s;flex-shrink:0}
+        .field-del:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+        .field-del svg{width:12px;height:12px}
+        .add-field-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);background:transparent;border:none;cursor:pointer;padding:4px 0;transition:color .15s;font-family:var(--font)}
+        .add-field-btn:hover{color:var(--orange)}
+
+        /* ADD SERVICE BUTTON */
+        .add-svc-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border:1px dashed var(--border2);border-radius:10px;background:transparent;color:var(--text3);font-size:13.5px;cursor:pointer;transition:all .15s;font-family:var(--font)}
+        .add-svc-btn:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-dim)}
+
+        /* DEPENDENCY MATRIX */
+        .dep-matrix{overflow-x:auto;margin-top:8px}
+        .dep-table{width:100%;border-collapse:collapse;font-size:12.5px}
+        .dep-table th,.dep-table td{padding:8px 12px;border:1px solid var(--border);text-align:center}
+        .dep-table th{font-weight:500;color:var(--text2);background:var(--bg2);font-family:var(--mono);font-size:11.5px}
+        .dep-table th.row-h{text-align:left;white-space:nowrap}
+        .dep-table td{background:var(--bg1)}
+        .dep-table td.self{background:var(--bg3)}
+        .dep-cb{width:16px;height:16px;accent-color:var(--orange);cursor:pointer}
+        .dep-empty{text-align:center;color:var(--text3);font-size:13px;padding:24px 0}
+
+        /* SAGAS */
+        .saga-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+        .saga-card{border:1px solid var(--border2);border-radius:10px;background:var(--bg1);overflow:hidden}
+        .saga-header{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer}
+        .saga-id{font-size:13.5px;font-weight:600;color:var(--white);flex:1;font-family:var(--mono)}
+        .saga-owner-badge{font-size:11px;padding:2px 8px;border-radius:4px;background:var(--orange-dim);color:var(--orange);border:1px solid rgba(244,96,12,.2);font-family:var(--mono)}
+        .saga-del{width:26px;height:26px;border:1px solid var(--border2);background:transparent;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text4);transition:all .15s;flex-shrink:0}
+        .saga-del:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+        .saga-del svg{width:12px;height:12px}
+        .saga-body{display:none;border-top:1px solid var(--border);padding:16px}
+        .saga-body.open{display:block}
+        .steps-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+        .step-row{display:flex;align-items:center;gap:8px}
+        .step-num-badge{width:20px;height:20px;border-radius:4px;background:var(--bg3);border:1px solid var(--border3);display:grid;place-items:center;font-size:10px;font-family:var(--mono);color:var(--text3);flex-shrink:0}
+        .step-row .form-input{flex:1}
+        .step-row-del{width:26px;height:26px;border:1px solid var(--border2);background:transparent;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text4);transition:all .15s;flex-shrink:0}
+        .step-row-del:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+        .step-row-del svg{width:11px;height:11px}
+        .add-step-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);background:transparent;border:none;cursor:pointer;padding:4px 0;transition:color .15s;font-family:var(--font)}
+        .add-step-btn:hover{color:var(--orange)}
+        .add-saga-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border:1px dashed var(--border2);border-radius:10px;background:transparent;color:var(--text3);font-size:13.5px;cursor:pointer;transition:all .15s;font-family:var(--font)}
+        .add-saga-btn:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-dim)}
+
+        /* INFRA TOGGLES */
+        .toggle-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+        @media(max-width:580px){.toggle-grid{grid-template-columns:1fr}}
+        .toggle-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border2);border-radius:9px;background:var(--bg1);cursor:pointer;transition:all .15s}
+        .toggle-card:hover{border-color:var(--border3)}
+        .toggle-card.on{border-color:var(--orange);background:var(--orange-dim)}
+        .toggle-icon{font-size:20px;flex-shrink:0}
+        .toggle-info{flex:1}
+        .toggle-name{font-size:13.5px;font-weight:600;color:var(--white);line-height:1.3}
+        .toggle-desc{font-size:12px;color:var(--text3);margin-top:1px}
+        .toggle-switch{width:36px;height:20px;border-radius:10px;background:var(--bg3);border:1px solid var(--border2);position:relative;flex-shrink:0;transition:background .15s,border-color .15s}
+        .toggle-switch::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:var(--text4);top:2px;left:2px;transition:transform .15s,background .15s}
+        .toggle-card.on .toggle-switch{background:var(--orange);border-color:var(--orange)}
+        .toggle-card.on .toggle-switch::after{transform:translateX(16px);background:#fff}
+
+        /* BOTTOM NAV */
+        .form-nav{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-top:1px solid var(--border);background:var(--bg1);position:sticky;bottom:0;z-index:10}
+        .btn{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:500;padding:9px 18px;border-radius:8px;cursor:pointer;transition:all .15s;border:none;font-family:var(--font);white-space:nowrap}
+        .btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+        .btn-ghost:hover{color:var(--text);background:var(--bg2);border-color:var(--border3)}
+        .btn-primary{background:var(--orange);color:#fff}
+        .btn-primary:hover{background:var(--orange2);box-shadow:0 0 20px var(--orange-glow)}
+        .btn svg{width:14px;height:14px}
+        .step-progress{display:flex;align-items:center;gap:8px}
+        .prog-dot{width:7px;height:7px;border-radius:50%;background:var(--border3);transition:all .2s;cursor:pointer}
+        .prog-dot.active{background:var(--orange);width:18px;border-radius:4px}
+        .prog-dot.done{background:var(--green)}
+
+        /* PREVIEW PANEL */
+        .preview-col{border-left:1px solid var(--border);padding:0;position:sticky;top:56px;max-height:calc(100vh - 56px);overflow-y:auto}
+        .preview-header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg1)}
+        .preview-title{font-size:12.5px;font-weight:600;color:var(--text2);letter-spacing:.04em;text-transform:uppercase}
+        .download-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:7px 13px;border-radius:7px;cursor:pointer;background:var(--orange);color:#fff;border:none;font-family:var(--font);transition:all .15s}
+        .download-btn:hover{background:var(--orange2)}
+        .download-btn svg{width:13px;height:13px}
+        .download-btn:disabled{opacity:.4;cursor:not-allowed}
+        .file-tree{padding:14px 12px;font-family:var(--mono);font-size:12px;line-height:1.8}
+        .tree-node{display:flex;align-items:center;gap:6px;color:var(--text3);white-space:nowrap;padding:1px 0}
+        .tree-node.dir{color:var(--text2);font-weight:500}
+        .tree-node.file:hover{color:var(--text)}
+        .tree-icon{flex-shrink:0;font-size:11px;opacity:.7}
+        .tree-indent{display:inline-block;width:16px;flex-shrink:0}
+
+        /* MOBILE CTA */
+        .mobile-generate{display:none;position:fixed;bottom:0;left:0;right:0;padding:16px 20px;background:var(--bg1);border-top:1px solid var(--border);z-index:50}
+        @media(max-width:860px){.mobile-generate{display:block}.form-nav{position:static}}
+        .mobile-generate .btn{width:100%;justify-content:center;padding:13px}
+
+        /* TOAST */
+        .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:11px 18px;font-size:13px;color:var(--text);display:none;align-items:center;gap:8px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.3);opacity:0;transition:opacity .2s,transform .2s}
+        .toast.show{display:flex;opacity:1;transform:translateX(-50%) translateY(0)}
+        .toast.green{border-color:rgba(80,227,194,.3);color:var(--green)}
+        .toast svg{width:15px;height:15px;flex-shrink:0}
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+    <div class="nav-inner">
+        <a class="nav-logo" href="/">
+            <div class="logo-mark">
+                <svg viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="var(--orange)"/>
+                    <path d="M18.2837 0H148.284V40H18.2837V0Z" fill="var(--orange)"/>
+                    <path d="M59.2837 66H148.284V106H59.2837V66Z" fill="var(--orange)"/>
+                    <path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="var(--orange)"/>
+                </svg>
+            </div>
+            FractalX
+        </a>
+        <div class="nav-links">
+            <a class="nav-link" href="/docs/">Docs</a>
+            <a class="nav-link" href="/blog/">Blog</a>
+            <a class="nav-link" href="/contribute/">Contribute</a>
+            <a class="nav-link" href="/corporate/">Enterprise</a>
+        </div>
+        <div class="nav-right">
+            <button class="tt" onclick="toggleTheme()" aria-label="Toggle theme">
+                <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            </button>
+            <button class="ham" onclick="toggleMob()" aria-label="Menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+<div class="mob-menu" id="mob-menu">
+    <a class="mob-link" href="/docs/">Docs</a>
+    <a class="mob-link" href="/blog/">Blog</a>
+    <a class="mob-link" href="/contribute/">Contribute</a>
+    <a class="mob-link" href="/corporate/">Enterprise</a>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div class="page-header-tag"><span class="dot"></span>mvn fractalx:init</div>
+    <h1 class="page-h">FractalX <span class="hl">Initializr</span></h1>
+    <p class="page-sub">Spring Initializr for distributed systems. Define your bounded contexts, download a decomposition-ready monolith.</p>
+</div>
+
+<!-- MAIN -->
+<div class="initializr">
+
+    <!-- STEP NAV -->
+    <div class="steps-col">
+        <div id="step-nav"></div>
+    </div>
+
+    <!-- FORM -->
+    <div class="form-col">
+        <!-- Step 1: Project -->
+        <div class="form-panel active" data-step="0">
+            <div style="padding:28px 32px 0">
+                <div class="panel-title">Project</div>
+                <div class="panel-sub">Basic metadata for the generated monolith.</div>
+            </div>
+            <div style="padding:0 32px">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Group ID</label>
+                        <input class="form-input" id="groupId" value="com.example" oninput="updatePreview()"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Artifact ID</label>
+                        <input class="form-input" id="artifactId" value="my-platform" oninput="updatePreview()"/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Version</label>
+                        <input class="form-input" id="version" value="1.0.0-SNAPSHOT" oninput="updatePreview()"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Spring Boot</label>
+                        <select class="form-select" id="springBoot" onchange="updatePreview()">
+                            <option value="3.4.1">3.4.1</option>
+                            <option value="3.3.6">3.3.6</option>
+                            <option value="3.2.5" selected>3.2.5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row single">
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <input class="form-input" id="description" value="FractalX modular monolith" oninput="updatePreview()"/>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:20px">
+                    <label class="form-label">Java Version</label>
+                    <div class="chips" id="java-chips">
+                        <div class="chip sel" data-val="17" onclick="selectChip('java',this)">Java 17</div>
+                        <div class="chip" data-val="21" onclick="selectChip('java',this)">Java 21</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Services -->
+        <div class="form-panel" data-step="1">
+            <div style="padding:28px 32px 0">
+                <div class="panel-title">Services</div>
+                <div class="panel-sub">Define each bounded-context service. Add entities and their fields per service.</div>
+            </div>
+            <div style="padding:16px 32px 0" id="svc-list-container">
+                <div class="svc-list" id="svc-list"></div>
+                <button class="add-svc-btn" onclick="addService()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 5v14M5 12h14"/></svg>
+                    Add service
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Dependencies -->
+        <div class="form-panel" data-step="2">
+            <div style="padding:28px 32px 0">
+                <div class="panel-title">Dependencies</div>
+                <div class="panel-sub">Check which services call other services. This populates <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">dependencies={}</code> on each <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@DecomposableModule</code>.</div>
+            </div>
+            <div style="padding:16px 32px 0" id="dep-matrix-container">
+                <div class="dep-matrix" id="dep-matrix"></div>
+            </div>
+        </div>
+
+        <!-- Step 4: Sagas -->
+        <div class="form-panel" data-step="3">
+            <div style="padding:28px 32px 0">
+                <div class="panel-title">Distributed Sagas</div>
+                <div class="panel-sub">Define multi-service transactions. Annotates orchestrator methods with <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@DistributedSaga</code>.</div>
+            </div>
+            <div style="padding:16px 32px 0">
+                <div class="saga-list" id="saga-list"></div>
+                <button class="add-saga-btn" onclick="addSaga()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 5v14M5 12h14"/></svg>
+                    Add saga
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 5: Infrastructure -->
+        <div class="form-panel" data-step="4">
+            <div style="padding:28px 32px 0">
+                <div class="panel-title">Infrastructure</div>
+                <div class="panel-sub">Choose which infrastructure components to generate alongside the monolith source.</div>
+            </div>
+            <div style="padding:16px 32px 0">
+                <div class="toggle-grid" id="infra-toggles">
+                    <div class="toggle-card on" data-key="gateway" onclick="toggleInfra(this)">
+                        <span class="toggle-icon">🔀</span>
+                        <div class="toggle-info"><div class="toggle-name">API Gateway</div><div class="toggle-desc">fractalx-gateway on port 9999</div></div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-card on" data-key="admin" onclick="toggleInfra(this)">
+                        <span class="toggle-icon">📊</span>
+                        <div class="toggle-info"><div class="toggle-name">Admin Dashboard</div><div class="toggle-desc">fractalx-admin on port 9090</div></div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-card on" data-key="registry" onclick="toggleInfra(this)">
+                        <span class="toggle-icon">📡</span>
+                        <div class="toggle-info"><div class="toggle-name">Service Registry</div><div class="toggle-desc">fractalx-registry on port 8761</div></div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-card on" data-key="docker" onclick="toggleInfra(this)">
+                        <span class="toggle-icon">🐳</span>
+                        <div class="toggle-info"><div class="toggle-name">Docker Compose</div><div class="toggle-desc">docker-compose.dev.yml with DB containers</div></div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-card on" data-key="ci" onclick="toggleInfra(this)">
+                        <span class="toggle-icon">⚙️</span>
+                        <div class="toggle-info"><div class="toggle-name">GitHub Actions CI</div><div class="toggle-desc">.github/workflows/ci.yml</div></div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-card" data-key="kubernetes" onclick="toggleInfra(this)">
+                        <span class="toggle-icon">☸️</span>
+                        <div class="toggle-info"><div class="toggle-name">Kubernetes</div><div class="toggle-desc">k8s/ manifests per service</div></div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6: Security -->
+        <div class="form-panel" data-step="5">
+            <div style="padding:28px 32px 0">
+                <div class="panel-title">Security</div>
+                <div class="panel-sub">Authentication strategy for the generated application. Configures gateway security and per-service stubs.</div>
+            </div>
+            <div style="padding:16px 32px 0">
+                <div class="form-group" style="margin-bottom:20px">
+                    <label class="form-label">Authentication type</label>
+                    <div class="chips" id="sec-chips" style="margin-top:4px">
+                        <div class="chip sel" data-val="none" onclick="selectChip('sec',this)">None</div>
+                        <div class="chip" data-val="jwt" onclick="selectChip('sec',this)">JWT / Bearer</div>
+                        <div class="chip" data-val="oauth2" onclick="selectChip('sec',this)">OAuth2 / OIDC</div>
+                        <div class="chip" data-val="apikey" onclick="selectChip('sec',this)">API Key</div>
+                    </div>
+                </div>
+                <div id="sec-desc" style="font-size:13px;color:var(--text2);background:var(--bg1);border:1px solid var(--border);border-radius:8px;padding:14px 16px;line-height:1.7"></div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAV -->
+        <div class="form-nav">
+            <button class="btn btn-ghost" id="prev-btn" onclick="prevStep()" style="visibility:hidden">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                Back
+            </button>
+            <div class="step-progress" id="step-progress"></div>
+            <button class="btn btn-primary" id="next-btn" onclick="nextStep()">
+                Next
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="preview-col">
+        <div class="preview-header">
+            <span class="preview-title">File Preview</span>
+            <button class="download-btn" onclick="generate()" id="dl-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                Download
+            </button>
+        </div>
+        <div class="file-tree" id="file-tree"></div>
+    </div>
+
+</div>
+
+<!-- MOBILE GENERATE -->
+<div class="mobile-generate">
+    <button class="btn btn-primary" onclick="generate()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Download ZIP
+    </button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════════════════
+
+const STEPS = ['Project','Services','Dependencies','Sagas','Infrastructure','Security'];
+const STEP_ICONS = ['◈','⬡','⟶','⟲','⬟','⚿'];
+let currentStep = 0;
+
+let services = [
+    { id: uid(), name: 'order-service',   port: 8081, db: 'h2',         entities: [], deps: [] },
+    { id: uid(), name: 'payment-service', port: 8082, db: 'postgresql', entities: [], deps: [] },
+];
+
+let sagas = [];
+
+const infra = { gateway: true, admin: true, registry: true, docker: true, ci: true, kubernetes: false };
+
+function uid() { return Math.random().toString(36).slice(2,9); }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NAV + THEME
+// ═══════════════════════════════════════════════════════════════════════════
+
+function toggleTheme() {
+    document.documentElement.classList.toggle('light');
+    localStorage.setItem('frx-theme', document.documentElement.classList.contains('light') ? 'light' : 'dark');
+}
+function toggleMob() {
+    document.getElementById('mob-menu').classList.toggle('open');
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.getElementById('mob-menu').classList.remove('open'); });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STEPS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderStepNav() {
+    const nav = document.getElementById('step-nav');
+    nav.innerHTML = STEPS.map((s, i) => `
+        <div class="step-item ${i===currentStep?'active':i<currentStep?'done':''}" onclick="goStep(${i})">
+            <div class="step-num">${i<currentStep?'✓':i+1}</div>
+            <span class="step-label">${s}</span>
+        </div>
+    `).join('') + '<div class="steps-divider"></div>' +
+    `<button class="download-btn" onclick="generate()" style="width:100%;justify-content:center;margin-top:4px;border-radius:8px;padding:10px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Generate ZIP
+    </button>`;
+}
+
+function renderProgress() {
+    document.getElementById('step-progress').innerHTML = STEPS.map((_, i) =>
+        `<div class="prog-dot ${i===currentStep?'active':i<currentStep?'done':''}" onclick="goStep(${i})"></div>`
+    ).join('');
+}
+
+function goStep(i) {
+    currentStep = i;
+    document.querySelectorAll('.form-panel').forEach((p,j) => p.classList.toggle('active', j===i));
+    document.getElementById('prev-btn').style.visibility = i===0 ? 'hidden' : 'visible';
+    const nextBtn = document.getElementById('next-btn');
+    if (i === STEPS.length-1) {
+        nextBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Generate`;
+        nextBtn.onclick = generate;
+    } else {
+        nextBtn.innerHTML = `Next <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="m9 18 6-6-6-6"/></svg>`;
+        nextBtn.onclick = nextStep;
+    }
+    if (i === 2) renderDepMatrix();
+    renderStepNav();
+    renderProgress();
+    updatePreview();
+}
+
+function nextStep() { if(currentStep<STEPS.length-1) goStep(currentStep+1); }
+function prevStep() { if(currentStep>0) goStep(currentStep-1); }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CHIP SELECTORS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function selectChip(group, el) {
+    const container = document.getElementById(group+'-chips');
+    container.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    if(group==='sec') updateSecDesc();
+    updatePreview();
+}
+
+function getChipVal(group) {
+    const sel = document.querySelector('#'+group+'-chips .chip.sel');
+    return sel ? sel.dataset.val : '';
+}
+
+function updateSecDesc() {
+    const desc = {
+        none: 'No authentication — suitable for internal services behind a trusted gateway.',
+        jwt:  'JWT Bearer Token (HMAC-SHA256). Adds spring-boot-starter-security + jjwt dependencies. Gateway validates tokens and propagates claims downstream.',
+        oauth2: 'OAuth2 Resource Server (OpenID Connect). Integrates with Keycloak, Auth0, or any OIDC-compliant provider. Adds spring-boot-starter-oauth2-resource-server.',
+        apikey: 'Static API Key header validation. Lightweight; suitable for service-to-service or partner APIs.',
+    };
+    document.getElementById('sec-desc').textContent = desc[getChipVal('sec')] || '';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INFRA TOGGLES
+// ═══════════════════════════════════════════════════════════════════════════
+
+function toggleInfra(el) {
+    el.classList.toggle('on');
+    infra[el.dataset.key] = el.classList.contains('on');
+    updatePreview();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SERVICES
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderServices() {
+    const list = document.getElementById('svc-list');
+    list.innerHTML = services.map(svc => renderSvcCard(svc)).join('');
+}
+
+function renderSvcCard(svc) {
+    const entities = svc.entities.map((e,ei) => `
+        <div class="entity-row">
+            <span class="entity-name">${e.name||'Unnamed'}</span>
+            <span class="entity-fields">${e.fields.map(f=>f.name+':'+f.type).join(', ')||'no fields'}</span>
+            <button class="entity-del" onclick="deleteEntity('${svc.id}',${ei})" title="Remove">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+    `).join('');
+
+    return `
+    <div class="svc-card" id="svc-${svc.id}">
+        <div class="svc-header" onclick="toggleSvc('${svc.id}')">
+            <span class="svc-name">${svc.name||'Unnamed'}</span>
+            <div class="svc-meta">
+                <span class="svc-badge port">:${svc.port}</span>
+                <span class="svc-badge db">${svc.db}</span>
+            </div>
+            <button class="svc-del" onclick="event.stopPropagation();deleteService('${svc.id}')" title="Remove">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+            <svg class="svc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <div class="svc-body" id="svc-body-${svc.id}">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Service name</label>
+                    <input class="form-input" value="${svc.name}" oninput="updateSvc('${svc.id}','name',this.value)" placeholder="order-service"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Port</label>
+                    <input class="form-input" type="number" value="${svc.port}" oninput="updateSvc('${svc.id}','port',+this.value)" min="1024" max="65535"/>
+                </div>
+            </div>
+            <div class="form-row single">
+                <div class="form-group">
+                    <label class="form-label">Database</label>
+                    <select class="form-select" onchange="updateSvc('${svc.id}','db',this.value)">
+                        ${['h2','postgresql','mysql','mongodb','redis'].map(d=>`<option value="${d}" ${svc.db===d?'selected':''}>${d}</option>`).join('')}
+                    </select>
+                </div>
+            </div>
+            <div class="entity-section">
+                <div class="entity-label">Entities</div>
+                <div class="entity-list" id="entity-list-${svc.id}">${entities}</div>
+                <button class="add-entity-btn" onclick="showEntityForm('${svc.id}')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M12 5v14M5 12h14"/></svg>
+                    Add entity
+                </button>
+                <div class="entity-form hidden" id="entity-form-${svc.id}">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Entity name <span>(PascalCase)</span></label>
+                            <input class="form-input" id="ename-${svc.id}" placeholder="Order"/>
+                        </div>
+                    </div>
+                    <div id="fields-${svc.id}">
+                        <div class="form-label" style="margin-bottom:6px">Fields</div>
+                        <div id="field-rows-${svc.id}"></div>
+                        <button class="add-field-btn" onclick="addFieldRow('${svc.id}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M12 5v14M5 12h14"/></svg>
+                            Add field
+                        </button>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:12px">
+                        <button class="btn btn-primary" style="font-size:12px;padding:7px 14px" onclick="saveEntity('${svc.id}')">Save entity</button>
+                        <button class="btn btn-ghost" style="font-size:12px;padding:7px 14px" onclick="hideEntityForm('${svc.id}')">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function toggleSvc(id) {
+    const body = document.getElementById('svc-body-'+id);
+    const chevron = document.querySelector('#svc-'+id+' .svc-chevron');
+    const open = body.classList.toggle('open');
+    chevron.classList.toggle('open', open);
+}
+
+function addService() {
+    const id = uid();
+    const port = services.length ? Math.max(...services.map(s=>s.port))+1 : 8081;
+    services.push({ id, name: 'new-service', port, db: 'h2', entities: [], deps: [] });
+    renderServices();
+    updatePreview();
+    setTimeout(() => toggleSvc(id), 50);
+}
+
+function deleteService(id) {
+    services = services.filter(s => s.id !== id);
+    renderServices();
+    renderDepMatrix();
+    updatePreview();
+}
+
+function updateSvc(id, key, val) {
+    const svc = services.find(s => s.id === id);
+    if (svc) { svc[key] = val; updatePreview(); }
+    // Refresh badge in header without full re-render
+    const card = document.getElementById('svc-'+id);
+    if (card) {
+        const nm = card.querySelector('.svc-name');
+        const portBadge = card.querySelector('.svc-badge.port');
+        const dbBadge   = card.querySelector('.svc-badge.db');
+        if(nm && svc) nm.textContent = svc.name;
+        if(portBadge && svc) portBadge.textContent = ':'+svc.port;
+        if(dbBadge && svc) dbBadge.textContent = svc.db;
+    }
+}
+
+// ── Entities ───────────────────────────────────────────────────────────────
+
+function showEntityForm(svcId) {
+    document.getElementById('entity-form-'+svcId).classList.remove('hidden');
+    document.getElementById('ename-'+svcId).value = '';
+    document.getElementById('field-rows-'+svcId).innerHTML = '';
+    addFieldRow(svcId);
+}
+function hideEntityForm(svcId) {
+    document.getElementById('entity-form-'+svcId).classList.add('hidden');
+}
+
+function addFieldRow(svcId) {
+    const container = document.getElementById('field-rows-'+svcId);
+    const idx = container.children.length;
+    const row = document.createElement('div');
+    row.className = 'field-row';
+    row.innerHTML = `
+        <input class="form-input" placeholder="fieldName" style="flex:1.2" data-role="fname"/>
+        <input class="form-input" placeholder="String" style="flex:1" data-role="ftype"/>
+        <button class="field-del" onclick="this.parentElement.remove()" title="Remove">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>`;
+    container.appendChild(row);
+}
+
+function saveEntity(svcId) {
+    const svc = services.find(s => s.id === svcId);
+    const name = document.getElementById('ename-'+svcId).value.trim();
+    if (!name || !svc) return;
+    const rows = document.querySelectorAll('#field-rows-'+svcId+' .field-row');
+    const fields = Array.from(rows)
+        .map(r => ({ name: r.querySelector('[data-role=fname]').value.trim(), type: r.querySelector('[data-role=ftype]').value.trim()||'String' }))
+        .filter(f => f.name);
+    svc.entities.push({ name, fields });
+    hideEntityForm(svcId);
+    renderServices();
+    updatePreview();
+    // Reopen card
+    const body = document.getElementById('svc-body-'+svcId);
+    if (body) body.classList.add('open');
+    const chevron = document.querySelector('#svc-'+svcId+' .svc-chevron');
+    if (chevron) chevron.classList.add('open');
+}
+
+function deleteEntity(svcId, idx) {
+    const svc = services.find(s => s.id === svcId);
+    if (svc) { svc.entities.splice(idx, 1); renderServices(); updatePreview(); }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DEPENDENCY MATRIX
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderDepMatrix() {
+    const container = document.getElementById('dep-matrix');
+    if (services.length < 2) {
+        container.innerHTML = '<div class="dep-empty">Add at least 2 services to define dependencies.</div>';
+        return;
+    }
+    let html = '<table class="dep-table"><thead><tr><th class="row-h">Caller ↓ &nbsp; Callee →</th>';
+    services.forEach(s => { html += `<th>${s.name}</th>`; });
+    html += '</tr></thead><tbody>';
+    services.forEach(caller => {
+        html += `<tr><td style="text-align:left;font-family:var(--mono);font-size:12px;white-space:nowrap">${caller.name}</td>`;
+        services.forEach(callee => {
+            if (caller.id === callee.id) { html += '<td class="self">—</td>'; return; }
+            const checked = (caller.deps||[]).includes(callee.name) ? 'checked' : '';
+            html += `<td><input type="checkbox" class="dep-cb" ${checked} onchange="toggleDep('${caller.id}','${callee.name}',this.checked)"/></td>`;
+        });
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+function toggleDep(callerId, calleeName, checked) {
+    const caller = services.find(s => s.id === callerId);
+    if (!caller) return;
+    if (checked && !caller.deps.includes(calleeName)) caller.deps.push(calleeName);
+    if (!checked) caller.deps = caller.deps.filter(d => d !== calleeName);
+    updatePreview();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SAGAS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderSagas() {
+    const list = document.getElementById('saga-list');
+    list.innerHTML = sagas.map((saga, si) => `
+        <div class="saga-card" id="saga-${saga.id}">
+            <div class="saga-header" onclick="toggleSaga('${saga.id}')">
+                <span class="saga-id">${saga.sagaId||'saga-id'}</span>
+                <span class="saga-owner-badge">${saga.owner||'?'}</span>
+                <button class="saga-del" onclick="event.stopPropagation();deleteSaga('${saga.id}')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="color:var(--text4)"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+            <div class="saga-body" id="saga-body-${saga.id}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Saga ID</label>
+                        <input class="form-input" value="${saga.sagaId}" placeholder="place-order-saga" oninput="updateSaga('${saga.id}','sagaId',this.value)"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Owner service</label>
+                        <select class="form-select" onchange="updateSaga('${saga.id}','owner',this.value)">
+                            ${services.map(s=>`<option value="${s.name}" ${saga.owner===s.name?'selected':''}>${s.name}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row single">
+                    <div class="form-group">
+                        <label class="form-label">Compensation method <span>(optional)</span></label>
+                        <input class="form-input" value="${saga.compensation}" placeholder="cancelOrder" oninput="updateSaga('${saga.id}','compensation',this.value)"/>
+                    </div>
+                </div>
+                <div class="form-label" style="margin-bottom:8px">Steps</div>
+                <div class="steps-list" id="saga-steps-${saga.id}">
+                    ${saga.steps.map((step, si) => `
+                        <div class="step-row">
+                            <div class="step-num-badge">${si+1}</div>
+                            <input class="form-input" value="${step.service}" placeholder="service-name" style="flex:1.2" oninput="updateSagaStep('${saga.id}',${si},'service',this.value)"/>
+                            <input class="form-input" value="${step.method}" placeholder="methodName()" style="flex:1" oninput="updateSagaStep('${saga.id}',${si},'method',this.value)"/>
+                            <button class="step-row-del" onclick="deleteSagaStep('${saga.id}',${si})">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="add-step-btn" onclick="addSagaStep('${saga.id}')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M12 5v14M5 12h14"/></svg>
+                    Add step
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function addSaga() {
+    const owner = services.length ? services[0].name : '';
+    sagas.push({ id: uid(), sagaId: 'new-saga', owner, compensation: '', steps: [{ service: '', method: '' }] });
+    renderSagas();
+    setTimeout(() => toggleSaga(sagas[sagas.length-1].id), 30);
+    updatePreview();
+}
+function deleteSaga(id) { sagas = sagas.filter(s => s.id !== id); renderSagas(); updatePreview(); }
+function updateSaga(id, key, val) {
+    const s = sagas.find(s => s.id === id);
+    if (s) { s[key] = val; updatePreview(); }
+}
+function toggleSaga(id) {
+    document.getElementById('saga-body-'+id).classList.toggle('open');
+}
+function addSagaStep(sagaId) {
+    const s = sagas.find(s => s.id === sagaId);
+    if (s) { s.steps.push({ service: '', method: '' }); renderSagas(); }
+}
+function deleteSagaStep(sagaId, idx) {
+    const s = sagas.find(s => s.id === sagaId);
+    if (s) { s.steps.splice(idx, 1); renderSagas(); }
+}
+function updateSagaStep(sagaId, idx, key, val) {
+    const s = sagas.find(s => s.id === sagaId);
+    if (s && s.steps[idx]) s.steps[idx][key] = val;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FILE TREE PREVIEW
+// ═══════════════════════════════════════════════════════════════════════════
+
+function updatePreview() {
+    const tree = document.getElementById('file-tree');
+    const spec = buildSpec();
+    const root = spec.artifactId || 'my-platform';
+    const pkg  = resolvedPackage(spec).replace(/\./g, '/');
+    const appClass = appClassName(spec);
+
+    const rows = [];
+    const dir = (indent, name) => rows.push(`<div class="tree-node dir">${'<span class="tree-indent"></span>'.repeat(indent)}<span class="tree-icon">📁</span> ${name}/</div>`);
+    const file = (indent, name, highlight) => rows.push(`<div class="tree-node file" ${highlight?'style="color:var(--orange)"':''}>${'<span class="tree-indent"></span>'.repeat(indent)}<span class="tree-icon">📄</span> ${name}</div>`);
+
+    dir(0, root);
+    file(1, 'pom.xml', true);
+    if (infra.docker) file(1, 'docker-compose.dev.yml');
+    if (infra.ci) { dir(1, '.github'); dir(2, 'workflows'); file(3, 'ci.yml'); }
+    file(1, 'fractalx.yaml', true);
+    file(1, 'README.md');
+
+    dir(1, 'src');
+    dir(2, 'main');
+    dir(3, 'java');
+    // show package path abbreviated
+    const pkgParts = pkg.split('/');
+    pkgParts.forEach((p, i) => dir(3+i, p));
+    const baseIndent = 3 + pkgParts.length;
+    file(baseIndent, appClass+'.java', true);
+
+    services.forEach(svc => {
+        const pkg2 = svcPackage(svc);
+        const pfx  = svcPrefix(svc);
+        dir(baseIndent, pkg2);
+        file(baseIndent+1, pfx+'Module.java', true);
+        svc.entities.forEach(e => {
+            file(baseIndent+1, e.name+'.java');
+            file(baseIndent+1, e.name+'Repository.java');
+            file(baseIndent+1, e.name+'Controller.java');
+        });
+        file(baseIndent+1, pfx+'Service.java');
+    });
+
+    dir(3, 'resources');
+    file(4, 'application.yml');
+    file(4, 'application-dev.yml');
+    file(4, 'fractalx-config.yml');
+
+    const hasFlyway = services.some(s => s.db !== 'h2' && s.db !== 'mongodb' && s.db !== 'redis');
+    if (hasFlyway) { dir(4, 'db'); dir(5, 'migration'); file(6, 'V1__init.sql'); }
+
+    dir(2, 'test');
+    dir(3, 'java');
+    pkgParts.forEach((p, i) => dir(3+i, p));
+    file(baseIndent, appClass+'Tests.java');
+
+    tree.innerHTML = rows.join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GENERATION (client-side ZIP)
+// ═══════════════════════════════════════════════════════════════════════════
+
+async function generate() {
+    const btn = document.getElementById('dl-btn');
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+    showToast('⏳ Building project…');
+
+    try {
+        const spec = buildSpec();
+        const zip  = new JSZip();
+        const root = spec.artifactId;
+
+        // pom.xml
+        zip.file(`${root}/pom.xml`, genPom(spec));
+
+        // Application class
+        const appPath = `${root}/src/main/java/${resolvedPackage(spec).replace(/\./g,'/')}`;
+        zip.file(`${appPath}/${appClassName(spec)}.java`, genAppClass(spec));
+        zip.file(`${root}/src/test/java/${resolvedPackage(spec).replace(/\./g,'/')}/${appClassName(spec)}Tests.java`, genAppTest(spec));
+
+        // application.yml
+        zip.file(`${root}/src/main/resources/application.yml`, genAppYml(spec));
+        zip.file(`${root}/src/main/resources/application-dev.yml`, genDevYml());
+        zip.file(`${root}/src/main/resources/fractalx-config.yml`, genFractalxConfig(spec));
+
+        // Per-service
+        spec.services.forEach(svc => {
+            const svcPath = `${appPath}/${svcPackage(svc)}`;
+            const pfx = svcPrefix(svc);
+
+            zip.file(`${svcPath}/${pfx}Module.java`, genModuleMarker(spec, svc));
+
+            svc.entities.forEach(e => {
+                zip.file(`${svcPath}/${e.name}.java`,             genEntity(spec, svc, e));
+                zip.file(`${svcPath}/${e.name}Repository.java`,   genRepository(spec, svc, e));
+                zip.file(`${svcPath}/${e.name}Controller.java`,   genController(spec, svc, e));
+            });
+            zip.file(`${svcPath}/${pfx}Service.java`, genServiceClass(spec, svc));
+
+            // Flyway migration
+            if (svc.db !== 'h2' && svc.db !== 'mongodb' && svc.db !== 'redis') {
+                zip.file(`${root}/src/main/resources/db/migration/V1__init.sql`, genFlyway(spec));
+            }
+        });
+
+        // docker-compose
+        if (infra.docker) zip.file(`${root}/docker-compose.dev.yml`, genDocker(spec));
+
+        // CI
+        if (infra.ci) zip.file(`${root}/.github/workflows/ci.yml`, genCI(spec));
+
+        // fractalx.yaml spec
+        zip.file(`${root}/fractalx.yaml`, genSpecYaml(spec));
+
+        // README
+        zip.file(`${root}/README.md`, genReadme(spec));
+
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href     = url;
+        a.download = `${root}.zip`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('✓ Downloaded '+root+'.zip', true);
+    } catch(e) {
+        showToast('Error: '+e.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Download`;
+    }
+}
+
+// ── BUILD SPEC ──────────────────────────────────────────────────────────────
+
+function buildSpec() {
+    return {
+        groupId:          document.getElementById('groupId').value.trim() || 'com.example',
+        artifactId:       document.getElementById('artifactId').value.trim() || 'my-platform',
+        version:          document.getElementById('version').value.trim() || '1.0.0-SNAPSHOT',
+        description:      document.getElementById('description').value.trim(),
+        javaVersion:      getChipVal('java') || '17',
+        springBootVersion:document.getElementById('springBoot').value,
+        security:         getChipVal('sec') || 'none',
+        services:         JSON.parse(JSON.stringify(services)),
+        sagas:            JSON.parse(JSON.stringify(sagas)),
+        infra:            { ...infra },
+    };
+}
+
+// ── DERIVED HELPERS ─────────────────────────────────────────────────────────
+
+function resolvedPackage(spec) {
+    const suffix = spec.artifactId.replace(/[^a-zA-Z0-9]/g,'').toLowerCase();
+    return spec.groupId + '.' + suffix;
+}
+
+function appClassName(spec) {
+    return spec.artifactId.split(/[^a-zA-Z0-9]+/)
+        .map(p => p ? p[0].toUpperCase()+p.slice(1).toLowerCase() : '')
+        .join('') + 'Application';
+}
+
+function svcPackage(svc) {
+    return svc.name.replace(/-service$/,'').replace(/[^a-zA-Z0-9]/g,'').toLowerCase();
+}
+
+function svcPrefix(svc) {
+    return svc.name.replace(/-service$/,'').split(/[^a-zA-Z0-9]+/)
+        .map(p => p ? p[0].toUpperCase()+p.slice(1).toLowerCase() : '')
+        .join('');
+}
+
+function resolvedSchema(svc) {
+    return svcPackage(svc) + '_db';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FILE GENERATORS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function genPom(spec) {
+    const hasJpa  = spec.services.some(s => s.db !== 'mongodb' && s.db !== 'redis');
+    const hasPg   = spec.services.some(s => s.db === 'postgresql');
+    const hasMy   = spec.services.some(s => s.db === 'mysql');
+    const hasH2   = spec.services.some(s => s.db === 'h2');
+    const hasMg   = spec.services.some(s => s.db === 'mongodb');
+    const hasRd   = spec.services.some(s => s.db === 'redis');
+    const hasFly  = spec.services.some(s => s.db !== 'h2' && s.db !== 'mongodb' && s.db !== 'redis');
+    const isJwt   = spec.security === 'jwt';
+    const isOAuth = spec.security === 'oauth2';
+
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>${spec.springBootVersion}</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>${spec.groupId}</groupId>
+    <artifactId>${spec.artifactId}</artifactId>
+    <version>${spec.version}</version>
+    <name>${spec.artifactId}</name>
+    <description>${spec.description}</description>
+
+    <properties>
+        <java.version>${spec.javaVersion}</java.version>
+        <fractalx.version>0.3.1-SNAPSHOT</fractalx.version>
+    </properties>
+
+    <dependencies>
+        <!-- FractalX annotations -->
+        <dependency>
+            <groupId>org.fractalx</groupId>
+            <artifactId>fractalx-annotations</artifactId>
+            <version>\${fractalx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+${hasJpa ? `
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>` : ''}
+${hasPg ? `
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>` : ''}
+${hasMy ? `
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>` : ''}
+${hasH2 ? `
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>` : ''}
+${hasFly ? `
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>` : ''}
+${hasMg ? `
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>` : ''}
+${hasRd ? `
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>` : ''}
+${isJwt ? `
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.12.3</version>
+        </dependency>` : ''}
+${isOAuth ? `
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>` : ''}
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- Run: mvn fractalx:decompose  to extract microservices -->
+            <plugin>
+                <groupId>org.fractalx</groupId>
+                <artifactId>fractalx-maven-plugin</artifactId>
+                <version>\${fractalx.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+`;
+}
+
+function genAppClass(spec) {
+    const pkg = resolvedPackage(spec);
+    const cls = appClassName(spec);
+    return `package ${pkg};
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ${cls} {
+
+    public static void main(String[] args) {
+        SpringApplication.run(${cls}.class, args);
+    }
+}
+`;
+}
+
+function genAppTest(spec) {
+    const pkg = resolvedPackage(spec);
+    const cls = appClassName(spec);
+    return `package ${pkg};
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ${cls}Tests {
+
+    @Test
+    void contextLoads() {
+    }
+}
+`;
+}
+
+function genAppYml(spec) {
+    let yml = `spring:
+  application:
+    name: ${spec.artifactId}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    root: INFO
+    ${resolvedPackage(spec)}: DEBUG
+`;
+    return yml;
+}
+
+function genDevYml() {
+    return `spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework.web: DEBUG
+`;
+}
+
+function genFractalxConfig(spec) {
+    let cfg = `# FractalX per-service datasource configuration.
+# Each service gets this block as its application.yml after mvn fractalx:decompose.
+
+`;
+    spec.services.forEach(svc => {
+        cfg += `${svc.name}:\n  datasource:\n`;
+        if (svc.db === 'postgresql') cfg += `    url: jdbc:postgresql://localhost:5432/${resolvedSchema(svc)}\n`;
+        else if (svc.db === 'mysql') cfg += `    url: jdbc:mysql://localhost:3306/${resolvedSchema(svc)}\n`;
+        else cfg += `    url: jdbc:h2:mem:${resolvedSchema(svc)};DB_CLOSE_DELAY=-1\n`;
+        cfg += '\n';
+    });
+    return cfg;
+}
+
+function genModuleMarker(spec, svc) {
+    const pkg  = resolvedPackage(spec) + '.' + svcPackage(svc);
+    const pfx  = svcPrefix(svc);
+    const deps = (svc.deps||[]).map(d => {
+        const depSvc = spec.services.find(s => s.name === d);
+        return depSvc ? svcPrefix(depSvc)+'Module.class' : null;
+    }).filter(Boolean).join(', ');
+    const depLine = deps ? `    dependencies = {${deps}},\n` : '';
+
+    const imports = (svc.deps||[]).map(d => {
+        const depSvc = spec.services.find(s => s.name === d);
+        return depSvc ? `import ${resolvedPackage(spec)}.${svcPackage(depSvc)}.${svcPrefix(depSvc)}Module;` : '';
+    }).filter(Boolean).join('\n');
+
+    return `package ${pkg};
+
+import org.fractalx.annotations.DecomposableModule;
+${imports ? imports+'\n' : ''}
+@DecomposableModule(
+    serviceName = "${svc.name}",
+    port = ${svc.port},
+${depLine}    ownedSchemas = {"${resolvedSchema(svc)}"},
+    independentDeployment = true
+)
+public class ${pfx}Module {
+    // Marker class — FractalX uses this annotation to identify the service boundary.
+    // Do not add business logic here.
+}
+`;
+}
+
+function genEntity(spec, svc, entity) {
+    const pkg     = resolvedPackage(spec) + '.' + svcPackage(svc);
+    const isMongo = svc.db === 'mongodb';
+    const idType  = isMongo ? 'String' : 'Long';
+
+    const fieldImports = [...new Set(entity.fields
+        .map(f => {
+            if (f.type === 'BigDecimal') return 'java.math.BigDecimal';
+            if (f.type === 'LocalDateTime') return 'java.time.LocalDateTime';
+            if (f.type === 'UUID') return 'java.util.UUID';
+            return null;
+        }).filter(Boolean))].map(i => `import ${i};`).join('\n');
+
+    const fieldDecls = entity.fields.map(f => `    private ${f.type} ${f.name};`).join('\n');
+
+    const getters = [{ type: idType, name: 'id' }, ...entity.fields]
+        .map(f => {
+            const cap = f.name[0].toUpperCase()+f.name.slice(1);
+            return `    public ${f.type} get${cap}() { return ${f.name}; }\n    public void set${cap}(${f.type} ${f.name}) { this.${f.name} = ${f.name}; }`;
+        }).join('\n\n');
+
+    if (isMongo) {
+        return `package ${pkg};
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+${fieldImports}
+
+@Document(collection = "${entity.name.toLowerCase()}s")
+public class ${entity.name} {
+
+    @Id
+    private String id;
+
+${fieldDecls}
+
+${getters}
+}
+`;
+    }
+
+    return `package ${pkg};
+
+import jakarta.persistence.*;
+${fieldImports}
+
+@Entity
+@Table(name = "${toSnake(entity.name)}s")
+public class ${entity.name} {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+${fieldDecls}
+
+${getters}
+}
+`;
+}
+
+function genRepository(spec, svc, entity) {
+    const pkg     = resolvedPackage(spec) + '.' + svcPackage(svc);
+    const isMongo = svc.db === 'mongodb';
+    const repoIf  = isMongo ? 'MongoRepository' : 'JpaRepository';
+    const idType  = isMongo ? 'String' : 'Long';
+    const importPkg = isMongo
+        ? 'org.springframework.data.mongodb.repository.MongoRepository'
+        : 'org.springframework.data.jpa.repository.JpaRepository';
+
+    return `package ${pkg};
+
+import ${importPkg};
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ${entity.name}Repository extends ${repoIf}<${entity.name}, ${idType}> {
+    // Add custom query methods here
+}
+`;
+}
+
+function genController(spec, svc, entity) {
+    const pkg       = resolvedPackage(spec) + '.' + svcPackage(svc);
+    const varName   = entity.name[0].toLowerCase()+entity.name.slice(1);
+    const svcClass  = svcPrefix(svc)+'Service';
+    const svcVar    = svcClass[0].toLowerCase()+svcClass.slice(1);
+    const idType    = svc.db === 'mongodb' ? 'String' : 'Long';
+    const basePath  = '/'+varName.toLowerCase()+'s';
+
+    return `package ${pkg};
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import java.util.List;
+
+@RestController
+@RequestMapping("${basePath}")
+public class ${entity.name}Controller {
+
+    private final ${svcClass} ${svcVar};
+
+    public ${entity.name}Controller(${svcClass} ${svcVar}) {
+        this.${svcVar} = ${svcVar};
+    }
+
+    @GetMapping
+    public ResponseEntity<List<${entity.name}>> getAll() {
+        return ResponseEntity.ok(${svcVar}.findAll${entity.name}s());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<${entity.name}> getById(@PathVariable ${idType} id) {
+        return ResponseEntity.ok(${svcVar}.find${entity.name}ById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<${entity.name}> create(@Valid @RequestBody ${entity.name} ${varName}) {
+        return ResponseEntity.status(201).body(${svcVar}.create${entity.name}(${varName}));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable ${idType} id) {
+        ${svcVar}.delete${entity.name}(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+`;
+}
+
+function genServiceClass(spec, svc) {
+    const pkg      = resolvedPackage(spec) + '.' + svcPackage(svc);
+    const cls      = svcPrefix(svc)+'Service';
+    const idType   = svc.db === 'mongodb' ? 'String' : 'Long';
+    const ownedSagas = spec.sagas.filter(s => s.owner === svc.name);
+
+    const repoParams = svc.entities.map(e => `${e.name}Repository ${e.name[0].toLowerCase()+e.name.slice(1)}Repository`).join(', ');
+    const repoAssigns = svc.entities.map(e => {
+        const v = e.name[0].toLowerCase()+e.name.slice(1)+'Repository';
+        return `        this.${v} = ${v};`;
+    }).join('\n');
+    const repoFields = svc.entities.map(e => `    private final ${e.name}Repository ${e.name[0].toLowerCase()+e.name.slice(1)}Repository;`).join('\n');
+
+    const crudMethods = svc.entities.map(e => {
+        const rVar = e.name[0].toLowerCase()+e.name.slice(1)+'Repository';
+        const vn   = e.name[0].toLowerCase()+e.name.slice(1);
+        return `
+    @Transactional(readOnly = true)
+    public java.util.List<${e.name}> findAll${e.name}s() {
+        return ${rVar}.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public ${e.name} find${e.name}ById(${idType} id) {
+        return ${rVar}.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("${e.name} not found: " + id));
+    }
+
+    @Transactional
+    public ${e.name} create${e.name}(${e.name} ${vn}) {
+        return ${rVar}.save(${vn});
+    }
+
+    @Transactional
+    public void delete${e.name}(${idType} id) {
+        ${rVar}.deleteById(id);
+    }`;
+    }).join('\n');
+
+    const sagaMethods = ownedSagas.map(saga => {
+        const method = toCamel(saga.sagaId);
+        return `
+    @DistributedSaga(sagaId = "${saga.sagaId}", compensationMethod = "${saga.compensation||''}", timeout = 30000)
+    @Transactional
+    public void ${method}() {
+        // TODO: implement saga orchestration
+${saga.steps.map(s => `        // Step → ${s.service}.${s.method}()`).join('\n')}
+    }
+${saga.compensation ? `
+    @Transactional
+    public void ${saga.compensation}() {
+        // TODO: implement compensation / rollback
+    }` : ''}`;
+    }).join('\n');
+
+    const sagaImport = ownedSagas.length ? `import org.fractalx.annotations.DistributedSaga;\n` : '';
+
+    return `package ${pkg};
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+${sagaImport}
+@Service
+public class ${cls} {
+
+${repoFields}
+
+    public ${cls}(${repoParams}) {
+${repoAssigns}
+    }
+${crudMethods}
+${sagaMethods}
+}
+`;
+}
+
+function genFlyway(spec) {
+    let sql = `-- V1__init.sql — auto-generated by FractalX Initializr\n\n`;
+    spec.services.forEach(svc => {
+        if (svc.db === 'h2' || svc.db === 'mongodb' || svc.db === 'redis') return;
+        svc.entities.forEach(e => {
+            sql += `CREATE TABLE IF NOT EXISTS ${toSnake(e.name)}s (\n`;
+            sql += `    id BIGSERIAL PRIMARY KEY,\n`;
+            e.fields.forEach(f => {
+                sql += `    ${toSnake(f.name)} ${sqlType(f.type)},\n`;
+            });
+            sql = sql.replace(/,\n$/, '\n');
+            sql += `);\n\n`;
+        });
+    });
+    return sql;
+}
+
+function genDocker(spec) {
+    const hasPg = spec.services.some(s => s.db === 'postgresql');
+    const hasMy = spec.services.some(s => s.db === 'mysql');
+    const hasMg = spec.services.some(s => s.db === 'mongodb');
+    const hasRd = spec.services.some(s => s.db === 'redis');
+
+    if (!hasPg && !hasMy && !hasMg && !hasRd) {
+        return `# All services use H2 in-memory — no containers needed for local dev.\nservices: {}\n`;
+    }
+
+    let yml = `# docker-compose.dev.yml — local development databases
+# Run: docker compose -f docker-compose.dev.yml up -d
+
+services:
+`;
+    if (hasPg) yml += `  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: fractalx
+      POSTGRES_PASSWORD: fractalx
+      POSTGRES_DB: fractalx_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fractalx"]
+      interval: 10s
+      retries: 5
+
+`;
+    if (hasMy) yml += `  mysql:
+    image: mysql:8.3
+    environment:
+      MYSQL_ROOT_PASSWORD: fractalx
+      MYSQL_DATABASE: fractalx_dev
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+`;
+    if (hasMg) yml += `  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+`;
+    if (hasRd) yml += `  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+`;
+    yml += `volumes:\n`;
+    if (hasPg) yml += `  postgres_data:\n`;
+    if (hasMy) yml += `  mysql_data:\n`;
+    if (hasMg) yml += `  mongo_data:\n`;
+    if (hasRd) yml += `  redis_data:\n`;
+    return yml;
+}
+
+function genCI(spec) {
+    const hasPg = spec.services.some(s => s.db === 'postgresql');
+    const hasMy = spec.services.some(s => s.db === 'mysql');
+
+    return `name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+${(hasPg||hasMy) ? `
+    services:
+${hasPg ? `      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: fractalx
+          POSTGRES_PASSWORD: fractalx
+          POSTGRES_DB: fractalx_test
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-retries 5
+` : ''}${hasMy ? `      mysql:
+        image: mysql:8.3
+        env:
+          MYSQL_ROOT_PASSWORD: fractalx
+          MYSQL_DATABASE: fractalx_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-retries=5
+` : ''}` : ''}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${spec.javaVersion}
+        uses: actions/setup-java@v4
+        with:
+          java-version: '${spec.javaVersion}'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and test
+        run: mvn -B verify --no-transfer-progress
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: target/surefire-reports/
+`;
+}
+
+function genSpecYaml(spec) {
+    let yaml = `# fractalx.yaml — FractalX project specification
+# Re-generate: mvn fractalx:init --spec fractalx.yaml
+
+project:
+  groupId: ${spec.groupId}
+  artifactId: ${spec.artifactId}
+  version: "${spec.version}"
+  javaVersion: "${spec.javaVersion}"
+  springBootVersion: ${spec.springBootVersion}
+  description: "${spec.description}"
+
+services:
+`;
+    spec.services.forEach(svc => {
+        yaml += `  - name: ${svc.name}\n`;
+        yaml += `    port: ${svc.port}\n`;
+        yaml += `    database: ${svc.db}\n`;
+        yaml += `    schema: ${resolvedSchema(svc)}\n`;
+        if (svc.deps && svc.deps.length) {
+            yaml += `    dependencies:\n`;
+            svc.deps.forEach(d => { yaml += `      - ${d}\n`; });
+        }
+        if (svc.entities && svc.entities.length) {
+            yaml += `    entities:\n`;
+            svc.entities.forEach(e => {
+                yaml += `      - name: ${e.name}\n`;
+                if (e.fields.length) {
+                    yaml += `        fields:\n`;
+                    e.fields.forEach(f => { yaml += `          - ${f.name}: ${f.type}\n`; });
+                }
+            });
+        }
+        yaml += '\n';
+    });
+
+    if (spec.sagas.length) {
+        yaml += `sagas:\n`;
+        spec.sagas.forEach(s => {
+            yaml += `  - id: ${s.sagaId}\n    owner: ${s.owner}\n`;
+            if (s.compensation) yaml += `    compensationMethod: ${s.compensation}\n`;
+            yaml += `    timeoutMs: 30000\n`;
+            if (s.steps.length) {
+                yaml += `    steps:\n`;
+                s.steps.forEach(st => { yaml += `      - service: ${st.service}\n        method: ${st.method}\n`; });
+            }
+            yaml += '\n';
+        });
+    }
+
+    yaml += `infrastructure:
+  gateway: ${infra.gateway}
+  admin: ${infra.admin}
+  serviceRegistry: ${infra.registry}
+  docker: ${infra.docker}
+  kubernetes: ${infra.kubernetes}
+  ci: ${infra.ci ? 'github-actions' : 'none'}
+
+security:
+  type: ${spec.security}
+`;
+    return yaml;
+}
+
+function genReadme(spec) {
+    const table = spec.services.map(s =>
+        `| \`${s.name}\` | ${s.port} | ${s.db} | ${s.entities.map(e=>e.name).join(', ')||'—'} |`
+    ).join('\n');
+
+    return `# ${spec.artifactId}
+
+> ${spec.description}
+
+Generated by **[FractalX Initializr](https://fractalx.org/start/)** — decomposition-ready from day one.
+
+## Services
+
+| Service | Port | Database | Entities |
+|---------|------|----------|----------|
+${table}
+
+## Getting Started
+
+\`\`\`bash
+# Start database containers (if using PostgreSQL / MySQL)
+docker compose -f docker-compose.dev.yml up -d
+
+# Run the monolith
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+\`\`\`
+
+## Decompose into Microservices
+
+When you're ready to extract independent services:
+
+\`\`\`bash
+mvn fractalx:decompose
+\`\`\`
+
+FractalX reads the \`@DecomposableModule\` annotations on each bounded context
+and generates production-ready microservices, a gateway, admin dashboard, and service registry.
+
+### Validate before decomposing
+
+\`\`\`bash
+mvn fractalx:decompose -Dfractalx.generate=false
+\`\`\`
+
+## Built with
+
+- [FractalX](https://fractalx.org) — static decomposition framework
+- Spring Boot ${spec.springBootVersion}
+- Java ${spec.javaVersion}
+`;
+}
+
+// ── UTIL ────────────────────────────────────────────────────────────────────
+
+function toSnake(s) {
+    return s.replace(/([A-Z])/g,'_$1').toLowerCase().replace(/^_/,'');
+}
+
+function sqlType(t) {
+    const map = { String:'VARCHAR(255)', Long:'BIGINT', Integer:'INTEGER', BigDecimal:'NUMERIC(19,4)',
+        Boolean:'BOOLEAN', LocalDateTime:'TIMESTAMP', LocalDate:'DATE', UUID:'UUID', Double:'DOUBLE PRECISION' };
+    return map[t] || 'VARCHAR(255)';
+}
+
+function toCamel(kebab) {
+    return (kebab||'').split('-').map((p,i) => i===0?p.toLowerCase():p[0].toUpperCase()+p.slice(1).toLowerCase()).join('');
+}
+
+// ── TOAST ───────────────────────────────────────────────────────────────────
+
+function showToast(msg, success) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (success ? ' green' : '');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => { t.className = 'toast'; }, 3000);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════════════
+
+renderStepNav();
+renderProgress();
+renderServices();
+renderSagas();
+updateSecDesc();
+updatePreview();
+</script>
+</body>
+</html>
