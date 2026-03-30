@@ -387,7 +387,7 @@
         <div class="form-panel" data-step="2">
             <div style="padding:28px 32px 0">
                 <div class="panel-title">Dependencies</div>
-                <div class="panel-sub">Check which services call other services. This populates <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">dependencies={}</code> on each <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@DecomposableModule</code>, and injects matching <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@Service</code> fields into the module marker class for Lombok-based bytecode analysis.</div>
+                <div class="panel-sub">Check which services call other services. FractalX detects these at decompose time from <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">private final OrderService orderService</code> field injections in each <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">*Service</code> class. Circular dependencies block decomposition — they are flagged below in real-time.</div>
             </div>
             <div style="padding:16px 32px 0" id="dep-matrix-container">
                 <div class="dep-matrix" id="dep-matrix"></div>
@@ -814,12 +814,65 @@ function deleteEntity(svcId, idx) {
 // DEPENDENCY MATRIX
 // ═══════════════════════════════════════════════════════════════════════════
 
+// DFS cycle detector. Returns deduplicated cycle path strings like
+// "order-service → payment-service → order-service".
+function detectCycles(svcs) {
+    const adj = {};
+    svcs.forEach(s => { adj[s.name] = s.deps || []; });
+    const allCycles = [];
+    const visited = new Set(), inStack = new Set();
+
+    function dfs(name, path) {
+        if (inStack.has(name)) {
+            const idx = path.indexOf(name);
+            if (idx !== -1) allCycles.push([...path.slice(idx), name]);
+            return;
+        }
+        if (visited.has(name)) return;
+        visited.add(name);
+        inStack.add(name);
+        path.push(name);
+        (adj[name] || []).forEach(dep => dfs(dep, [...path]));
+        inStack.delete(name);
+    }
+    svcs.forEach(s => { if (!visited.has(s.name)) dfs(s.name, []); });
+
+    // Deduplicate: normalise each cycle to start at lexicographic minimum node
+    const seen = new Set();
+    return allCycles.filter(parts => {
+        const nodes = parts.slice(0, -1); // remove duplicate tail
+        if (!nodes.length) return false;
+        const minIdx = nodes.reduce((mi, n, i) => (n < nodes[mi] ? i : mi), 0);
+        const key = [...nodes.slice(minIdx), ...nodes.slice(0, minIdx)].join('→');
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    }).map(parts => parts.join(' → '));
+}
+
 function renderDepMatrix() {
     const container = document.getElementById('dep-matrix');
     if (services.length < 2) {
         container.innerHTML = '<div class="dep-empty">Add at least 2 services to define dependencies.</div>';
         return;
     }
+
+    // Cycle detection banner
+    const cycles = detectCycles(services);
+    const cycleBanner = cycles.length ? `
+        <div style="margin-bottom:12px;padding:10px 14px;background:var(--red-dim);border:1px solid rgba(255,68,68,.25);border-radius:8px;font-size:12.5px;color:var(--red)">
+            <strong style="display:flex;align-items:center;gap:6px">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Circular dependencies detected — <code style="font-family:var(--mono)">mvn fractalx:decompose</code> will fail:
+            </strong>
+            <ul style="margin:7px 0 0 18px;line-height:2">
+                ${cycles.map(c => `<li><code style="font-family:var(--mono);font-size:11.5px">${c}</code></li>`).join('')}
+            </ul>
+            <span style="color:var(--text3);margin-top:6px;display:block;font-size:12px">
+                Uncheck at least one edge in each cycle, or break it with an event/outbox pattern.
+            </span>
+        </div>` : '';
+
     let html = '<table class="dep-table"><thead><tr><th class="row-h">Caller ↓ &nbsp; Callee →</th>';
     services.forEach(s => { html += `<th>${s.name}</th>`; });
     html += '</tr></thead><tbody>';
@@ -833,7 +886,7 @@ function renderDepMatrix() {
         html += '</tr>';
     });
     html += '</tbody></table>';
-    container.innerHTML = html;
+    container.innerHTML = cycleBanner + html;
 }
 
 function toggleDep(callerId, calleeName, checked) {
@@ -841,6 +894,7 @@ function toggleDep(callerId, calleeName, checked) {
     if (!caller) return;
     if (checked && !caller.deps.includes(calleeName)) caller.deps.push(calleeName);
     if (!checked) caller.deps = caller.deps.filter(d => d !== calleeName);
+    renderDepMatrix();  // re-render so cycle banner updates immediately on each checkbox toggle
     updatePreview();
 }
 
@@ -1538,42 +1592,37 @@ fractalx:
 
 function genModuleMarker(spec, svc) {
     // The *Module class is a PURE MARKER — no fields, no logic, no constructors.
-    // FractalX's ModuleAnalyzer reads @DecomposableModule from the AST for metadata,
-    // and detects cross-module calls from field injections in the *Service classes.
-    const pkg  = resolvedPackage(spec) + '.' + svcPackage(svc);
-    const pfx  = svcPrefix(svc);
-    const deps = (svc.deps||[]).map(d => {
-        const depSvc = spec.services.find(s => s.name === d);
-        return depSvc ? svcPrefix(depSvc)+'Module.class' : null;
-    }).filter(Boolean).join(', ');
-    const depLine = deps ? `    dependencies = {${deps}},\n` : '';
-
-    const moduleImports = (svc.deps||[]).map(d => {
-        const depSvc = spec.services.find(s => s.name === d);
-        return depSvc
-            ? `import ${resolvedPackage(spec)}.${svcPackage(depSvc)}.${svcPrefix(depSvc)}Module;`
-            : '';
-    }).filter(Boolean).join('\n');
+    //
+    // IMPORTANT: Do NOT put dependency types in dependencies = {…}.
+    // FractalX's beanTypeToServiceName() only strips "Service"/"Client" suffixes:
+    //   "PaymentModule" → no suffix stripped → kebab → "payment-module-service"
+    //   but serviceName is "payment-service" → UNRESOLVED_DEP at decompose time.
+    //
+    // Dependency detection happens automatically from Spring field injections
+    // in the *Service class (e.g. private final OrderService orderService):
+    //   beanTypeToServiceName("OrderService") → "order-service" ✓
+    const pkg = resolvedPackage(spec) + '.' + svcPackage(svc);
+    const pfx = svcPrefix(svc);
 
     return `package ${pkg};
 
 import org.fractalx.annotations.DecomposableModule;
-${moduleImports ? moduleImports+'\n' : ''}
+
 /**
  * Service boundary marker for ${svc.name}.
  *
- * FractalX reads this annotation during {@code mvn fractalx:decompose} to:
- *  - identify the bounded context and its HTTP port
- *  - resolve cross-module dependencies listed in {@code dependencies}
- *  - generate a standalone Spring Boot service with NetScope gRPC wiring
+ * FractalX reads this annotation during {@code mvn fractalx:decompose} to identify
+ * the bounded context, its HTTP port, and owned DB schema.
  *
- * Do NOT add fields, constructors, or business logic here.
- * Cross-module @Service dependencies live in ${pfx}Service.java.
+ * Cross-module dependencies are detected automatically from Spring field injections
+ * in {@link ${pfx}Service} — do NOT list them here via {@code dependencies = {}}.
+ *
+ * Do NOT add fields, constructors, or business logic to this class.
  */
 @DecomposableModule(
     serviceName = "${svc.name}",
     port = ${svc.port},
-${depLine}    ownedSchemas = {"${resolvedSchema(svc)}"},
+    ownedSchemas = {"${resolvedSchema(svc)}"},
     independentDeployment = true
 )
 public class ${pfx}Module {}
