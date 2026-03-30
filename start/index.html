@@ -1558,6 +1558,11 @@ function genFractalxConfig(spec) {
 # Top-level fractalx.* keys configure the platform infrastructure.
 
 fractalx:
+  # Explicitly set here so FractalxConfigReader can detect the Spring Boot version.
+  # Without this, the reader cannot find the version declared only in <parent><version>
+  # of pom.xml and falls back to 3.2.0 with a WARNING during mvn fractalx:decompose.
+  spring-boot-version: ${spec.springBootVersion}
+
   registry-url: http://localhost:${registryPort}
   gateway-port: ${gatewayPort}
   admin-port: ${adminPort}
