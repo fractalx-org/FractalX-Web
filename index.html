@@ -128,7 +128,7 @@
         html.light .tt .ic-sun{display:block}
 
         /* ── HERO ── */
-        .hero{padding:148px 24px 100px;text-align:center;position:relative;overflow:hidden}
+        .hero{padding:92px 24px 100px;text-align:center;position:relative;overflow:hidden}
         .hero::before{content:'';position:absolute;inset:0;background:var(--hero-grad);pointer-events:none}
         /* subtle grid lines */
         .hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.3;pointer-events:none;mask-image:radial-gradient(ellipse 70% 60% at 50% 0%,#000 30%,transparent 100%)}
@@ -339,6 +339,25 @@
             .stats-inner{grid-template-columns:1fr}
             .stat+.stat{border-left:none;border-top:1px solid var(--border)}
         }
+
+        /* ── EVENT BANNER ── */
+        .event-banner{display:block;margin-top:56px;background:linear-gradient(135deg,rgba(244,96,12,.07) 0%,rgba(245,168,0,.05) 100%);border-bottom:1px solid rgba(244,96,12,.18);text-decoration:none;transition:background .15s}
+        .event-banner:hover{background:linear-gradient(135deg,rgba(244,96,12,.12) 0%,rgba(245,168,0,.08) 100%)}
+        html.light .event-banner{background:linear-gradient(135deg,rgba(212,81,10,.05) 0%,rgba(196,122,0,.03) 100%);border-bottom-color:rgba(212,81,10,.15)}
+        html.light .event-banner:hover{background:linear-gradient(135deg,rgba(212,81,10,.09) 0%,rgba(196,122,0,.06) 100%)}
+        .event-banner-inner{max-width:1120px;margin:0 auto;padding:11px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+        .event-banner-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+        .event-banner-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange);flex-shrink:0;animation:bannerpulse 2s ease-in-out infinite}
+        @keyframes bannerpulse{0%,100%{box-shadow:0 0 5px var(--orange)}50%{box-shadow:0 0 12px var(--orange)}}
+        .event-banner-label{font-size:11.5px;font-family:var(--mono);color:var(--orange);font-weight:600;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+        .event-banner-sep{color:var(--text4);font-size:13px}
+        .event-banner-title{font-size:13.5px;font-weight:500;color:var(--text);letter-spacing:-.1px}
+        .event-banner-right{display:flex;align-items:center;gap:14px;flex-shrink:0}
+        .event-banner-meta{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--text3);font-family:var(--mono);white-space:nowrap}
+        .event-banner-meta svg{opacity:.6}
+        .event-banner-cta{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;color:var(--orange);white-space:nowrap;transition:gap .15s}
+        .event-banner:hover .event-banner-cta{gap:7px}
+        @media(max-width:700px){.event-banner-sep,.event-banner-meta{display:none}.event-banner-inner{padding:10px 16px}}
     </style>
 </head>
 <body>
@@ -384,6 +403,25 @@
     <a href="/corporate" class="mob-link" onclick="toggleMob()">Enterprise</a>
     <a href="/start/" class="mob-link" onclick="toggleMob()" style="color:var(--orange)">Start →</a>
 </div>
+
+<!-- ── EVENT BANNER ── -->
+<a href="/sliit-dev-conf-26/" class="event-banner">
+    <div class="event-banner-inner">
+        <div class="event-banner-left">
+            <span class="event-banner-dot"></span>
+            <span class="event-banner-label">Upcoming Event</span>
+            <span class="event-banner-sep">/</span>
+            <span class="event-banner-title">Introduction to Microservices &amp; FractalX Framework &mdash; SLIIT Dev Conf 2026</span>
+        </div>
+        <div class="event-banner-right">
+            <span class="event-banner-meta">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Apr 4, 2026 &nbsp;&bull;&nbsp; 1:30 PM
+            </span>
+            <span class="event-banner-cta">Register Now →</span>
+        </div>
+    </div>
+</a>
 
 <!-- ── HERO ── -->
 <section class="hero">
