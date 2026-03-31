@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Introduction to Microservices & FractalX Framework — SLIIT Dev Conf 2026</title>
+    <meta name="description" content="A hands-on developer session on microservices architecture and the FractalX framework, organised by FractalX and SESC at SLIIT. 4th April 2026, 1:30 PM – 3:30 PM, Hall F1402."/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        (function(){
+            const s=localStorage.getItem('frx-theme');
+            const d=window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if(s==='light'||(!s&&!d))document.documentElement.classList.add('light');
+        })();
+    </script>
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+        :root{
+            --bg:#000;--bg1:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
+            --border:#1f1f1f;--border2:#272727;--border3:#333;--border4:#444;
+            --text:#ededed;--text2:#a1a1aa;--text3:#71717a;--text4:#3f3f46;
+            --white:#fff;
+            --orange:#f4600c;--orange2:#e0540a;
+            --orange-dim:rgba(244,96,12,.10);--orange-glow:rgba(244,96,12,.22);
+            --gold:#f5a800;--gold-dim:rgba(245,168,0,.10);
+            --peri:#b8c4e0;--peri-dim:rgba(184,196,224,.08);
+            --green:#50e3c2;--green-dim:rgba(80,227,194,.08);
+            --blue:#3291ff;--blue-dim:rgba(50,145,255,.10);
+            --nav-bg:rgba(0,0,0,.80);
+            --hero-grad:radial-gradient(ellipse 90% 55% at 50% -5%,rgba(244,96,12,.18) 0%,transparent 70%);
+            --r:8px;--font:'Geist',sans-serif;--mono:'Geist Mono',monospace;
+        }
+        html.light{
+            --bg:#fff;--bg1:#fafafa;--bg2:#f4f4f5;--bg3:#e4e4e7;--bg4:#d4d4d8;
+            --border:#e4e4e7;--border2:#d4d4d8;--border3:#a1a1aa;--border4:#71717a;
+            --text:#09090b;--text2:#52525b;--text3:#71717a;--text4:#a1a1aa;
+            --white:#09090b;
+            --orange:#d4510a;--orange2:#c04608;
+            --orange-dim:rgba(212,81,10,.07);--orange-glow:rgba(212,81,10,.14);
+            --gold:#c47a00;--gold-dim:rgba(196,122,0,.07);
+            --peri:#4a5fa8;--peri-dim:rgba(74,95,168,.07);
+            --green:#067a6f;--green-dim:rgba(6,122,111,.07);
+            --blue:#0070f3;--blue-dim:rgba(0,112,243,.07);
+            --nav-bg:rgba(255,255,255,.85);
+            --hero-grad:radial-gradient(ellipse 90% 55% at 50% -5%,rgba(212,81,10,.09) 0%,transparent 70%);
+        }
+
+        html{scroll-behavior:smooth}
+        body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;transition:background .2s,color .2s;overflow-x:hidden}
+        ::-webkit-scrollbar{width:4px}
+        ::-webkit-scrollbar-thumb{background:var(--border3);border-radius:4px}
+        a{color:inherit;text-decoration:none}
+
+        /* ── NAV ── */
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;background:var(--nav-bg);backdrop-filter:blur(16px) saturate(180%);border-bottom:1px solid var(--border);transition:background .2s}
+        .nav-inner{max-width:1120px;margin:0 auto;padding:0 24px;width:100%;display:flex;align-items:center;gap:28px}
+        .nav-logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;color:var(--text);letter-spacing:-.2px;flex-shrink:0}
+        .logo-mark{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;flex-shrink:0}
+        .logo-mark svg{width:14px;height:14px}
+        .nav-links{display:flex;align-items:center;gap:2px;margin-left:8px}
+        .nav-link{font-size:13.5px;color:var(--text2);padding:6px 11px;border-radius:6px;transition:color .15s,background .15s;white-space:nowrap}
+        .nav-link:hover{color:var(--text);background:var(--bg2)}
+        .nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
+        .tt{width:34px;height:34px;border-radius:7px;border:1px solid var(--border2);background:var(--bg1);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;padding:0}
+        .tt:hover{border-color:var(--border3);background:var(--bg2)}
+        .tt svg{width:15px;height:15px;color:var(--text3);display:block}
+        .tt .ic-moon{display:block}.tt .ic-sun{display:none}
+        html.light .tt .ic-moon{display:none}
+        html.light .tt .ic-sun{display:block}
+        .ham{display:none;width:36px;height:36px;border:1px solid var(--border2);background:var(--bg1);border-radius:7px;cursor:pointer;align-items:center;justify-content:center;padding:0;flex-shrink:0}
+        .ham svg{width:16px;height:16px;color:var(--text2)}
+        .mob-menu{display:none;position:fixed;top:56px;left:0;right:0;background:var(--bg1);border-bottom:1px solid var(--border);padding:12px 16px;z-index:99;flex-direction:column;gap:4px}
+        .mob-menu.open{display:flex}
+        .mob-link{font-size:14px;color:var(--text2);padding:10px 12px;border-radius:6px;transition:color .15s,background .15s}
+        .mob-link:hover,.mob-link.active{color:var(--orange);background:var(--orange-dim)}
+        @media(max-width:900px){.nav-links{display:none}.ham{display:inline-flex}}
+
+        /* ── HERO ── */
+        .hero{padding:130px 24px 80px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+        .hero::before{content:'';position:absolute;inset:0;background:var(--hero-grad);pointer-events:none}
+        .hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.25;pointer-events:none;mask-image:radial-gradient(ellipse 70% 60% at 50% 0%,#000 20%,transparent 100%)}
+        html.light .hero::after{opacity:.12}
+        .hero-inner{max-width:780px;margin:0 auto;position:relative;z-index:1}
+
+        /* collab badge */
+        .collab-badge{display:inline-flex;align-items:center;gap:10px;background:var(--bg1);border:1px solid var(--border2);border-radius:24px;padding:6px 14px 6px 8px;margin-bottom:24px}
+        .collab-logos{display:flex;align-items:center;gap:6px}
+        .collab-logo{width:26px;height:26px;border-radius:6px;display:grid;place-items:center;background:var(--bg2);border:1px solid var(--border2)}
+        .collab-logo svg{width:13px;height:13px}
+        .collab-sep{font-size:14px;color:var(--text4);font-weight:300}
+        .collab-sesc{font-size:13px;font-weight:700;color:var(--text2);letter-spacing:-.1px}
+        .collab-sesc span{color:var(--blue)}
+        .collab-text{font-size:12px;color:var(--text3);font-family:var(--mono)}
+
+        .event-label{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-family:var(--mono);color:var(--orange);background:var(--orange-dim);border:1px solid rgba(244,96,12,.2);padding:4px 12px;border-radius:20px;margin-bottom:18px;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+        .event-label .live-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange);animation:pulse 2s ease-in-out infinite}
+        @keyframes pulse{0%,100%{box-shadow:0 0 6px var(--orange)}50%{box-shadow:0 0 14px var(--orange)}}
+
+        .hero-h1{font-size:clamp(32px,5.5vw,60px);font-weight:800;letter-spacing:-2px;line-height:1.07;color:var(--white);margin-bottom:22px}
+        .hero-h1 .hl{color:var(--orange)}
+        .hero-h1 .dim{color:var(--text2);font-weight:600}
+
+        /* info pills */
+        .info-pills{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;margin-bottom:36px}
+        .pill{display:inline-flex;align-items:center;gap:7px;font-size:13px;padding:8px 16px;border-radius:30px;border:1px solid var(--border2);background:var(--bg1);color:var(--text2);font-weight:500;white-space:nowrap}
+        .pill svg{width:14px;height:14px;flex-shrink:0;opacity:.7}
+        .pill.date{border-color:rgba(244,96,12,.25);background:var(--orange-dim);color:var(--orange)}
+        .pill.date svg{opacity:1;color:var(--orange)}
+        .pill.time{border-color:rgba(245,168,0,.2);background:var(--gold-dim);color:var(--gold)}
+        .pill.venue{border-color:rgba(50,145,255,.2);background:var(--blue-dim);color:var(--blue)}
+        .pill.audience{border-color:rgba(80,227,194,.2);background:var(--green-dim);color:var(--green)}
+        html.light .pill.date{color:var(--orange)}
+        html.light .pill.time{color:var(--gold)}
+        html.light .pill.venue{color:var(--blue)}
+        html.light .pill.audience{color:var(--green)}
+
+        .hero-ctas{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+        .btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:13px 26px;border-radius:9px;cursor:pointer;transition:all .18s;border:none;font-family:var(--font);white-space:nowrap;letter-spacing:-.1px}
+        .btn-primary{background:var(--orange);color:#fff;box-shadow:0 0 0 0 var(--orange-glow)}
+        .btn-primary:hover{background:var(--orange2);box-shadow:0 0 24px var(--orange-glow);transform:translateY(-1px)}
+        .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border2)}
+        .btn-ghost:hover{background:var(--bg2);border-color:var(--border3)}
+        .btn svg{width:15px;height:15px;flex-shrink:0}
+        .btn-sm{font-size:13px;padding:9px 18px;border-radius:8px;font-weight:500}
+
+        /* countdown */
+        .countdown{display:flex;align-items:center;justify-content:center;gap:20px;margin:40px 0 0;padding:28px 24px;background:var(--bg1);border:1px solid var(--border2);border-radius:16px;max-width:480px;margin:40px auto 0}
+        .cd-item{text-align:center;min-width:56px}
+        .cd-num{font-size:36px;font-weight:800;color:var(--white);letter-spacing:-2px;font-family:var(--mono);line-height:1}
+        .cd-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-top:4px;font-family:var(--mono)}
+        .cd-sep{font-size:28px;font-weight:300;color:var(--border3);line-height:1;margin-top:-8px}
+
+        /* ── SECTIONS ── */
+        .section{padding:80px 24px}
+        .section-inner{max-width:1120px;margin:0 auto}
+        .section-label{font-size:11.5px;font-family:var(--mono);color:var(--orange);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;font-weight:500}
+        .section-h{font-size:clamp(24px,3.5vw,34px);font-weight:700;letter-spacing:-1px;color:var(--white);line-height:1.2;margin-bottom:12px}
+        .section-sub{font-size:15px;color:var(--text2);line-height:1.75;max-width:560px}
+        html.light .section-h{color:var(--white)}
+
+        /* ── ABOUT GRID ── */
+        .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:44px}
+        @media(max-width:680px){.about-grid{grid-template-columns:1fr}}
+        .about-card{background:var(--bg);padding:32px 28px;position:relative;transition:background .15s}
+        .about-card:hover{background:var(--bg1)}
+        .about-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;margin-bottom:18px;font-size:20px;border:1px solid var(--border2);background:var(--bg2)}
+        .about-title{font-size:17px;font-weight:700;color:var(--white);margin-bottom:8px;letter-spacing:-.3px}
+        .about-desc{font-size:13.5px;color:var(--text2);line-height:1.7}
+
+        /* ── AGENDA ── */
+        .agenda{margin-top:44px}
+        .agenda-item{display:grid;grid-template-columns:90px 1fr;gap:24px;padding:24px 0;border-bottom:1px solid var(--border);position:relative}
+        .agenda-item:last-child{border-bottom:none}
+        .agenda-item::before{content:'';position:absolute;left:90px;top:0;bottom:0;width:1px;background:var(--border)}
+        .agenda-time{font-size:12.5px;font-family:var(--mono);color:var(--text3);font-weight:500;padding-top:3px;text-align:right;padding-right:24px}
+        .agenda-content{padding-left:24px}
+        .agenda-dot{position:absolute;left:calc(90px - 5px);top:28px;width:10px;height:10px;border-radius:50%;border:2px solid var(--bg);background:var(--border3)}
+        .agenda-item.highlight .agenda-dot{background:var(--orange);border-color:var(--bg)}
+        .agenda-item.highlight .agenda-time{color:var(--orange)}
+        .agenda-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:4px;letter-spacing:-.2px}
+        .agenda-desc{font-size:13px;color:var(--text3);line-height:1.6}
+        .agenda-tag{display:inline-flex;align-items:center;font-size:11px;font-family:var(--mono);padding:2px 8px;border-radius:4px;margin-top:6px;font-weight:500}
+        .tag-demo{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(244,96,12,.2)}
+        .tag-talk{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(50,145,255,.15)}
+        .tag-hands{background:var(--green-dim);color:var(--green);border:1px solid rgba(80,227,194,.15)}
+        .tag-net{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(245,168,0,.15)}
+
+        /* ── TOPICS ── */
+        .topics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:44px}
+        .topic-card{background:var(--bg);padding:26px;position:relative;overflow:hidden;transition:background .15s}
+        .topic-card:hover{background:var(--bg1)}
+        .topic-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange-dim),transparent);opacity:0;transition:opacity .2s}
+        .topic-card:hover::after{opacity:1}
+        .topic-num{font-size:11px;font-family:var(--mono);color:var(--orange);background:var(--orange-dim);border:1px solid rgba(244,96,12,.2);width:24px;height:24px;border-radius:5px;display:grid;place-items:center;margin-bottom:14px;font-weight:700}
+        .topic-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:7px;letter-spacing:-.2px}
+        .topic-desc{font-size:13px;color:var(--text2);line-height:1.65}
+
+        /* ── ORGANIZERS ── */
+        .org-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:44px}
+        @media(max-width:600px){.org-grid{grid-template-columns:1fr}}
+        .org-card{border:1px solid var(--border2);border-radius:14px;padding:28px;background:var(--bg1);transition:border-color .15s}
+        .org-card:hover{border-color:var(--border3)}
+        .org-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+        .org-logo-box{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;border:1px solid var(--border2);background:var(--bg2);flex-shrink:0}
+        .org-name{font-size:16px;font-weight:700;color:var(--white);letter-spacing:-.3px}
+        .org-handle{font-size:12px;color:var(--text3);font-family:var(--mono);margin-top:1px}
+        .org-desc{font-size:13.5px;color:var(--text2);line-height:1.7}
+        .org-link{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--orange);margin-top:14px;transition:gap .15s}
+        .org-link:hover{gap:8px}
+        .org-link svg{width:12px;height:12px}
+
+        /* ── CTA BAND ── */
+        .cta-band{padding:80px 24px;text-align:center;position:relative;overflow:hidden;border-top:1px solid var(--border)}
+        .cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(244,96,12,.08) 0%,transparent 70%);pointer-events:none}
+        html.light .cta-band::before{background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(212,81,10,.05) 0%,transparent 70%)}
+        .cta-inner{max-width:600px;margin:0 auto;position:relative;z-index:1}
+        .cta-h{font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-1.2px;color:var(--white);margin-bottom:14px;line-height:1.15}
+        .cta-sub{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:32px}
+        .cta-note{font-size:12.5px;color:var(--text3);margin-top:16px;font-family:var(--mono)}
+
+        /* ── FOOTER ── */
+        .footer{border-top:1px solid var(--border);padding:32px 24px;background:var(--bg1)}
+        .footer-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+        .footer-logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:var(--text2)}
+        .footer-logo svg{width:13px;height:13px}
+        .footer-links{display:flex;gap:20px}
+        .footer-link{font-size:13px;color:var(--text3);transition:color .15s}
+        .footer-link:hover{color:var(--text2)}
+        .footer-copy{font-size:12.5px;color:var(--text4);font-family:var(--mono)}
+
+        /* ── DIVIDER ── */
+        .sep{border:none;border-top:1px solid var(--border);margin:0}
+
+        @media(max-width:600px){
+            .hero{padding:110px 20px 60px}
+            .section{padding:60px 20px}
+            .countdown{gap:12px;padding:20px 16px}
+            .cd-num{font-size:28px}
+            .about-card,.topic-card{padding:22px 18px}
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+    <div class="nav-inner">
+        <a class="nav-logo" href="/">
+            <div class="logo-mark">
+                <svg viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="var(--orange)"/>
+                    <path d="M18.2837 0H148.284V40H18.2837V0Z" fill="var(--orange)"/>
+                    <path d="M59.2837 66H148.284V106H59.2837V66Z" fill="var(--orange)"/>
+                    <path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="var(--orange)"/>
+                </svg>
+            </div>
+            FractalX
+        </a>
+        <div class="nav-links">
+            <a class="nav-link" href="/docs/">Docs</a>
+            <a class="nav-link" href="/blog/">Blog</a>
+            <a class="nav-link" href="/contribute/">Contribute</a>
+            <a class="nav-link" href="/corporate/">Enterprise</a>
+            <a class="nav-link" href="/start/" style="color:var(--orange)">Start →</a>
+        </div>
+        <div class="nav-right">
+            <button class="tt" onclick="toggleTheme()" aria-label="Toggle theme">
+                <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            </button>
+            <button class="ham" onclick="toggleMob()" aria-label="Menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+<div class="mob-menu" id="mob-menu">
+    <a class="mob-link" href="/docs/" onclick="toggleMob()">Docs</a>
+    <a class="mob-link" href="/blog/" onclick="toggleMob()">Blog</a>
+    <a class="mob-link" href="/contribute/" onclick="toggleMob()">Contribute</a>
+    <a class="mob-link" href="/corporate/" onclick="toggleMob()">Enterprise</a>
+    <a class="mob-link" href="/start/" onclick="toggleMob()" style="color:var(--orange)">Start →</a>
+</div>
+
+<!-- ══ HERO ══════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+    <div class="hero-inner">
+
+        <!-- Collab badge: FractalX × SESC -->
+        <div class="collab-badge">
+            <div class="collab-logos">
+                <div class="collab-logo">
+                    <svg viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="var(--orange)"/>
+                        <path d="M18.2837 0H148.284V40H18.2837V0Z" fill="var(--orange)"/>
+                        <path d="M59.2837 66H148.284V106H59.2837V66Z" fill="var(--orange)"/>
+                        <path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="var(--orange)"/>
+                    </svg>
+                </div>
+                <span class="collab-sep">×</span>
+                <div class="collab-logo" style="background:rgba(0,112,243,.08);border-color:rgba(0,112,243,.2)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" width="13" height="13"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+            </div>
+            <span class="collab-text">FractalX &nbsp;×&nbsp; <span style="color:var(--blue);font-weight:600">SESC</span> &nbsp;·&nbsp; SLIIT Dev Session</span>
+        </div>
+
+        <div class="event-label">
+            <span class="live-dot"></span>
+            Developer Conference 2026
+        </div>
+
+        <h1 class="hero-h1">
+            Introduction to<br>
+            <span class="hl">Microservices</span> <span class="dim">&</span><br>
+            FractalX Framework
+        </h1>
+
+        <!-- Info pills -->
+        <div class="info-pills">
+            <div class="pill date">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Saturday, 4th April 2026
+            </div>
+            <div class="pill time">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                1:30 PM — 3:30 PM
+            </div>
+            <div class="pill venue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                SLIIT, Hall F1402
+            </div>
+            <div class="pill audience">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Open to SLIIT Students
+            </div>
+        </div>
+
+        <div class="hero-ctas">
+            <a href="https://forms.gle/2Xhmv7F4Bdhkb9d4A" target="_blank" rel="noopener" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Register Now — It's Free
+            </a>
+            <a href="#agenda" class="btn btn-ghost">
+                View Agenda
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </a>
+        </div>
+
+        <!-- Live countdown -->
+        <div class="countdown" id="countdown">
+            <div class="cd-item"><div class="cd-num" id="cd-d">--</div><div class="cd-label">Days</div></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-item"><div class="cd-num" id="cd-h">--</div><div class="cd-label">Hours</div></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-item"><div class="cd-num" id="cd-m">--</div><div class="cd-label">Mins</div></div>
+            <div class="cd-sep">:</div>
+            <div class="cd-item"><div class="cd-num" id="cd-s">--</div><div class="cd-label">Secs</div></div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ══ ABOUT ══════════════════════════════════════════════════════════════════ -->
+<section class="section" style="background:var(--bg1);border-bottom:1px solid var(--border)">
+    <div class="section-inner">
+        <div class="section-label">About the event</div>
+        <h2 class="section-h">Why attend this session?</h2>
+        <p class="section-sub">A hands-on, zero-fluff developer session designed for students who want to understand modern backend architecture from first principles — and leave with a working project.</p>
+
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="about-icon">🧩</div>
+                <div class="about-title">Understand Microservices from Scratch</div>
+                <div class="about-desc">Learn why microservices exist, when they make sense, and how to structure a system around bounded contexts — without the hype or buzzwords.</div>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">⚡</div>
+                <div class="about-title">See FractalX in Action</div>
+                <div class="about-desc">Watch a monolith decompose into independent microservices with a single Maven command. Three annotations. One command. A fully wired service platform.</div>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">🛠️</div>
+                <div class="about-title">Hands-on Demo</div>
+                <div class="about-desc">Follow along as we build and annotate a Spring Boot monolith live, then run <code style="font-family:var(--mono);font-size:12px;color:var(--orange);background:var(--orange-dim);padding:1px 5px;border-radius:3px">mvn fractalx:decompose</code> to extract it into services.</div>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">🤝</div>
+                <div class="about-title">Network with Peers</div>
+                <div class="about-desc">Connect with fellow SLIIT students passionate about backend engineering, open-source development, and distributed systems. Build your network early.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ AGENDA ══════════════════════════════════════════════════════════════════ -->
+<section class="section" id="agenda">
+    <div class="section-inner">
+        <div class="section-label">Schedule</div>
+        <h2 class="section-h">Agenda</h2>
+        <p class="section-sub">Two focused hours. No filler. Every segment is practical and demo-driven.</p>
+
+        <div class="agenda">
+
+            <div class="agenda-item">
+                <div class="agenda-time">1:30 PM</div>
+                <div class="agenda-dot"></div>
+                <div class="agenda-content">
+                    <div class="agenda-title">Welcome & Introductions</div>
+                    <div class="agenda-desc">Quick welcome from SESC and the FractalX team. What to expect from the next two hours and what you'll walk away with.</div>
+                    <span class="agenda-tag tag-net">Opening</span>
+                </div>
+            </div>
+
+            <div class="agenda-item highlight">
+                <div class="agenda-time">1:40 PM</div>
+                <div class="agenda-dot"></div>
+                <div class="agenda-content">
+                    <div class="agenda-title">The Monolith Problem — Why Do We Need Microservices?</div>
+                    <div class="agenda-desc">A crisp, honest look at why monoliths break at scale, what microservices actually solve (and what they don't), and the real cost of a bad decomposition.</div>
+                    <span class="agenda-tag tag-talk">Talk</span>
+                </div>
+            </div>
+
+            <div class="agenda-item highlight">
+                <div class="agenda-time">2:05 PM</div>
+                <div class="agenda-dot"></div>
+                <div class="agenda-content">
+                    <div class="agenda-title">Introducing FractalX — Decomposition by Design</div>
+                    <div class="agenda-desc">How FractalX uses static AST analysis and build-time code generation to extract microservices safely. Core concepts: <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@DecomposableModule</code>, <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@DistributedSaga</code>, and the decomposition pipeline.</div>
+                    <span class="agenda-tag tag-talk">Talk</span>
+                </div>
+            </div>
+
+            <div class="agenda-item highlight">
+                <div class="agenda-time">2:30 PM</div>
+                <div class="agenda-dot"></div>
+                <div class="agenda-content">
+                    <div class="agenda-title">Live Demo — From Monolith to Microservices</div>
+                    <div class="agenda-desc">We'll build a small Spring Boot monolith from scratch, add the three FractalX annotations, and run <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">mvn fractalx:decompose</code> to extract independent services — gateway, registry, admin dashboard and all.</div>
+                    <span class="agenda-tag tag-demo">Live Demo</span>
+                </div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">3:05 PM</div>
+                <div class="agenda-dot"></div>
+                <div class="agenda-content">
+                    <div class="agenda-title">Try It Yourself — FractalX Initializr</div>
+                    <div class="agenda-desc">Use <a href="/start/" style="color:var(--orange)">start.fractalx.org</a> to scaffold your own project live. Define services, entities, and sagas — download a decomposition-ready monolith in seconds.</div>
+                    <span class="agenda-tag tag-hands">Hands-on</span>
+                </div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">3:20 PM</div>
+                <div class="agenda-dot"></div>
+                <div class="agenda-content">
+                    <div class="agenda-title">Q&amp;A — Ask Anything</div>
+                    <div class="agenda-desc">Open floor for questions on microservices architecture, FractalX internals, contributing to open source, or anything else on your mind.</div>
+                    <span class="agenda-tag tag-talk">Q&amp;A</span>
+                </div>
+            </div>
+
+            <div class="agenda-item">
+                <div class="agenda-time">3:30 PM</div>
+                <div class="agenda-dot"></div>
+                <div class="agenda-content">
+                    <div class="agenda-title">Wrap-up &amp; Networking</div>
+                    <div class="agenda-desc">Session closes. Hang around to connect with the speakers, SESC team, and other attendees. Resources and follow-up links shared in the group.</div>
+                    <span class="agenda-tag tag-net">Networking</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══ TOPICS ══════════════════════════════════════════════════════════════════ -->
+<section class="section" style="background:var(--bg1);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="section-inner">
+        <div class="section-label">What you'll learn</div>
+        <h2 class="section-h">Topics Covered</h2>
+        <p class="section-sub">Practical concepts you can apply to your final year project, internship, or side project from day one.</p>
+
+        <div class="topics-grid">
+            <div class="topic-card">
+                <div class="topic-num">01</div>
+                <div class="topic-title">Monolith vs. Microservices</div>
+                <div class="topic-desc">Understand the architectural trade-offs — when a monolith is the right choice and when decomposition becomes necessary.</div>
+            </div>
+            <div class="topic-card">
+                <div class="topic-num">02</div>
+                <div class="topic-title">Bounded Contexts & DDD</div>
+                <div class="topic-desc">How to identify service boundaries using Domain-Driven Design principles. Define what each service owns and what it should never touch.</div>
+            </div>
+            <div class="topic-card">
+                <div class="topic-num">03</div>
+                <div class="topic-title">Spring Boot for Microservices</div>
+                <div class="topic-desc">Best practices for structuring Spring Boot modules with clean package boundaries that decompose gracefully later.</div>
+            </div>
+            <div class="topic-card">
+                <div class="topic-num">04</div>
+                <div class="topic-title">FractalX Annotations</div>
+                <div class="topic-desc"><code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@DecomposableModule</code>, <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@DistributedSaga</code>, and <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">@AdminEnabled</code> — how three annotations describe your entire architecture.</div>
+            </div>
+            <div class="topic-card">
+                <div class="topic-num">05</div>
+                <div class="topic-title">Distributed Sagas & Eventual Consistency</div>
+                <div class="topic-desc">How to handle transactions that span multiple services without a distributed lock or two-phase commit.</div>
+            </div>
+            <div class="topic-card">
+                <div class="topic-num">06</div>
+                <div class="topic-title">Service Mesh & Observability</div>
+                <div class="topic-desc">What FractalX generates for you: API Gateway, service registry, distributed tracing, correlation IDs, and circuit breakers — all wired automatically.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ ORGANIZERS ══════════════════════════════════════════════════════════════ -->
+<section class="section">
+    <div class="section-inner">
+        <div class="section-label">Organised by</div>
+        <h2 class="section-h">The Organising Teams</h2>
+        <p class="section-sub">This session is a joint initiative between FractalX and SESC — bringing open-source engineering culture to SLIIT's software engineering community.</p>
+
+        <div class="org-grid">
+
+            <div class="org-card">
+                <div class="org-logo-row">
+                    <div class="org-logo-box">
+                        <svg viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="22">
+                            <path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="var(--orange)"/>
+                            <path d="M18.2837 0H148.284V40H18.2837V0Z" fill="var(--orange)"/>
+                            <path d="M59.2837 66H148.284V106H59.2837V66Z" fill="var(--orange)"/>
+                            <path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="var(--orange)"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="org-name">FractalX</div>
+                        <div class="org-handle">fractalx.org</div>
+                    </div>
+                </div>
+                <div class="org-desc">FractalX is an open-source static decomposition framework that transforms modular Spring Boot monoliths into production-ready microservice platforms using AST analysis and build-time code generation.</div>
+                <a href="/" class="org-link">
+                    Visit fractalx.org
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                </a>
+            </div>
+
+            <div class="org-card">
+                <div class="org-logo-row">
+                    <div class="org-logo-box" style="background:rgba(0,112,243,.08);border-color:rgba(0,112,243,.2)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" width="18" height="18"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <div>
+                        <div class="org-name" style="color:var(--blue)">SESC</div>
+                        <div class="org-handle">Software Engineering Students Community</div>
+                    </div>
+                </div>
+                <div class="org-desc">SESC (Software Engineering Students Community) is the student-run community of the Department of Software Engineering at SLIIT, Sri Lanka — organising tech events, workshops, and developer sessions for students.</div>
+                <span class="org-link" style="color:var(--blue)">
+                    SLIIT · Faculty of Computing
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="m9 18 6-6-6-6"/></svg>
+                </span>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══ CTA BAND ════════════════════════════════════════════════════════════════ -->
+<section class="cta-band" id="register">
+    <div class="cta-inner">
+        <div style="display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-family:var(--mono);color:var(--text3);background:var(--bg1);border:1px solid var(--border2);padding:4px 12px;border-radius:20px;margin-bottom:18px">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);display:inline-block"></span>
+            Free · No prerequisites · Open to all SLIIT students
+        </div>
+        <h2 class="cta-h">Reserve your seat — <span style="color:var(--orange)">4 Apr 2026</span></h2>
+        <p class="cta-sub">Spots are limited to ensure a quality hands-on experience. Register now to secure your place at Hall F1402, SLIIT.</p>
+        <a href="https://forms.gle/REPLACE_WITH_FORM_LINK" target="_blank" rel="noopener" class="btn btn-primary" style="font-size:15px;padding:15px 32px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Register Now — Free
+        </a>
+        <div class="cta-note">Saturday 4th April 2026 · 1:30 PM – 3:30 PM · SLIIT Hall F1402</div>
+    </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-logo">
+            <svg viewBox="0 0 149 165" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.2837 40L77.5674 70.7474L59.2837 106L0 75.2526L18.2837 40Z" fill="var(--orange)"/>
+                <path d="M18.2837 0H148.284V40H18.2837V0Z" fill="var(--orange)"/>
+                <path d="M59.2837 66H148.284V106H59.2837V66Z" fill="var(--orange)"/>
+                <path d="M59.2837 106V165H18.2837V106H59.2837Z" fill="var(--orange)"/>
+            </svg>
+            FractalX × SESC · SLIIT Dev Conf 2026
+        </div>
+        <div class="footer-links">
+            <a class="footer-link" href="/">Home</a>
+            <a class="footer-link" href="/docs/">Docs</a>
+            <a class="footer-link" href="/start/">Initializr</a>
+            <a class="footer-link" href="/corporate/">Enterprise</a>
+        </div>
+        <div class="footer-copy">© 2026 FractalX · Apache 2.0</div>
+    </div>
+</footer>
+
+<script>
+    function toggleTheme() {
+        document.documentElement.classList.toggle('light');
+        localStorage.setItem('frx-theme', document.documentElement.classList.contains('light') ? 'light' : 'dark');
+    }
+    function toggleMob() {
+        document.getElementById('mob-menu').classList.toggle('open');
+    }
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') document.getElementById('mob-menu').classList.remove('open');
+    });
+
+    // ── Countdown ────────────────────────────────────────────────────────────
+    // Event: 4 April 2026, 13:30 (Sri Lanka Time = UTC+5:30)
+    const EVENT_DATE = new Date('2026-04-04T08:00:00Z'); // 13:30 LKT = 08:00 UTC
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function updateCountdown() {
+        const now  = new Date();
+        const diff = EVENT_DATE - now;
+
+        const countdownEl = document.getElementById('countdown');
+
+        if (diff <= 0) {
+            countdownEl.innerHTML = '<div style="text-align:center;width:100%;font-size:16px;font-weight:700;color:var(--green)">🎉 The session is happening right now!</div>';
+            return;
+        }
+
+        const days  = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff % 86400000) / 3600000);
+        const mins  = Math.floor((diff % 3600000)  / 60000);
+        const secs  = Math.floor((diff % 60000)    / 1000);
+
+        document.getElementById('cd-d').textContent = pad(days);
+        document.getElementById('cd-h').textContent = pad(hours);
+        document.getElementById('cd-m').textContent = pad(mins);
+        document.getElementById('cd-s').textContent = pad(secs);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>
