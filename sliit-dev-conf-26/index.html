@@ -979,17 +979,15 @@
         ctx.fillText('×', sepX, LOGO_Y + LOGO_H * 0.66);
         const sepW = ctx.measureText('×').width;
 
-        // SESC logo — multiply blend removes the white background
+        // SESC logo
         const SESC_H = 30;
         const sescX  = sepX + sepW + 10;
         const sescY  = LOGO_Y + (LOGO_H - SESC_H) / 2;
         try {
             const sescImg = await loadImage('/assets/images/events/sliit-dev-conf/sesc.png');
             const sescW   = sescImg.naturalWidth / sescImg.naturalHeight * SESC_H;
-            ctx.globalCompositeOperation = 'multiply';
             ctx.drawImage(sescImg, sescX, sescY, sescW, SESC_H);
-            ctx.globalCompositeOperation = 'source-over';
-        } catch (_) { ctx.globalCompositeOperation = 'source-over'; }
+        } catch (_) { /* skip if image fails */ }
 
         // Right-side label
         ctx.fillStyle = '#a1a1aa';
