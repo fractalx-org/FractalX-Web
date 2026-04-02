@@ -808,10 +808,10 @@
         });
     }
 
-    function drawDecorLine(ctx, W, y, lineWidth, dotColor) {
+    function drawDecorLine(ctx, W, y, lineWidth, lineColor, dotColor) {
         const x1 = (W - lineWidth) / 2;
         const x2 = x1 + lineWidth;
-        ctx.strokeStyle = '#252525';
+        ctx.strokeStyle = lineColor || '#e4e4e7';
         ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y); ctx.stroke();
         // Center dot
@@ -819,7 +819,7 @@
         ctx.beginPath(); ctx.arc(W / 2, y, 3, 0, Math.PI * 2); ctx.fill();
         // Flanking dots
         [-52, 52].forEach(offset => {
-            ctx.fillStyle = '#2e2e2e';
+            ctx.fillStyle = lineColor || '#d4d4d8';
             ctx.beginPath(); ctx.arc(W / 2 + offset, y, 2, 0, Math.PI * 2); ctx.fill();
         });
     }
@@ -832,36 +832,47 @@
         const W = 1200, H = 848;
 
         // ── Background ────────────────────────────────────────────────────────
+        // Warm off-white base
         const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
-        bgGrad.addColorStop(0, '#0d0d0d');
-        bgGrad.addColorStop(1, '#121212');
+        bgGrad.addColorStop(0, '#ffffff');
+        bgGrad.addColorStop(1, '#faf9f7');
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, W, H);
 
-        // Subtle center glow
-        const radGrad = ctx.createRadialGradient(W / 2, H / 2 - 40, 0, W / 2, H / 2 - 40, 480);
-        radGrad.addColorStop(0, 'rgba(244,96,12,0.055)');
-        radGrad.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = radGrad;
-        ctx.fillRect(0, 0, W, H);
+        // Very subtle dot grid pattern
+        ctx.fillStyle = 'rgba(0,0,0,0.04)';
+        for (let gx = 0; gx <= W; gx += 40) {
+            for (let gy = 0; gy <= H; gy += 40) {
+                ctx.beginPath();
+                ctx.arc(gx, gy, 0.8, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
 
         // Outer border
-        ctx.strokeStyle = '#1e1e1e';
+        ctx.strokeStyle = '#e4e4e7';
         ctx.lineWidth = 1;
         ctx.strokeRect(0.5, 0.5, W - 1, H - 1);
 
-        // Inner frame
-        ctx.strokeStyle = '#1a1a1a';
+        // Inner frame (inset 26px)
+        ctx.strokeStyle = '#ece9e4';
         ctx.lineWidth = 1;
         ctx.strokeRect(26.5, 26.5, W - 53, H - 53);
 
         // Orange top accent bar
         ctx.fillStyle = '#f4600c';
-        ctx.fillRect(0, 0, W, 4);
+        ctx.fillRect(0, 0, W, 5);
 
         // Orange bottom accent bar
         ctx.fillStyle = '#f4600c';
-        ctx.fillRect(0, H - 4, W, 4);
+        ctx.fillRect(0, H - 5, W, 5);
+
+        // Subtle warm tint strip just below top bar
+        const stripGrad = ctx.createLinearGradient(0, 5, 0, 60);
+        stripGrad.addColorStop(0, 'rgba(244,96,12,0.06)');
+        stripGrad.addColorStop(1, 'rgba(244,96,12,0)');
+        ctx.fillStyle = stripGrad;
+        ctx.fillRect(0, 5, W, 55);
 
         // ── Header ────────────────────────────────────────────────────────────
         const LOGO_H = 34;
@@ -870,18 +881,18 @@
         const LOGO_Y = 40;
         drawFXLogo(ctx, LOGO_X, LOGO_Y, LOGO_H);
 
-        ctx.fillStyle = '#e4e4e7';
+        ctx.fillStyle = '#09090b';
         ctx.font = '700 17px "Geist", sans-serif';
         ctx.textAlign = 'left';
         ctx.fillText('FractalX', LOGO_X + LOGO_W + 10, LOGO_Y + LOGO_H * 0.66);
 
-        ctx.fillStyle = '#3f3f46';
+        ctx.fillStyle = '#a1a1aa';
         ctx.font = '500 11.5px "Geist Mono", monospace';
         ctx.textAlign = 'right';
         ctx.fillText('SESC × SLIIT  ·  Dev Conf 2026', W - 56, LOGO_Y + LOGO_H * 0.66);
 
         // Header separator
-        ctx.strokeStyle = '#1c1c1c';
+        ctx.strokeStyle = '#e4e4e7';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(56, 94); ctx.lineTo(W - 56, 94);
@@ -894,74 +905,88 @@
         ctx.textAlign = 'center';
         drawTrackedText(ctx, 'CERTIFICATE OF PARTICIPATION', W / 2, 240, 3.5);
 
-        drawDecorLine(ctx, W, 272, 260);
+        drawDecorLine(ctx, W, 272, 260, '#e4e4e7', '#f4600c');
 
         // "This certifies that"
-        ctx.fillStyle = '#71717a';
+        ctx.fillStyle = '#a1a1aa';
         ctx.font = '400 15.5px "Geist", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('This certifies that', W / 2, 314);
 
-        // NAME — auto-scale font for long names
+        // FULL NAME — auto-scale font for long names; uses the complete name field from MongoDB
         let nameFontSize = 60;
         ctx.font = `700 ${nameFontSize}px "Geist", sans-serif`;
         while (ctx.measureText(name).width > W - 160 && nameFontSize > 28) {
             nameFontSize -= 2;
             ctx.font = `700 ${nameFontSize}px "Geist", sans-serif`;
         }
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = '#09090b';
         ctx.textAlign = 'center';
         ctx.fillText(name, W / 2, 400);
 
+        // Thin underline beneath name
+        const nameWidth = Math.min(ctx.measureText(name).width + 80, W - 120);
+        const nlx = (W - nameWidth) / 2;
+        const nlGrad = ctx.createLinearGradient(nlx, 0, nlx + nameWidth, 0);
+        nlGrad.addColorStop(0, 'rgba(244,96,12,0)');
+        nlGrad.addColorStop(0.3, 'rgba(244,96,12,0.35)');
+        nlGrad.addColorStop(0.7, 'rgba(244,96,12,0.35)');
+        nlGrad.addColorStop(1, 'rgba(244,96,12,0)');
+        ctx.strokeStyle = nlGrad;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(nlx, 416); ctx.lineTo(nlx + nameWidth, 416);
+        ctx.stroke();
+
         // "has successfully participated in"
-        ctx.fillStyle = '#71717a';
+        ctx.fillStyle = '#a1a1aa';
         ctx.font = '400 15.5px "Geist", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('has successfully participated in', W / 2, 448);
+        ctx.fillText('has successfully participated in', W / 2, 456);
 
-        drawDecorLine(ctx, W, 484, 180, '#3f3f46');
+        drawDecorLine(ctx, W, 490, 180, '#e4e4e7', '#d4d4d8');
 
         // Event title
-        ctx.fillStyle = '#e4e4e7';
+        ctx.fillStyle = '#18181b';
         ctx.font = '600 22px "Geist", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Introduction to Microservices & FractalX Framework', W / 2, 534);
+        ctx.fillText('Introduction to Microservices & FractalX Framework', W / 2, 540);
 
         // Event subtitle (orange)
         ctx.fillStyle = '#f4600c';
         ctx.font = '500 15px "Geist", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('SLIIT Dev Conf 2026', W / 2, 570);
+        ctx.fillText('SLIIT Dev Conf 2026', W / 2, 575);
 
         // Date & venue
-        ctx.fillStyle = '#52525b';
+        ctx.fillStyle = '#71717a';
         ctx.font = '400 13px "Geist", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Saturday, 4th April 2026  ·  Hall F1402, SLIIT', W / 2, 598);
+        ctx.fillText('Saturday, 4th April 2026  ·  Hall F1402, SLIIT', W / 2, 602);
 
         // ── Footer ────────────────────────────────────────────────────────────
-        ctx.strokeStyle = '#1c1c1c';
+        ctx.strokeStyle = '#e4e4e7';
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(56, 680); ctx.lineTo(W - 56, 680);
+        ctx.moveTo(56, 686); ctx.lineTo(W - 56, 686);
         ctx.stroke();
 
         ctx.font = '400 10.5px "Geist Mono", monospace';
 
         // Certificate ID (left)
-        ctx.fillStyle = '#3f3f46';
+        ctx.fillStyle = '#a1a1aa';
         ctx.textAlign = 'left';
-        ctx.fillText(`Certificate ID: ${certId}`, 56, 726);
+        ctx.fillText(`Certificate ID: ${certId}`, 56, 730);
 
         // Issued by (center)
-        ctx.fillStyle = '#3f3f46';
+        ctx.fillStyle = '#a1a1aa';
         ctx.textAlign = 'center';
-        ctx.fillText('Issued by FractalX & SESC  ·  fractalx.org', W / 2, 726);
+        ctx.fillText('Issued by FractalX & SESC  ·  fractalx.org', W / 2, 730);
 
         // Verify URL (right)
-        ctx.fillStyle = '#3f3f46';
+        ctx.fillStyle = '#a1a1aa';
         ctx.textAlign = 'right';
-        ctx.fillText(`Verify: fractalx.org/sliit-dev-conf-26/?cert=${certId}`, W - 56, 726);
+        ctx.fillText(`Verify: fractalx.org/sliit-dev-conf-26/?cert=${certId}`, W - 56, 730);
     }
 
     // ── Certificate lookup ────────────────────────────────────────────────────
@@ -1069,9 +1094,9 @@
         // Show a loading state on the canvas
         const canvas = document.getElementById('certCanvas');
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#0d0d0d';
+        ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, 1200, 848);
-        ctx.fillStyle = '#3f3f46';
+        ctx.fillStyle = '#a1a1aa';
         ctx.font = '400 14px "Geist", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('Loading certificate…', 600, 424);
