@@ -1001,12 +1001,13 @@
         ctx.fillText('×', sepX, LOGO_Y + LOGO_H * 0.66);
         const sepW = ctx.measureText('×').width;
 
-        // SESC logo (SVG, square 1:1) — same height as FractalX logo
+        // SESC logo (SVG, square 1:1) — drawn larger to compensate for internal SVG padding
+        const SESC_SIZE = 54;
         const sescX  = sepX + sepW + 10;
-        const sescY  = LOGO_Y;
+        const sescY  = LOGO_Y + (LOGO_H - SESC_SIZE) / 2;
         try {
             const sescImg = await loadImage('/assets/images/events/sliit-dev-conf/sesc.svg');
-            ctx.drawImage(sescImg, sescX, sescY, LOGO_H, LOGO_H);
+            ctx.drawImage(sescImg, sescX, sescY, SESC_SIZE, SESC_SIZE);
         } catch (_) { /* skip if image fails */ }
 
         // Right-side label
