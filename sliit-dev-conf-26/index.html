@@ -260,6 +260,10 @@
         .li-guide .li-copy-caption:hover{text-decoration:underline}
         .li-caption-copied{font-size:12px;color:var(--green);font-family:var(--mono);margin-left:10px;display:none}
         @media(max-width:560px){.cert-field-row{flex-direction:column}.cert-actions{gap:8px}.cert-actions .btn{flex:1 1 calc(50% - 4px);justify-content:center}}
+        .badge-section{margin-top:52px;padding-top:44px;border-top:1px solid var(--border)}
+        .badge-section-label{font-size:11px;font-family:var(--mono);color:var(--text4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+        .badge-canvas-wrap{display:inline-block;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px var(--border2),0 20px 70px rgba(0,0,0,.65);line-height:0}
+        #badgeCanvas{max-width:320px;width:100%;height:auto;display:block}
 
         @media(max-width:600px){
             .hero{padding:110px 20px 60px}
@@ -656,6 +660,24 @@
             <div class="cert-meta">
                 <div class="cert-id"><span>Certificate ID</span> &nbsp;<code id="certIdDisplay"></code></div>
                 <div class="cert-copied" id="certCopied" style="display:none">✓ Link copied to clipboard</div>
+            </div>
+
+            <!-- Digital Badge -->
+            <div class="badge-section">
+                <div class="badge-section-label">Digital Badge</div>
+                <div class="badge-canvas-wrap">
+                    <canvas id="badgeCanvas" width="600" height="600"></canvas>
+                </div>
+                <div class="cert-actions" style="margin-top:14px">
+                    <button class="btn btn-primary btn-sm" onclick="downloadBadge()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download Badge
+                    </button>
+                    <button class="btn btn-li btn-sm" onclick="shareOnLinkedInBadge()">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        Share Badge on LinkedIn
+                    </button>
+                </div>
             </div>
 
             <!-- LinkedIn posting guide (shown after clicking Post on LinkedIn) -->
@@ -1131,6 +1153,7 @@
             }
 
             await renderCertificate(data.name, data.certificateId);
+            await renderBadge(data.name, data.certificateId);
             currentCertId = data.certificateId;
             window._certName = data.name;
             document.getElementById('certIdDisplay').textContent = data.certificateId;
@@ -1156,6 +1179,183 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }, 'image/png');
+    }
+
+    // ── Digital badge renderer ────────────────────────────────────────────────
+    async function renderBadge(name, certId) {
+        await document.fonts.ready;
+        const canvas = document.getElementById('badgeCanvas');
+        const ctx    = canvas.getContext('2d');
+        const W = 600, H = 600;
+
+        // Background
+        ctx.fillStyle = '#08080a';
+        ctx.fillRect(0, 0, W, H);
+
+        // Radial orange glow
+        const glow = ctx.createRadialGradient(W / 2, H * 0.42, 0, W / 2, H * 0.42, 300);
+        glow.addColorStop(0,   'rgba(244,96,12,0.18)');
+        glow.addColorStop(0.6, 'rgba(244,96,12,0.07)');
+        glow.addColorStop(1,   'rgba(244,96,12,0)');
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, W, H);
+
+        // FX watermark
+        const WM = 380;
+        ctx.globalAlpha = 0.055;
+        drawFXLogo(ctx, (W - (149 / 165) * WM) * 0.08, (H - WM) / 2 - 10, WM);
+        ctx.globalAlpha = 1;
+
+        // Dot grid
+        ctx.fillStyle = 'rgba(255,255,255,0.025)';
+        for (let gx = 0; gx < W; gx += 22)
+            for (let gy = 0; gy < H; gy += 22)
+                { ctx.beginPath(); ctx.arc(gx, gy, 0.9, 0, Math.PI * 2); ctx.fill(); }
+
+        // Borders
+        ctx.strokeStyle = '#27272a'; ctx.lineWidth = 1;
+        ctx.strokeRect(0.5, 0.5, W - 1, H - 1);
+        ctx.strokeStyle = '#1c1c1f';
+        ctx.strokeRect(18.5, 18.5, W - 37, H - 37);
+
+        // Orange accent bars
+        ctx.fillStyle = '#f4600c';
+        ctx.fillRect(0, 0, W, 4);
+        ctx.fillRect(0, H - 4, W, 4);
+
+        // Warm strip under top bar
+        const strip = ctx.createLinearGradient(0, 4, 0, 52);
+        strip.addColorStop(0, 'rgba(244,96,12,0.10)');
+        strip.addColorStop(1, 'rgba(244,96,12,0)');
+        ctx.fillStyle = strip;
+        ctx.fillRect(0, 4, W, 48);
+
+        // ── Header ────────────────────────────────────────────────────────────
+        const LH = 28, LW = (149 / 165) * LH, LX = 36, LY = 32;
+        drawFXLogo(ctx, LX, LY, LH);
+
+        ctx.fillStyle = '#fafafa';
+        ctx.font = '700 14px "Geist", sans-serif';
+        ctx.textAlign = 'left';
+        const fxWX = LX + LW + 8;
+        ctx.fillText('FractalX', fxWX, LY + LH * 0.72);
+
+        const fxWW = ctx.measureText('FractalX').width;
+        const bSepX = fxWX + fxWW + 8;
+        ctx.fillStyle = '#52525b';
+        ctx.font = '400 13px "Geist", sans-serif';
+        ctx.fillText('×', bSepX, LY + LH * 0.72);
+        const bSepW = ctx.measureText('×').width;
+
+        // SESC logo
+        const sescBX = bSepX + bSepW + 8;
+        try {
+            const sescImg = await loadImage('/assets/images/events/sliit-dev-conf/sesc.svg');
+            ctx.drawImage(sescImg, sescBX, LY, LH, LH);
+        } catch (_) {}
+
+        // Right label
+        ctx.fillStyle = '#52525b';
+        ctx.font = '500 10px "Geist Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText('SESC × SLIIT  ·  Dev Conf 2026', W - 36, LY + LH * 0.72);
+
+        // Header separator
+        ctx.strokeStyle = '#27272a'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(36, 76); ctx.lineTo(W - 36, 76); ctx.stroke();
+
+        // ── Content ───────────────────────────────────────────────────────────
+        ctx.fillStyle = '#f4600c';
+        ctx.font = '600 11px "Geist", sans-serif';
+        ctx.textAlign = 'center';
+        drawTrackedText(ctx, 'CERTIFICATE OF PARTICIPATION', W / 2, 148, 3);
+
+        drawDecorLine(ctx, W, 172, 200, '#27272a', '#f4600c');
+
+        ctx.fillStyle = '#71717a';
+        ctx.font = '400 13px "Geist", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('This certifies that', W / 2, 210);
+
+        // Name — auto-scale
+        let nfs = 48;
+        ctx.font = `700 ${nfs}px "Geist", sans-serif`;
+        while (ctx.measureText(name).width > W - 100 && nfs > 22) {
+            nfs -= 2;
+            ctx.font = `700 ${nfs}px "Geist", sans-serif`;
+        }
+        ctx.fillStyle = '#fafafa';
+        ctx.textAlign = 'center';
+        ctx.fillText(name, W / 2, 290);
+
+        // Orange underline
+        const nw = Math.min(ctx.measureText(name).width + 60, W - 80);
+        const nx = (W - nw) / 2;
+        const ulg = ctx.createLinearGradient(nx, 0, nx + nw, 0);
+        ulg.addColorStop(0,   'rgba(244,96,12,0)');
+        ulg.addColorStop(0.3, 'rgba(244,96,12,0.5)');
+        ulg.addColorStop(0.7, 'rgba(244,96,12,0.5)');
+        ulg.addColorStop(1,   'rgba(244,96,12,0)');
+        ctx.strokeStyle = ulg; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(nx, 304); ctx.lineTo(nx + nw, 304); ctx.stroke();
+
+        ctx.fillStyle = '#e4e4e7';
+        ctx.font = '500 13px "Geist", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('FractalX Dev Conference 2026 at SLIIT', W / 2, 356);
+
+        ctx.fillStyle = '#52525b';
+        ctx.font = '400 11.5px "Geist", sans-serif';
+        ctx.fillText('Saturday, 4th April 2026  ·  SLIIT, Malabe', W / 2, 380);
+
+        // ── Footer ────────────────────────────────────────────────────────────
+        ctx.strokeStyle = '#27272a'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(36, 462); ctx.lineTo(W - 36, 462); ctx.stroke();
+
+        // QR — bottom right
+        const QR = 58, QX = W - 36 - QR, QY = 472;
+        const verifyUrl = `https://fractalx.org/sliit-dev-conf-26/?cert=${certId}`;
+        drawQR(ctx, verifyUrl, QX, QY, QR, '#f4600c', '#08080a');
+
+        ctx.fillStyle = '#3f3f46';
+        ctx.font = '500 7px "Geist Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('SCAN TO VERIFY', QX + QR / 2, QY + QR + 10);
+
+        ctx.font = '400 9px "Geist Mono", monospace';
+        ctx.fillStyle = '#52525b';
+        ctx.textAlign = 'left';
+        ctx.fillText(`ID: ${certId}`, 36, 502);
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#71717a';
+        ctx.fillText('fractalx.org', W / 2, 502);
+    }
+
+    // ── Badge download ────────────────────────────────────────────────────────
+    function downloadBadge() {
+        const canvas = document.getElementById('badgeCanvas');
+        canvas.toBlob(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `badge-sliit-dev-conf-26.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 'image/png');
+    }
+
+    // ── Share badge on LinkedIn ───────────────────────────────────────────────
+    function shareOnLinkedInBadge() {
+        downloadBadge();
+        const caption = buildLinkedInCaption();
+        navigator.clipboard.writeText(caption).catch(() => {});
+        window.open('https://www.linkedin.com/feed/', '_blank', 'noopener,noreferrer');
+        const guide = document.getElementById('liGuide');
+        guide.style.display = 'block';
+        guide.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     // ── Share helpers ─────────────────────────────────────────────────────────
@@ -1275,6 +1475,7 @@
             }
 
             await renderCertificate(data.name, certParam);
+            await renderBadge(data.name, certParam);
             currentCertId = certParam;
             document.getElementById('certIdDisplay').textContent = certParam;
         } catch {
@@ -1286,11 +1487,13 @@
 
     // ── Expose functions to global scope (for onclick handlers) ───────────────
     window.lookupCertificate  = lookupCertificate;
-    window.downloadCertificate = downloadCertificate;
+    window.downloadCertificate  = downloadCertificate;
     window.copyShareLink        = copyShareLink;
     window.shareOnLinkedIn      = shareOnLinkedIn;
     window.copyLinkedInCaption  = copyLinkedInCaption;
     window.resetCertLookup      = resetCertLookup;
+    window.downloadBadge        = downloadBadge;
+    window.shareOnLinkedInBadge = shareOnLinkedInBadge;
 
     // ── Init ──────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', autoLoadFromURL);
