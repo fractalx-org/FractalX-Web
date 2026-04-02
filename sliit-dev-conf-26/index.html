@@ -251,6 +251,14 @@
         .cert-copied{font-size:12px;color:var(--green);font-family:var(--mono)}
         .btn-li{background:#0a66c2;color:#fff;border:none}
         .btn-li:hover{background:#004182;transform:translateY(-1px)}
+        .li-guide{display:none;margin-top:16px;background:rgba(10,102,194,.07);border:1px solid rgba(10,102,194,.18);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--text2);line-height:1.65}
+        .li-guide strong{color:var(--text);display:block;margin-bottom:6px;font-size:13.5px}
+        .li-guide ol{padding-left:18px;margin:0}
+        .li-guide li{margin-bottom:3px}
+        .li-guide .li-caption-box{margin-top:10px;background:var(--bg2);border:1px solid var(--border2);border-radius:7px;padding:10px 12px;font-size:12px;font-family:var(--mono);color:var(--text2);white-space:pre-wrap;word-break:break-word;max-height:120px;overflow-y:auto}
+        .li-guide .li-copy-caption{margin-top:8px;font-size:12px;color:#0a66c2;cursor:pointer;font-weight:600;background:none;border:none;padding:0;font-family:var(--font)}
+        .li-guide .li-copy-caption:hover{text-decoration:underline}
+        .li-caption-copied{font-size:12px;color:var(--green);font-family:var(--mono);margin-left:10px;display:none}
         @media(max-width:560px){.cert-field-row{flex-direction:column}.cert-actions{gap:8px}.cert-actions .btn{flex:1 1 calc(50% - 4px);justify-content:center}}
 
         @media(max-width:600px){
@@ -639,7 +647,7 @@
                 </button>
                 <button class="btn btn-li btn-sm" onclick="shareOnLinkedIn()">
                     <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                    Share on LinkedIn
+                    Post on LinkedIn
                 </button>
                 <button class="btn btn-ghost btn-sm" onclick="resetCertLookup()">
                     ← New lookup
@@ -648,6 +656,24 @@
             <div class="cert-meta">
                 <div class="cert-id"><span>Certificate ID</span> &nbsp;<code id="certIdDisplay"></code></div>
                 <div class="cert-copied" id="certCopied" style="display:none">✓ Link copied to clipboard</div>
+            </div>
+
+            <!-- LinkedIn posting guide (shown after clicking Post on LinkedIn) -->
+            <div class="li-guide" id="liGuide">
+                <strong>
+                    <svg viewBox="0 0 24 24" fill="#0a66c2" width="14" height="14" style="vertical-align:-2px;margin-right:5px"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                    Post your certificate on LinkedIn in 3 steps
+                </strong>
+                <ol>
+                    <li>Your certificate PNG was just downloaded — click <em>Download PNG</em> again if needed.</li>
+                    <li>LinkedIn just opened in a new tab. Click <strong>Start a post</strong>, then attach the PNG as a photo.</li>
+                    <li>Paste the caption below (already copied to your clipboard).</li>
+                </ol>
+                <div class="li-caption-box" id="liCaptionBox"></div>
+                <div style="display:flex;align-items:center;margin-top:4px">
+                    <button class="li-copy-caption" onclick="copyLinkedInCaption()">Copy caption again</button>
+                    <span class="li-caption-copied" id="liCaptionCopied">✓ Copied!</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1010,7 +1036,7 @@
         ctx.fillStyle = '#71717a';
         ctx.font = '400 13px "Geist", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Saturday, 4th April 2026  ·  Hall F1402, SLIIT', W / 2, 600);
+        ctx.fillText('Saturday, 4th April 2026  ·  Sri Lanka Institute of Information Technology, Malabe, Sri Lanka', W / 2, 600);
 
         // Organized by
         ctx.fillStyle = '#a1a1aa';
@@ -1078,6 +1104,7 @@
 
             await renderCertificate(data.name, data.certificateId);
             currentCertId = data.certificateId;
+            window._certName = data.name;
             document.getElementById('certIdDisplay').textContent = data.certificateId;
             hide('certLookup');
             show('certDisplay');
@@ -1125,14 +1152,56 @@
         });
     }
 
+    function buildLinkedInCaption() {
+        const verifyUrl = getShareURL();
+        const name = document.getElementById('certIdDisplay')
+            ? (window._certName || 'I') : 'I';
+        return [
+            `🎓 Proud to share my participation certificate from FractalX Dev Conference 2026 at SLIIT!`,
+            ``,
+            `I attended an exciting hands-on session on Introduction to Microservices & the FractalX Framework, where we explored modern backend architecture, distributed sagas, and live service decomposition.`,
+            ``,
+            `A huge thanks to the organising teams — FractalX Dev Community and the Software Engineering Student Community at SLIIT — for putting together such a valuable session.`,
+            ``,
+            `🔗 Follow FractalX on LinkedIn: https://www.linkedin.com/company/fractalx_org`,
+            `✅ Verify this certificate: ${verifyUrl}`,
+            ``,
+            `#FractalX #DevConf2026 #Microservices #SoftwareEngineering #SLIIT #OpenSource #BackendDevelopment`,
+        ].join('\n');
+    }
+
+    function copyLinkedInCaption() {
+        const caption = buildLinkedInCaption();
+        navigator.clipboard.writeText(caption).then(() => {
+            const el = document.getElementById('liCaptionCopied');
+            el.style.display = 'inline';
+            setTimeout(() => { el.style.display = 'none'; }, 2500);
+        });
+    }
+
     function shareOnLinkedIn() {
-        const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareURL())}`;
-        window.open(url, '_blank', 'noopener,noreferrer,width=600,height=600');
+        // 1. Download the certificate PNG
+        downloadCertificate();
+
+        // 2. Build caption and copy to clipboard
+        const caption = buildLinkedInCaption();
+        document.getElementById('liCaptionBox').textContent = caption;
+        navigator.clipboard.writeText(caption).catch(() => {});
+
+        // 3. Open LinkedIn post composer
+        window.open('https://www.linkedin.com/feed/', '_blank', 'noopener,noreferrer');
+
+        // 4. Show the step-by-step guide
+        const guide = document.getElementById('liGuide');
+        guide.style.display = 'block';
+        guide.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function resetCertLookup() {
         currentCertId = null;
+        window._certName = null;
         document.getElementById('certInput').value = '';
+        document.getElementById('liGuide').style.display = 'none';
         clearMessages();
         hide('certDisplay');
         hide('certCopied');
@@ -1190,9 +1259,10 @@
     // ── Expose functions to global scope (for onclick handlers) ───────────────
     window.lookupCertificate  = lookupCertificate;
     window.downloadCertificate = downloadCertificate;
-    window.copyShareLink       = copyShareLink;
-    window.shareOnLinkedIn     = shareOnLinkedIn;
-    window.resetCertLookup     = resetCertLookup;
+    window.copyShareLink        = copyShareLink;
+    window.shareOnLinkedIn      = shareOnLinkedIn;
+    window.copyLinkedInCaption  = copyLinkedInCaption;
+    window.resetCertLookup      = resetCertLookup;
 
     // ── Init ──────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', autoLoadFromURL);
