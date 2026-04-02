@@ -1194,9 +1194,9 @@
         ctx.fillRect(0, 0, W, H);
 
         // Radial orange glow
-        const glow = ctx.createRadialGradient(W / 2, H * 0.42, 0, W / 2, H * 0.42, 300);
-        glow.addColorStop(0,   'rgba(244,96,12,0.18)');
-        glow.addColorStop(0.6, 'rgba(244,96,12,0.07)');
+        const glow = ctx.createRadialGradient(W / 2, H * 0.44, 0, W / 2, H * 0.44, 320);
+        glow.addColorStop(0,   'rgba(244,96,12,0.20)');
+        glow.addColorStop(0.55,'rgba(244,96,12,0.08)');
         glow.addColorStop(1,   'rgba(244,96,12,0)');
         ctx.fillStyle = glow;
         ctx.fillRect(0, 0, W, H);
@@ -1221,116 +1221,123 @@
 
         // Orange accent bars
         ctx.fillStyle = '#f4600c';
-        ctx.fillRect(0, 0, W, 4);
-        ctx.fillRect(0, H - 4, W, 4);
+        ctx.fillRect(0, 0, W, 5);
+        ctx.fillRect(0, H - 5, W, 5);
 
         // Warm strip under top bar
-        const strip = ctx.createLinearGradient(0, 4, 0, 52);
-        strip.addColorStop(0, 'rgba(244,96,12,0.10)');
+        const strip = ctx.createLinearGradient(0, 5, 0, 60);
+        strip.addColorStop(0, 'rgba(244,96,12,0.12)');
         strip.addColorStop(1, 'rgba(244,96,12,0)');
         ctx.fillStyle = strip;
-        ctx.fillRect(0, 4, W, 48);
+        ctx.fillRect(0, 5, W, 55);
 
-        // ── Header ────────────────────────────────────────────────────────────
-        const LH = 28, LW = (149 / 165) * LH, LX = 36, LY = 32;
-        drawFXLogo(ctx, LX, LY, LH);
+        // ── Header — centered logo row ────────────────────────────────────────
+        const LH = 36, LW = (149 / 165) * LH;
+        // Measure total width of [FX mark] [FractalX] [×] [SESC logo] to center
+        ctx.font = '700 18px "Geist", sans-serif';
+        const fxTextW = ctx.measureText('FractalX').width;
+        ctx.font = '400 16px "Geist", sans-serif';
+        const sepTW = ctx.measureText('  ×  ').width;
+        const totalHeaderW = LW + 8 + fxTextW + sepTW + LH;
+        const hStartX = (W - totalHeaderW) / 2;
+        const LY = 22;
+
+        drawFXLogo(ctx, hStartX, LY, LH);
 
         ctx.fillStyle = '#fafafa';
-        ctx.font = '700 14px "Geist", sans-serif';
+        ctx.font = '700 18px "Geist", sans-serif';
         ctx.textAlign = 'left';
-        const fxWX = LX + LW + 8;
-        ctx.fillText('FractalX', fxWX, LY + LH * 0.72);
+        const fxLabelX = hStartX + LW + 8;
+        ctx.fillText('FractalX', fxLabelX, LY + LH * 0.72);
 
-        const fxWW = ctx.measureText('FractalX').width;
-        const bSepX = fxWX + fxWW + 8;
         ctx.fillStyle = '#52525b';
-        ctx.font = '400 13px "Geist", sans-serif';
-        ctx.fillText('×', bSepX, LY + LH * 0.72);
-        const bSepW = ctx.measureText('×').width;
+        ctx.font = '400 16px "Geist", sans-serif';
+        const sepLabelX = fxLabelX + fxTextW;
+        ctx.fillText('  ×  ', sepLabelX, LY + LH * 0.72);
 
-        // SESC logo
-        const sescBX = bSepX + bSepW + 8;
+        const sescBX = sepLabelX + sepTW;
         try {
             const sescImg = await loadImage('/assets/images/events/sliit-dev-conf/sesc.svg');
             ctx.drawImage(sescImg, sescBX, LY, LH, LH);
         } catch (_) {}
 
-        // Right label
-        ctx.fillStyle = '#52525b';
-        ctx.font = '500 10px "Geist Mono", monospace';
-        ctx.textAlign = 'right';
-        ctx.fillText('SESC × SLIIT  ·  Dev Conf 2026', W - 36, LY + LH * 0.72);
-
-        // Header separator
+        // ── Separator ─────────────────────────────────────────────────────────
         ctx.strokeStyle = '#27272a'; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(36, 76); ctx.lineTo(W - 36, 76); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(36, 78); ctx.lineTo(W - 36, 78); ctx.stroke();
 
-        // ── Content ───────────────────────────────────────────────────────────
+        // ── Event branding ────────────────────────────────────────────────────
+        ctx.fillStyle = '#fafafa';
+        ctx.font = '700 26px "Geist", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('FractalX Dev Conference', W / 2, 128);
+
         ctx.fillStyle = '#f4600c';
-        ctx.font = '600 11px "Geist", sans-serif';
+        ctx.font = '600 22px "Geist", sans-serif';
+        ctx.fillText('2026 at SLIIT', W / 2, 160);
+
+        // ── Separator ─────────────────────────────────────────────────────────
+        drawDecorLine(ctx, W, 186, 220, '#27272a', '#f4600c');
+
+        // ── Badge type label ──────────────────────────────────────────────────
+        ctx.fillStyle = '#f4600c';
+        ctx.font = '600 14px "Geist", sans-serif';
         ctx.textAlign = 'center';
-        drawTrackedText(ctx, 'CERTIFICATE OF PARTICIPATION', W / 2, 148, 3);
+        drawTrackedText(ctx, 'BADGE OF PARTICIPATION', W / 2, 222, 3.5);
 
-        drawDecorLine(ctx, W, 172, 200, '#27272a', '#f4600c');
-
-        ctx.fillStyle = '#71717a';
-        ctx.font = '400 13px "Geist", sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('This certifies that', W / 2, 210);
-
-        // Name — auto-scale
-        let nfs = 48;
+        // ── Recipient name ────────────────────────────────────────────────────
+        let nfs = 52;
         ctx.font = `700 ${nfs}px "Geist", sans-serif`;
-        while (ctx.measureText(name).width > W - 100 && nfs > 22) {
+        while (ctx.measureText(name).width > W - 80 && nfs > 24) {
             nfs -= 2;
             ctx.font = `700 ${nfs}px "Geist", sans-serif`;
         }
         ctx.fillStyle = '#fafafa';
         ctx.textAlign = 'center';
-        ctx.fillText(name, W / 2, 290);
+        ctx.fillText(name, W / 2, 310);
 
         // Orange underline
         const nw = Math.min(ctx.measureText(name).width + 60, W - 80);
         const nx = (W - nw) / 2;
         const ulg = ctx.createLinearGradient(nx, 0, nx + nw, 0);
         ulg.addColorStop(0,   'rgba(244,96,12,0)');
-        ulg.addColorStop(0.3, 'rgba(244,96,12,0.5)');
-        ulg.addColorStop(0.7, 'rgba(244,96,12,0.5)');
+        ulg.addColorStop(0.3, 'rgba(244,96,12,0.55)');
+        ulg.addColorStop(0.7, 'rgba(244,96,12,0.55)');
         ulg.addColorStop(1,   'rgba(244,96,12,0)');
-        ctx.strokeStyle = ulg; ctx.lineWidth = 1.5;
-        ctx.beginPath(); ctx.moveTo(nx, 304); ctx.lineTo(nx + nw, 304); ctx.stroke();
+        ctx.strokeStyle = ulg; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(nx, 326); ctx.lineTo(nx + nw, 326); ctx.stroke();
 
-        ctx.fillStyle = '#e4e4e7';
-        ctx.font = '500 13px "Geist", sans-serif';
+        // ── Event details ─────────────────────────────────────────────────────
+        ctx.fillStyle = '#a1a1aa';
+        ctx.font = '400 16px "Geist", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('FractalX Dev Conference 2026 at SLIIT', W / 2, 356);
+        ctx.fillText('Saturday, 4th April 2026', W / 2, 374);
 
         ctx.fillStyle = '#52525b';
-        ctx.font = '400 11.5px "Geist", sans-serif';
-        ctx.fillText('Saturday, 4th April 2026  ·  SLIIT, Malabe', W / 2, 380);
+        ctx.font = '400 14px "Geist", sans-serif';
+        ctx.fillText('Sri Lanka Institute of Information Technology, Malabe', W / 2, 398);
 
         // ── Footer ────────────────────────────────────────────────────────────
         ctx.strokeStyle = '#27272a'; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(36, 462); ctx.lineTo(W - 36, 462); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(36, 464); ctx.lineTo(W - 36, 464); ctx.stroke();
 
-        // QR — bottom right
-        const QR = 58, QX = W - 36 - QR, QY = 472;
+        // QR — bottom right, white on dark
+        const QR = 62, QX = W - 36 - QR, QY = 474;
         const verifyUrl = `https://fractalx.org/sliit-dev-conf-26/?cert=${certId}`;
-        drawQR(ctx, verifyUrl, QX, QY, QR, '#f4600c', '#08080a');
+        drawQR(ctx, verifyUrl, QX, QY, QR, '#ffffff', '#08080a');
 
         ctx.fillStyle = '#3f3f46';
-        ctx.font = '500 7px "Geist Mono", monospace';
+        ctx.font = '500 9px "Geist Mono", monospace';
         ctx.textAlign = 'center';
-        ctx.fillText('SCAN TO VERIFY', QX + QR / 2, QY + QR + 10);
+        ctx.fillText('SCAN TO VERIFY', QX + QR / 2, QY + QR + 13);
 
-        ctx.font = '400 9px "Geist Mono", monospace';
+        ctx.font = '400 11px "Geist Mono", monospace';
         ctx.fillStyle = '#52525b';
         ctx.textAlign = 'left';
-        ctx.fillText(`ID: ${certId}`, 36, 502);
+        ctx.fillText(`ID: ${certId}`, 36, 506);
 
         ctx.textAlign = 'center';
         ctx.fillStyle = '#71717a';
-        ctx.fillText('fractalx.org', W / 2, 502);
+        ctx.fillText('fractalx.org', W / 2, 506);
     }
 
     // ── Badge download ────────────────────────────────────────────────────────
