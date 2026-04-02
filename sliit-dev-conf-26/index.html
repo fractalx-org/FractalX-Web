@@ -803,6 +803,15 @@
     }
 
     // ── Canvas certificate renderer ───────────────────────────────────────────
+    function loadImage(src) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload  = () => resolve(img);
+            img.onerror = () => reject(new Error('Failed to load image: ' + src));
+            img.src = src;
+        });
+    }
+
     function drawFXLogo(ctx, x, y, targetHeight) {
         const s = targetHeight / 165;
         ctx.save();
@@ -907,7 +916,7 @@
         // The logo itself — large and faded
         const WM_H  = 480;                           // watermark height in px
         const WM_W  = (149 / 165) * WM_H;            // ≈ 434 px
-        const WM_X  = (W - WM_W) / 2;               // horizontally centred
+        const WM_X  = -WM_W * 0.08;                  // left-aligned (slightly clipped on left edge)
         const WM_Y  = (H - WM_H) / 2 - 10;          // vertically centred, nudged up slightly
         ctx.globalAlpha = 0.07;
         drawFXLogo(ctx, WM_X, WM_Y, WM_H);
@@ -955,15 +964,30 @@
         const LOGO_Y = 40;
         drawFXLogo(ctx, LOGO_X, LOGO_Y, LOGO_H);
 
+        // FractalX wordmark
         ctx.fillStyle = '#09090b';
         ctx.font = '700 17px "Geist", sans-serif';
         ctx.textAlign = 'left';
-        ctx.fillText('FractalX', LOGO_X + LOGO_W + 10, LOGO_Y + LOGO_H * 0.66);
+        const fxWordmarkX = LOGO_X + LOGO_W + 10;
+        ctx.fillText('FractalX', fxWordmarkX, LOGO_Y + LOGO_H * 0.66);
 
-        ctx.fillStyle = '#a1a1aa';
-        ctx.font = '500 11.5px "Geist Mono", monospace';
-        ctx.textAlign = 'right';
-        ctx.fillText('SESC × SLIIT  ·  Dev Conf 2026', W - 56, LOGO_Y + LOGO_H * 0.66);
+        // × separator
+        const fxWordmarkW = ctx.measureText('FractalX').width;
+        const sepX = fxWordmarkX + fxWordmarkW + 10;
+        ctx.fillStyle = '#d4d4d8';
+        ctx.font = '400 15px "Geist", sans-serif';
+        ctx.fillText('×', sepX, LOGO_Y + LOGO_H * 0.66);
+        const sepW = ctx.measureText('×').width;
+
+        // SESC logo
+        const SESC_H = 30;
+        const sescX  = sepX + sepW + 10;
+        const sescY  = LOGO_Y + (LOGO_H - SESC_H) / 2;
+        try {
+            const sescImg = await loadImage('/assets/images/events/sliit-dev-conf/sesc.png');
+            const sescW   = sescImg.naturalWidth / sescImg.naturalHeight * SESC_H;
+            ctx.drawImage(sescImg, sescX, sescY, sescW, SESC_H);
+        } catch (_) { /* skip if image fails to load */ }
 
         // Header separator
         ctx.strokeStyle = '#e4e4e7';
