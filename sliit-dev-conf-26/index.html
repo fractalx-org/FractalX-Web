@@ -233,6 +233,25 @@
         /* ── DIVIDER ── */
         .sep{border:none;border-top:1px solid var(--border);margin:0}
 
+        /* ── CERTIFICATE ── */
+        .cert-lookup{margin-top:44px;max-width:560px}
+        .cert-field-row{display:flex;gap:10px;align-items:stretch}
+        .cert-input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:0 16px;font-size:14px;color:var(--text);font-family:var(--font);outline:none;height:48px;transition:border-color .15s}
+        .cert-input::placeholder{color:var(--text4)}
+        .cert-input:focus{border-color:var(--border3)}
+        .cert-error{margin-top:12px;font-size:13px;color:#f87171;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:7px;padding:10px 14px}
+        .cert-loading{margin-top:12px;font-size:13px;color:var(--text3);font-family:var(--mono)}
+        .cert-canvas-wrap{margin-top:44px;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--border2),0 24px 80px rgba(0,0,0,.5);line-height:0}
+        #certCanvas{max-width:100%;height:auto;display:block}
+        .cert-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:20px}
+        .cert-meta{display:flex;align-items:center;gap:16px;margin-top:14px;flex-wrap:wrap}
+        .cert-id{font-size:12px;font-family:var(--mono);color:var(--text3)}
+        .cert-id span{color:var(--text4)}
+        .cert-copied{font-size:12px;color:var(--green);font-family:var(--mono)}
+        .btn-li{background:#0a66c2;color:#fff;border:none}
+        .btn-li:hover{background:#004182;transform:translateY(-1px)}
+        @media(max-width:560px){.cert-field-row{flex-direction:column}.cert-actions{gap:8px}.cert-actions .btn{flex:1 1 calc(50% - 4px);justify-content:center}}
+
         @media(max-width:600px){
             .hero{padding:110px 20px 60px}
             .section{padding:60px 20px}
@@ -263,6 +282,7 @@
             <a class="nav-link" href="/blog/">Blog</a>
             <a class="nav-link" href="/contribute/">Contribute</a>
             <a class="nav-link" href="/corporate/">Enterprise</a>
+            <a class="nav-link" href="#certificate">Certificate</a>
             <a class="nav-link" href="/start/" style="color:var(--orange)">Start →</a>
         </div>
         <div class="nav-right">
@@ -281,6 +301,7 @@
     <a class="mob-link" href="/blog/" onclick="toggleMob()">Blog</a>
     <a class="mob-link" href="/contribute/" onclick="toggleMob()">Contribute</a>
     <a class="mob-link" href="/corporate/" onclick="toggleMob()">Enterprise</a>
+    <a class="mob-link" href="#certificate" onclick="toggleMob()">Certificate</a>
     <a class="mob-link" href="/start/" onclick="toggleMob()" style="color:var(--orange)">Start →</a>
 </div>
 
@@ -572,6 +593,65 @@
     </div>
 </section>
 
+<!-- ══ CERTIFICATE ════════════════════════════════════════════════════════════ -->
+<section class="section" id="certificate" style="border-top:1px solid var(--border)">
+    <div class="section-inner">
+        <div class="section-label">Participation Certificate</div>
+        <h2 class="section-h">Get Your Certificate</h2>
+        <p class="section-sub">Attended SLIIT Dev Conf 2026? Enter your registered email address or mobile number to view, download, and share your certificate.</p>
+
+        <!-- Lookup form -->
+        <div class="cert-lookup" id="certLookup">
+            <div class="cert-field-row">
+                <input
+                    type="text"
+                    id="certInput"
+                    class="cert-input"
+                    placeholder="Email address or mobile number"
+                    autocomplete="off"
+                    autocorrect="off"
+                    spellcheck="false"
+                    onkeydown="if(event.key==='Enter')lookupCertificate()"
+                />
+                <button class="btn btn-primary btn-sm" id="certBtn" onclick="lookupCertificate()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    Find Certificate
+                </button>
+            </div>
+            <div id="certError" class="cert-error" style="display:none"></div>
+            <div id="certLoading" class="cert-loading" style="display:none">Looking up your certificate…</div>
+        </div>
+
+        <!-- Certificate canvas (hidden until found) -->
+        <div id="certDisplay" style="display:none">
+            <div class="cert-canvas-wrap">
+                <canvas id="certCanvas" width="1200" height="848"></canvas>
+            </div>
+            <div class="cert-actions">
+                <button class="btn btn-primary btn-sm" onclick="downloadCertificate()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download PNG
+                </button>
+                <button class="btn btn-ghost btn-sm" onclick="copyShareLink()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    Copy Share Link
+                </button>
+                <button class="btn btn-li btn-sm" onclick="shareOnLinkedIn()">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                    Share on LinkedIn
+                </button>
+                <button class="btn btn-ghost btn-sm" onclick="resetCertLookup()">
+                    ← New lookup
+                </button>
+            </div>
+            <div class="cert-meta">
+                <div class="cert-id"><span>Certificate ID</span> &nbsp;<code id="certIdDisplay"></code></div>
+                <div class="cert-copied" id="certCopied" style="display:none">✓ Link copied to clipboard</div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ══ CTA BAND ════════════════════════════════════════════════════════════════ -->
 <section class="cta-band" id="register">
     <div class="cta-inner">
@@ -653,6 +733,383 @@
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
+</script>
+
+<!-- ══ CERTIFICATE SYSTEM ═══════════════════════════════════════════════════ -->
+<script>
+(function () {
+    // ── Config ────────────────────────────────────────────────────────────────
+    // Update CERT_API_BASE to match your deployed Vercel project URL.
+    const CERT_API_BASE = 'https://fractalx-corporate-api.vercel.app';
+    const EVENT_SLUG    = 'sliit-dev-conf-26';
+
+    // ── State ─────────────────────────────────────────────────────────────────
+    let currentCertId = null;
+
+    // ── DOM helpers ───────────────────────────────────────────────────────────
+    function show(id) { document.getElementById(id).style.display = ''; }
+    function hide(id) { document.getElementById(id).style.display = 'none'; }
+
+    function showError(msg) {
+        const el = document.getElementById('certError');
+        el.textContent = msg;
+        el.style.display = '';
+        hide('certLoading');
+    }
+
+    function clearMessages() {
+        hide('certError');
+        hide('certLoading');
+    }
+
+    function setLookupBusy(busy) {
+        const btn = document.getElementById('certBtn');
+        const input = document.getElementById('certInput');
+        btn.disabled = busy;
+        input.disabled = busy;
+        if (busy) {
+            hide('certError');
+            show('certLoading');
+        } else {
+            hide('certLoading');
+        }
+    }
+
+    // ── Canvas certificate renderer ───────────────────────────────────────────
+    function drawFXLogo(ctx, x, y, targetHeight) {
+        const s = targetHeight / 165;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(s, s);
+        ctx.fillStyle = '#f4600c';
+        // Parallelogram
+        ctx.beginPath();
+        ctx.moveTo(18.2837, 40); ctx.lineTo(77.5674, 70.7474);
+        ctx.lineTo(59.2837, 106); ctx.lineTo(0, 75.2526);
+        ctx.closePath(); ctx.fill();
+        // Top bar
+        ctx.fillRect(18.2837, 0, 130.0003, 40);
+        // Middle bar
+        ctx.fillRect(59.2837, 66, 89.0003, 40);
+        // Bottom piece
+        ctx.fillRect(18.2837, 106, 41, 59);
+        ctx.restore();
+    }
+
+    function drawTrackedText(ctx, text, x, y, extraSpacing) {
+        // Simulate letter-spacing for canvas contexts that may not support it
+        const letters = [...text];
+        const widths = letters.map(c => ctx.measureText(c).width);
+        const total = widths.reduce((a, w) => a + w, 0) + extraSpacing * (letters.length - 1);
+        let cx = x - total / 2;
+        letters.forEach((c, i) => {
+            ctx.fillText(c, cx + widths[i] / 2, y);
+            cx += widths[i] + extraSpacing;
+        });
+    }
+
+    function drawDecorLine(ctx, W, y, lineWidth, dotColor) {
+        const x1 = (W - lineWidth) / 2;
+        const x2 = x1 + lineWidth;
+        ctx.strokeStyle = '#252525';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y); ctx.stroke();
+        // Center dot
+        ctx.fillStyle = dotColor || '#f4600c';
+        ctx.beginPath(); ctx.arc(W / 2, y, 3, 0, Math.PI * 2); ctx.fill();
+        // Flanking dots
+        [-52, 52].forEach(offset => {
+            ctx.fillStyle = '#2e2e2e';
+            ctx.beginPath(); ctx.arc(W / 2 + offset, y, 2, 0, Math.PI * 2); ctx.fill();
+        });
+    }
+
+    async function renderCertificate(name, certId) {
+        await document.fonts.ready;
+
+        const canvas = document.getElementById('certCanvas');
+        const ctx = canvas.getContext('2d');
+        const W = 1200, H = 848;
+
+        // ── Background ────────────────────────────────────────────────────────
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+        bgGrad.addColorStop(0, '#0d0d0d');
+        bgGrad.addColorStop(1, '#121212');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, W, H);
+
+        // Subtle center glow
+        const radGrad = ctx.createRadialGradient(W / 2, H / 2 - 40, 0, W / 2, H / 2 - 40, 480);
+        radGrad.addColorStop(0, 'rgba(244,96,12,0.055)');
+        radGrad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = radGrad;
+        ctx.fillRect(0, 0, W, H);
+
+        // Outer border
+        ctx.strokeStyle = '#1e1e1e';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(0.5, 0.5, W - 1, H - 1);
+
+        // Inner frame
+        ctx.strokeStyle = '#1a1a1a';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(26.5, 26.5, W - 53, H - 53);
+
+        // Orange top accent bar
+        ctx.fillStyle = '#f4600c';
+        ctx.fillRect(0, 0, W, 4);
+
+        // Orange bottom accent bar
+        ctx.fillStyle = '#f4600c';
+        ctx.fillRect(0, H - 4, W, 4);
+
+        // ── Header ────────────────────────────────────────────────────────────
+        const LOGO_H = 34;
+        const LOGO_W = (149 / 165) * LOGO_H;
+        const LOGO_X = 56;
+        const LOGO_Y = 40;
+        drawFXLogo(ctx, LOGO_X, LOGO_Y, LOGO_H);
+
+        ctx.fillStyle = '#e4e4e7';
+        ctx.font = '700 17px "Geist", sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('FractalX', LOGO_X + LOGO_W + 10, LOGO_Y + LOGO_H * 0.66);
+
+        ctx.fillStyle = '#3f3f46';
+        ctx.font = '500 11.5px "Geist Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText('SESC × SLIIT  ·  Dev Conf 2026', W - 56, LOGO_Y + LOGO_H * 0.66);
+
+        // Header separator
+        ctx.strokeStyle = '#1c1c1c';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(56, 94); ctx.lineTo(W - 56, 94);
+        ctx.stroke();
+
+        // ── Certificate content ───────────────────────────────────────────────
+        // "CERTIFICATE OF PARTICIPATION"
+        ctx.fillStyle = '#f4600c';
+        ctx.font = '600 12.5px "Geist", sans-serif';
+        ctx.textAlign = 'center';
+        drawTrackedText(ctx, 'CERTIFICATE OF PARTICIPATION', W / 2, 240, 3.5);
+
+        drawDecorLine(ctx, W, 272, 260);
+
+        // "This certifies that"
+        ctx.fillStyle = '#71717a';
+        ctx.font = '400 15.5px "Geist", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('This certifies that', W / 2, 314);
+
+        // NAME — auto-scale font for long names
+        let nameFontSize = 60;
+        ctx.font = `700 ${nameFontSize}px "Geist", sans-serif`;
+        while (ctx.measureText(name).width > W - 160 && nameFontSize > 28) {
+            nameFontSize -= 2;
+            ctx.font = `700 ${nameFontSize}px "Geist", sans-serif`;
+        }
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText(name, W / 2, 400);
+
+        // "has successfully participated in"
+        ctx.fillStyle = '#71717a';
+        ctx.font = '400 15.5px "Geist", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('has successfully participated in', W / 2, 448);
+
+        drawDecorLine(ctx, W, 484, 180, '#3f3f46');
+
+        // Event title
+        ctx.fillStyle = '#e4e4e7';
+        ctx.font = '600 22px "Geist", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Introduction to Microservices & FractalX Framework', W / 2, 534);
+
+        // Event subtitle (orange)
+        ctx.fillStyle = '#f4600c';
+        ctx.font = '500 15px "Geist", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('SLIIT Dev Conf 2026', W / 2, 570);
+
+        // Date & venue
+        ctx.fillStyle = '#52525b';
+        ctx.font = '400 13px "Geist", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Saturday, 4th April 2026  ·  Hall F1402, SLIIT', W / 2, 598);
+
+        // ── Footer ────────────────────────────────────────────────────────────
+        ctx.strokeStyle = '#1c1c1c';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(56, 680); ctx.lineTo(W - 56, 680);
+        ctx.stroke();
+
+        ctx.font = '400 10.5px "Geist Mono", monospace';
+
+        // Certificate ID (left)
+        ctx.fillStyle = '#3f3f46';
+        ctx.textAlign = 'left';
+        ctx.fillText(`Certificate ID: ${certId}`, 56, 726);
+
+        // Issued by (center)
+        ctx.fillStyle = '#3f3f46';
+        ctx.textAlign = 'center';
+        ctx.fillText('Issued by FractalX & SESC  ·  fractalx.org', W / 2, 726);
+
+        // Verify URL (right)
+        ctx.fillStyle = '#3f3f46';
+        ctx.textAlign = 'right';
+        ctx.fillText(`Verify: fractalx.org/sliit-dev-conf-26/?cert=${certId}`, W - 56, 726);
+    }
+
+    // ── Certificate lookup ────────────────────────────────────────────────────
+    async function lookupCertificate() {
+        const raw = (document.getElementById('certInput').value || '').trim();
+        if (!raw) { showError('Please enter your email address or mobile number.'); return; }
+
+        clearMessages();
+        setLookupBusy(true);
+
+        try {
+            const isEmail = raw.includes('@');
+            const param = isEmail
+                ? `email=${encodeURIComponent(raw)}`
+                : `mobile=${encodeURIComponent(raw)}`;
+
+            const res = await fetch(
+                `${CERT_API_BASE}/api/certificate?event=${EVENT_SLUG}&${param}`,
+                { headers: { 'Accept': 'application/json' } }
+            );
+            const data = await res.json();
+
+            if (!res.ok || !data.found) {
+                showError(data.error || 'No certificate found. Please check your input and try again.');
+                return;
+            }
+
+            await renderCertificate(data.name, data.certificateId);
+            currentCertId = data.certificateId;
+            document.getElementById('certIdDisplay').textContent = data.certificateId;
+            hide('certLookup');
+            show('certDisplay');
+        } catch {
+            showError('Connection error. Please check your internet connection and try again.');
+        } finally {
+            setLookupBusy(false);
+        }
+    }
+
+    // ── Certificate download ──────────────────────────────────────────────────
+    function downloadCertificate() {
+        const canvas = document.getElementById('certCanvas');
+        canvas.toBlob(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `certificate-sliit-dev-conf-26.png`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 'image/png');
+    }
+
+    // ── Share helpers ─────────────────────────────────────────────────────────
+    function getShareURL() {
+        return `${window.location.origin}/sliit-dev-conf-26/?cert=${currentCertId}`;
+    }
+
+    function copyShareLink() {
+        navigator.clipboard.writeText(getShareURL()).then(() => {
+            const el = document.getElementById('certCopied');
+            el.style.display = '';
+            setTimeout(() => { el.style.display = 'none'; }, 3000);
+        }).catch(() => {
+            // Fallback for older browsers
+            const ta = document.createElement('textarea');
+            ta.value = getShareURL();
+            ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+        });
+    }
+
+    function shareOnLinkedIn() {
+        const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareURL())}`;
+        window.open(url, '_blank', 'noopener,noreferrer,width=600,height=600');
+    }
+
+    function resetCertLookup() {
+        currentCertId = null;
+        document.getElementById('certInput').value = '';
+        clearMessages();
+        hide('certDisplay');
+        hide('certCopied');
+        show('certLookup');
+    }
+
+    // ── Auto-load from URL param (?cert=XXXX) ─────────────────────────────────
+    async function autoLoadFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        const certParam = params.get('cert');
+        if (!certParam) return;
+
+        // Scroll to section immediately
+        const section = document.getElementById('certificate');
+        if (section) {
+            setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+        }
+
+        hide('certLookup');
+        show('certDisplay');
+        // Show a loading state on the canvas
+        const canvas = document.getElementById('certCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#0d0d0d';
+        ctx.fillRect(0, 0, 1200, 848);
+        ctx.fillStyle = '#3f3f46';
+        ctx.font = '400 14px "Geist", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Loading certificate…', 600, 424);
+
+        try {
+            const res = await fetch(
+                `${CERT_API_BASE}/api/certificate?event=${EVENT_SLUG}&verify=${encodeURIComponent(certParam)}`,
+                { headers: { 'Accept': 'application/json' } }
+            );
+            const data = await res.json();
+
+            if (!res.ok || !data.valid) {
+                hide('certDisplay');
+                show('certLookup');
+                showError(data.error || 'Certificate not found. It may be invalid or the event data is not yet available.');
+                return;
+            }
+
+            await renderCertificate(data.name, certParam);
+            currentCertId = certParam;
+            document.getElementById('certIdDisplay').textContent = certParam;
+        } catch {
+            hide('certDisplay');
+            show('certLookup');
+            showError('Could not load certificate. Please try again later.');
+        }
+    }
+
+    // ── Expose functions to global scope (for onclick handlers) ───────────────
+    window.lookupCertificate  = lookupCertificate;
+    window.downloadCertificate = downloadCertificate;
+    window.copyShareLink       = copyShareLink;
+    window.shareOnLinkedIn     = shareOnLinkedIn;
+    window.resetCertLookup     = resetCertLookup;
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', autoLoadFromURL);
+})();
 </script>
 </body>
 </html>
