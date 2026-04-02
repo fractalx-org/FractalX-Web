@@ -979,15 +979,23 @@
         ctx.fillText('×', sepX, LOGO_Y + LOGO_H * 0.66);
         const sepW = ctx.measureText('×').width;
 
-        // SESC logo
+        // SESC logo — multiply blend removes the white background
         const SESC_H = 30;
         const sescX  = sepX + sepW + 10;
         const sescY  = LOGO_Y + (LOGO_H - SESC_H) / 2;
         try {
             const sescImg = await loadImage('/assets/images/events/sliit-dev-conf/sesc.png');
             const sescW   = sescImg.naturalWidth / sescImg.naturalHeight * SESC_H;
+            ctx.globalCompositeOperation = 'multiply';
             ctx.drawImage(sescImg, sescX, sescY, sescW, SESC_H);
-        } catch (_) { /* skip if image fails to load */ }
+            ctx.globalCompositeOperation = 'source-over';
+        } catch (_) { ctx.globalCompositeOperation = 'source-over'; }
+
+        // Right-side label
+        ctx.fillStyle = '#a1a1aa';
+        ctx.font = '500 11.5px "Geist Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText('SESC × SLIIT  ·  Dev Conf 2026', W - 56, LOGO_Y + LOGO_H * 0.66);
 
         // Header separator
         ctx.strokeStyle = '#e4e4e7';
