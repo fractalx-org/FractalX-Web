@@ -869,8 +869,26 @@
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, W, H);
 
+        // ── FractalX logo watermark (large, centred, orange-shaded) ──────────
+        // Radial orange glow centred on the logo
+        const glowGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, 420);
+        glowGrad.addColorStop(0,   'rgba(244,96,12,0.10)');
+        glowGrad.addColorStop(0.55,'rgba(244,96,12,0.05)');
+        glowGrad.addColorStop(1,   'rgba(244,96,12,0)');
+        ctx.fillStyle = glowGrad;
+        ctx.fillRect(0, 0, W, H);
+
+        // The logo itself — large and faded
+        const WM_H  = 480;                           // watermark height in px
+        const WM_W  = (149 / 165) * WM_H;            // ≈ 434 px
+        const WM_X  = (W - WM_W) / 2;               // horizontally centred
+        const WM_Y  = (H - WM_H) / 2 - 10;          // vertically centred, nudged up slightly
+        ctx.globalAlpha = 0.07;
+        drawFXLogo(ctx, WM_X, WM_Y, WM_H);
+        ctx.globalAlpha = 1;
+
         // Very subtle dot grid pattern
-        ctx.fillStyle = 'rgba(0,0,0,0.04)';
+        ctx.fillStyle = 'rgba(0,0,0,0.03)';
         for (let gx = 0; gx <= W; gx += 40) {
             for (let gy = 0; gy <= H; gy += 40) {
                 ctx.beginPath();
@@ -885,7 +903,7 @@
         ctx.strokeRect(0.5, 0.5, W - 1, H - 1);
 
         // Inner frame (inset 26px)
-        ctx.strokeStyle = '#ece9e4';
+        ctx.strokeStyle = '#ede9e4';
         ctx.lineWidth = 1;
         ctx.strokeRect(26.5, 26.5, W - 53, H - 53);
 
@@ -897,12 +915,12 @@
         ctx.fillStyle = '#f4600c';
         ctx.fillRect(0, H - 5, W, 5);
 
-        // Subtle warm tint strip just below top bar
-        const stripGrad = ctx.createLinearGradient(0, 5, 0, 60);
-        stripGrad.addColorStop(0, 'rgba(244,96,12,0.06)');
+        // Warm orange tint fade just below top bar
+        const stripGrad = ctx.createLinearGradient(0, 5, 0, 70);
+        stripGrad.addColorStop(0, 'rgba(244,96,12,0.07)');
         stripGrad.addColorStop(1, 'rgba(244,96,12,0)');
         ctx.fillStyle = stripGrad;
-        ctx.fillRect(0, 5, W, 55);
+        ctx.fillRect(0, 5, W, 65);
 
         // ── Header ────────────────────────────────────────────────────────────
         const LOGO_H = 34;
