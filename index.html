@@ -289,6 +289,22 @@
         .eval-v.gold{color:var(--gold)}
         .eval-v.peri{color:var(--peri)}
 
+        /* ── CLI INSTALL ── */
+        .install-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:48px}
+        .install-card{background:var(--bg1);padding:28px 24px;display:flex;flex-direction:column;gap:10px;transition:background .15s}
+        .install-card:hover{background:var(--bg2)}
+        .install-method{font-size:10.5px;font-family:var(--mono);color:var(--orange);letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+        .install-title{font-size:15px;font-weight:600;color:var(--white);letter-spacing:-.2px}
+        .install-cmd{font-family:var(--mono);font-size:12.5px;color:var(--text);background:var(--bg2);border:1px solid var(--border2);border-radius:5px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;cursor:pointer;transition:border-color .15s}
+        .install-cmd:hover{border-color:var(--border3)}
+        .install-cmd span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .install-copy{flex-shrink:0;color:var(--text3);transition:color .15s}
+        .install-copy:hover{color:var(--text)}
+        .install-desc{font-size:12.5px;color:var(--text3);line-height:1.5}
+        .install-note{margin-top:20px;text-align:center;font-size:12.5px;color:var(--text3)}
+        .install-note a{color:var(--orange);text-decoration:underline;text-underline-offset:3px}
+        @media(max-width:700px){.install-grid{grid-template-columns:1fr}}
+
         /* ── CTA ── */
         .cta-section{padding:100px 24px;text-align:center;position:relative;overflow:hidden}
         .cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,var(--orange-dim) 0%,transparent 70%);pointer-events:none}
@@ -393,6 +409,7 @@
         <div class="nav-links">
             <a href="/docs" class="nav-link">Docs</a>
             <a href="/blog" class="nav-link">Blog</a>
+            <a href="/cli" class="nav-link">CLI</a>
             <a href="/contribute" class="nav-link">Contribute</a>
             <a href="/corporate" class="nav-link">Enterprise</a>
             <a href="/start/" class="nav-link" style="color:var(--orange);background:var(--orange-dim)">Start →</a>
@@ -418,6 +435,7 @@
 <div class="mob-menu" id="mob-menu">
     <a href="/docs" class="mob-link" onclick="toggleMob()">Docs</a>
     <a href="/blog" class="mob-link" onclick="toggleMob()">Blog</a>
+    <a href="/cli" class="mob-link" onclick="toggleMob()">CLI</a>
     <a href="/contribute" class="mob-link" onclick="toggleMob()">Contribute</a>
     <a href="/corporate" class="mob-link" onclick="toggleMob()">Enterprise</a>
     <a href="/start/" class="mob-link" onclick="toggleMob()" style="color:var(--orange)">Start →</a>
@@ -570,6 +588,48 @@
 </section>
 
 <hr class="divider">
+
+<!-- ── CLI INSTALL ── -->
+<section class="section" id="cli" style="padding-top:0">
+    <div class="section-inner">
+        <div class="section-label">FractalX CLI</div>
+        <h2 class="section-h">Bootstrap a project in seconds</h2>
+        <p class="section-sub">The FractalX CLI generates a Spring Boot modular monolith — pre-annotated and ready to decompose — from an interactive wizard or a <code style="font-family:var(--mono);font-size:13px;background:var(--bg2);padding:2px 6px;border-radius:4px;color:var(--text)">fractalx.yaml</code> spec. No browser required.</p>
+        <div class="install-grid">
+            <div class="install-card">
+                <div class="install-method">Homebrew</div>
+                <div class="install-title">macOS &amp; Linux</div>
+                <div class="install-cmd" onclick="copyInstall(this,'brew install fractalx-org/tap/fractalx-cli')">
+                    <span>brew install fractalx-org/tap/fractalx-cli</span>
+                    <svg class="install-copy" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </div>
+                <div class="install-desc">Installs the <code style="font-family:var(--mono);font-size:11px">fractalx</code> binary via Homebrew. Updates automatically with <code style="font-family:var(--mono);font-size:11px">brew upgrade</code>.</div>
+            </div>
+            <div class="install-card">
+                <div class="install-method">curl</div>
+                <div class="install-title">macOS &amp; Linux</div>
+                <div class="install-cmd" onclick="copyInstall(this,'curl -fsSL https://raw.githubusercontent.com/fractalx-org/fractalx-cli/main/install.sh | sh')">
+                    <span>curl -fsSL …/install.sh | sh</span>
+                    <svg class="install-copy" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </div>
+                <div class="install-desc">Detects your OS and arch, downloads the right binary from GitHub Releases, and places it in <code style="font-family:var(--mono);font-size:11px">/usr/local/bin</code>.</div>
+            </div>
+            <div class="install-card">
+                <div class="install-method">Go install</div>
+                <div class="install-title">Any platform</div>
+                <div class="install-cmd" onclick="copyInstall(this,'go install github.com/fractalx-org/fractalx-cli@latest')">
+                    <span>go install github.com/fractalx-org/fractalx-cli@latest</span>
+                    <svg class="install-copy" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </div>
+                <div class="install-desc">Requires Go 1.21+. Installs the latest release directly from source. Works on Windows too.</div>
+            </div>
+        </div>
+        <div class="install-note">
+            After install, run <code style="font-family:var(--mono);font-size:12px;background:var(--bg2);padding:2px 7px;border-radius:4px;color:var(--text)">fractalx</code> to launch the wizard &nbsp;&middot;&nbsp;
+            <a href="/cli">Full CLI docs →</a>
+        </div>
+    </div>
+</section>
 
 <!-- ── CODE SHOWCASE ── -->
 <section class="section" id="code-showcase">
@@ -959,6 +1019,10 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 Quick start
             </a>
+            <a href="/cli" class="btn btn-ghost" style="font-size:15px;padding:13px 28px">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                Try the CLI
+            </a>
             <a class="btn btn-ghost" onclick="openDocs()" style="font-size:15px;padding:13px 28px">
                 Read the docs
             </a>
@@ -979,6 +1043,7 @@
         <div class="foot-links">
             <a class="foot-link" onclick="openDocs()">Docs</a>
             <a href="/blog" class="foot-link">Blog</a>
+            <a href="/cli" class="foot-link">CLI</a>
             <a href="https://github.com/Project-FractalX/FractalX" class="foot-link">GitHub</a>
             <a href="https://github.com/Project-FractalX/FractalX/blob/main/LICENSE" class="foot-link">Apache 2.0</a>
             <a href="https://github.com/Project-FractalX/FractalX/issues" class="foot-link">Issues</a>
@@ -1014,6 +1079,19 @@
     function openDocs(){
         // Link to the docs page - adjust path as needed
         window.location.href = './docs';
+    }
+
+    /* ── INSTALL COPY ── */
+    function copyInstall(el, text) {
+        navigator.clipboard.writeText(text).then(() => {
+            const icon = el.querySelector('.install-copy');
+            icon.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+            icon.style.color = 'var(--green)';
+            setTimeout(() => {
+                icon.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+                icon.style.color = '';
+            }, 1800);
+        });
     }
 
     /* ── SMOOTH SCROLL WITH OFFSET ── */
