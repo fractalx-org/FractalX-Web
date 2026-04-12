@@ -119,9 +119,8 @@
         .collab-sesc span{color:var(--blue)}
         .collab-text{font-size:12px;color:var(--text3);font-family:var(--mono)}
 
-        .event-label{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-family:var(--mono);color:var(--orange);background:var(--orange-dim);border:1px solid rgba(244,96,12,.2);padding:4px 12px;border-radius:20px;margin-bottom:18px;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
-        .event-label .live-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange);animation:pulse 2s ease-in-out infinite}
-        @keyframes pulse{0%,100%{box-shadow:0 0 6px var(--orange)}50%{box-shadow:0 0 14px var(--orange)}}
+        .event-label{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-family:var(--mono);color:var(--text3);background:var(--bg1);border:1px solid var(--border2);padding:4px 12px;border-radius:20px;margin-bottom:18px;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+        .event-label .live-dot{width:6px;height:6px;border-radius:50%;background:var(--text3)}
 
         .hero-h1{font-size:clamp(32px,5.5vw,60px);font-weight:800;letter-spacing:-2px;line-height:1.07;color:var(--white);margin-bottom:22px}
         .hero-h1 .hl{color:var(--orange)}
@@ -356,7 +355,7 @@
 
         <div class="event-label">
             <span class="live-dot"></span>
-            Developer Conference 2026
+            Past Event · Apr 4, 2026
         </div>
 
         <h1 class="hero-h1">
@@ -386,9 +385,9 @@
         </div>
 
         <div class="hero-ctas">
-            <a href="https://forms.gle/2Xhmv7F4Bdhkb9d4A" target="_blank" rel="noopener" class="btn btn-primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Register Now — It's Free
+            <a href="#certificates" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                Get Your Certificate
             </a>
             <a href="#agenda" class="btn btn-ghost">
                 View Agenda
@@ -718,14 +717,14 @@
 <section class="cta-band" id="register">
     <div class="cta-inner">
         <div style="display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-family:var(--mono);color:var(--text3);background:var(--bg1);border:1px solid var(--border2);padding:4px 12px;border-radius:20px;margin-bottom:18px">
-            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);display:inline-block"></span>
-            Free · No prerequisites · Open to all SLIIT students
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--text3);display:inline-block"></span>
+            This event has concluded
         </div>
-        <h2 class="cta-h">Reserve your seat — <span style="color:var(--orange)">4 Apr 2026</span></h2>
-        <p class="cta-sub">Spots are limited to ensure a quality hands-on experience. Register now to secure your place at Hall F1402, SLIIT.</p>
-        <a href="https://forms.gle/2Xhmv7F4Bdhkb9d4A" target="_blank" rel="noopener" class="btn btn-primary" style="font-size:15px;padding:15px 32px">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            Register Now — Free
+        <h2 class="cta-h">Thank you for attending — <span style="color:var(--orange)">SLIIT Dev Conf 2026</span></h2>
+        <p class="cta-sub">The session was held on Saturday 4th April 2026 at Hall F1402, SLIIT. Download your certificate of attendance below.</p>
+        <a href="#certificates" class="btn btn-primary" style="font-size:15px;padding:15px 32px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            Get Your Certificate
         </a>
         <div class="cta-note">Saturday 4th April 2026 · 1:30 PM – 3:30 PM · SLIIT Hall F1402</div>
     </div>
@@ -778,7 +777,7 @@
         const countdownEl = document.getElementById('countdown');
 
         if (diff <= 0) {
-            countdownEl.innerHTML = '<div style="text-align:center;width:100%;font-size:16px;font-weight:700;color:var(--green)">🎉 The session is happening right now!</div>';
+            countdownEl.innerHTML = '<div style="text-align:center;width:100%;font-size:16px;font-weight:700;color:var(--text3)">This session has concluded. Thank you for attending!</div>';
             return;
         }
 
